@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.two.dao.room.RoomTypeDao">
+    <select id="selectRoomType" resultType="map">
+        select * from tb_roomtype
+    </select>
+    <select id="selectRoom" resultType="map">
+        select * from
+        (select rownum rn ,t.* from
+        (select room_code,room_typename,room_state
+        from tb_room t,tb_roomtype p
+        where t.room_typeid=p.room_typeid order by room_state,room_code) t where rownum &lt; #{end}) a
+        where a.rn &gt; #{start}
+    </select>
+    <select id="getPageCount" resultType="int">
+        select count(*) from tb_room
+    </select>
+    <insert id="insertRoom">
+        insert into tb_room(room_code,room_typeid,room_state) values(#{room_code},(select room_typeid from tb_roomtype where room_typename=#{room_typename}),#{room_state})
+    </insert>
+    <select id="selectRoomByCode" resultType="map">
+        select room_code,room_typename from tb_room a,tb_roomtype b where a.room_typeid=b.room_typeid and room_code=#{room_code}
+    </select>
+    <insert id="insertPart">
+        insert into tb_room_part values(#{room_code},#{name},#{phone},#{card},(select room_typeid from tb_roomtype where room_typename=#{room_typename}),#{indate},0,tb_room_part_id.nextval,#{outdate})
+    </insert>
+    <update id="updateState">
+        update tb_room set room_state=2 where room_code=#{room_code}
+    </update>
+</mapper>
