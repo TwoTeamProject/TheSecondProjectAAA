@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pro.two.dao.member.MemberDao">
+    <select id="memberLogin" resultType="map">
+        select MEM_TEL,MEM_PASSWORD from tb_user where MEM_TEL = #{MEM_TEL} and MEM_PASSWORD = #{MEM_PASSWORD}
+    </select>
+    <insert id="memberRegister">
+        insert into TB_MEMBER(MEM_ID,MEM_NAME,MEM_TEL,MEM_PASSWORD,MEM_IDCORD)
+        values (TB_MEMBER_ID.NEXTVAL,#{MEM_NAME},#{MEM_TEL},#{MEM_PASSWORD},#{MEM_IDCORD})
+    </insert>
+    <select id="getSelect" resultType="map">
+        select ROOM_TYPEID,ROOM_TYPENAME from TB_ROOMTYPE
+    </select>
+</mapper>
