@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户登陆</title>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../lib/laydate/laydate.js"></script>
+    <script src="../lib/layui/layui.js" charset="utf-8"></script>
+
+</head>
+<body class="login-bg">
+<!-- 头部区域（可配合layui已有的水平导航） -->
+<div class="layui-header layui-bg-black" style="width: 100%;" >
+    <div class="layui-container">
+        <ul class="layui-nav layui-layout-right" >
+            <li class="layui-nav-item">
+                <a href="">
+                    赵一凡
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="">退出登陆</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="layui-container layui-bg-gray" style="height:850px;width: 80%;">
+    <div class="layui-container">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <td width="200px">房间类型</td>
+                <td width="200px">数量</td>
+                <td width="200px">入住时间</td>
+                <td width="200px">离开时间</td>
+                <td width="200px">
+                    <button lay-filter="add" id="add" class="layui-btn layui-btn-normal layui-btn-sm">添加房间</button>
+                    <button lay-filter="delete" id="clear" class="layui-btn layui-bg-gray layui-btn-sm">清空</button>
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><select class="room">
+                    <option value="0">请选择</option>
+                    <option value="1">单人房</option>
+                    <option value="2">双人房</option>
+                    <option value="3">普通房</option>
+                    <option value="4">大床房</option>
+                    <option value="5">豪华房</option>
+                    <option value="6">豪华套房</option>
+                </select></td>
+                <td>
+                    <button class="change layui-btn layui-btn-sm" value="-">-</button>
+                    <input type="text" class="number" lay-verify="required|number" value="1" style="width: 80px"/>
+                    <button class="change layui-btn layui-btn-sm" value="+">+</button>
+                </td>
+                <td><input type="text" class="layui-input startTime"></td>
+                <td><input type="text" class="layui-input endTime"></td>
+                <td><input type="button" value="删除" class="deltr layui-btn layui-bg-gray layui-btn-sm"/></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+<script>
+
+    $("tbody").on("click",".change",function(){
+        var tr=$(this).parent().parent();
+        var number=Number(tr.find(".number").val());
+        if($(this).val()=="-"){
+            if(number>0)tr.find(".number").val(number-1);
+        }else{
+            if(number<10)tr.find(".number").val(number+1);
+        }
+    })
+
+    $("tbody").on("click",".deltr",function(){
+        $(this).parent().parent().remove();
+    })
+
+    $("#clear").click(function(){
+        $(".deltr").parent().parent().remove();
+    })
+
+    layui.use( 'laydate', function () {
+        var laydate = layui.laydate;
+        //核心方法
+        function timeAdd(){
+            lay('.startTime').each(function() {
+                    minDate = laydate.render({
+                    elem : this,
+                    min:'new Date()',
+                    max:+30,
+                    trigger : 'click',
+                        range:true
+
+                });
+            });
+            lay('.endTime').each(function() {
+                    laydate.render({
+                    elem : this,
+                    min:'new Date()',
+                    max:+30,
+                    trigger : 'click',
+                });
+            });
+        }
+        //初始化时先调用一次，确保静态的那一行可点
+        timeAdd();
+        //给新增按钮添加点击事件
+        $("#add").click(function(){
+            var html="<tr>\n" +
+                "                <td><select class=\"room\"><option>房间类型</option></select></td>\n" +
+                "                <td>\n" +
+                "                    <button class=\"change layui-btn layui-btn-sm\" value=\"-\">-</button>\n" +
+                "                    <input type=\"text\" class=\"number\" lay-verify=\"required|number\" value=\"1\" style=\"width: 80px\"/>\n" +
+                "                    <button class=\"change layui-btn layui-btn-sm\" value=\"+\">+</button>\n" +
+                "                </td>\n" +
+                "                <td><input type=\"text\" class=\"layui-input startTime\"></td>\n" +
+                "                <td><input type=\"text\" class=\"layui-input endTime\"></td>\n" +
+                "                <td><input type=\"button\" value=\"删除\" class=\"deltr layui-btn layui-bg-gray layui-btn-sm\"/></td>\n" +
+                "            </tr>"
+            $('tbody').append(html);
+            timeAdd();
+        })
+    })
+</script>
+</html>
