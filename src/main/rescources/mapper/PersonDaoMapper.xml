@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.two.dao.person.PersonDao">
+    <!--<select id="personList" resultType="map">
+        select * from (select rownum rn ,c.* from
+        (select a.*,b.title from tb_user a,tb_role b where a.user_post_id=b.id) c where rownum &lt; #{end}) d
+        where d.rn &gt; #{start}
+        /*select a.*,b.title from tb_user a,tb_role b where a.user_post_id=b.id*/
+    </select>
+    <select id="personCount" resultType="int">
+        select count(*) as cn from tb_user
+    </select>-->
+</mapper>

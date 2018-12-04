@@ -41,4 +41,13 @@ public class LoginController {
             return "login";
         }
     }
+
+    /**
+     * 跳转界面
+     * @return
+     */
+    @RequestMapping("toInterface")
+    public String toInterface(){
+        return "interface";
+    }
 }
