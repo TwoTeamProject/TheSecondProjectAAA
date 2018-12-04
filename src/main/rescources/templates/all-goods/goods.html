@@ -16,7 +16,16 @@
 </head>
 <body>
 <div class="demoTable" style="margin-top: 10px;width: 1662px;margin-left: 20px;">
-    <!--<div class="layui-btn" data-type="reload" id="redo"><i class="layui-icon">&#xe669;</i></div>-->
+    商品名称:
+    <div class="layui-inline">
+        <input class="layui-input" name="GOODS_NAME" id="demoReload" autocomplete="off">
+    </div>
+    商品类型:
+    <!--<div class="layui-inline">
+        <input class="layui-input" name="TYPE_NAME" id="demoReload2" autocomplete="off">
+    </div>-->
+    <div class="layui-btn" data-type="reload" id="searchBtn"><i class="layui-icon">&#xe615;</i>搜索</div>
+    <div class="layui-btn" data-type="reload" id="redo"><i class="layui-icon">&#xe669;</i></div>
     <div class="layui-btn layui-btn-warm" id="goodsAdd" style="margin-left:10px;"><i class="layui-icon">&#xe608;</i>添加</div>
 </div>
     <table class="layui-hide" id="userlist" lay-filter="demo" ></table>
@@ -47,6 +56,7 @@
                     , {field: 'SUPP_NAME', title: '供应商', width: 200}
                     , {fixed: 'right',title: '操作', toolbar: '#barDemo', width: 200}
                 ] ]
+                ,id: 'testReload'
                 , request:{
                     pageName:'pageNo',//页码的参数名称，默认：page
                     limitName:'pageSize'//每页数据量的参数名：默认：limit
@@ -58,6 +68,31 @@
                     $("[data-field='GOODS_ID']").css('display', 'none');
                 }
             })
+
+            //模糊查询（搜索）
+            var $ = layui.$, active = {
+                reload:function () {
+                    var demoReload = $("#demoReload");
+                    //var demoReload2 = $("#demoReload2");
+                    table.reload('testReload',{
+                        where:{
+                            GOODS_NAME:demoReload.val(),
+                            //TYPE_NAME:demoReload2.val()
+                        }
+                    })
+                }
+            }
+            $("#searchBtn").on('click', function(){
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            })
+            //取消搜索按钮
+            $("#redo").click(function(){
+                $("#demoReload").val("");
+                //$("#demoReload2").val("");
+                $("#searchBtn").trigger("click");
+            })
+
         //监听工具条
         table.on('tool(demo)', function(obj){
             var data = obj.data;

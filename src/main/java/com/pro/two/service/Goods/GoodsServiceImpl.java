@@ -30,8 +30,8 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public int getGoodsCount() {
-        return goodsDao.getGoodsCount();
+    public int getGoodsCount(Map map) {
+        return goodsDao.getGoodsCount(map);
     }
 
     @Override

@@ -15,11 +15,25 @@
         from tb_goods t
         join tb_goodstype d on t.goods_typeid = d.type_id
         join TB_SUPPLIER e on t.supp_id = e.supp_id
-        where rownum &lt; #{end}) a where a.rn &gt; #{start}
+        <where>
+            <if test="GOODS_NAME!=null and GOODS_NAME!= '' ">
+                and GOODS_NAME like '%'||#{GOODS_NAME}||'%'
+            </if>
+
+            <if test="pageNo!=null and pageNo!= '' ">
+                and rownum &lt; #{end}) a where a.rn &gt; #{start}
+            </if>
+        </where>
     </select>
     <!-- 查询数量 -->
     <select id="getGoodsCount" resultType="int">
         select count(*) from tb_goods
+        <where>
+            <if test="GOODS_NAME!=null and GOODS_NAME!= '' ">
+                and GOODS_NAME like '%'||#{GOODS_NAME}||'%'
+            </if>
+
+        </where>
     </select>
     <!-- 增加商品 -->
     <insert id="add">
