@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.two.dao.Goods.SupplierDao">
+    <!-- 查询供应商信息 -->
+    <select id="getSuppList" resultType="map">
+        select SUPP_ID,SUPP_NAME,SUPP_ADDRESS,SUPP_PHONE,SUPP_STATE,to_char(UPDATE_TIME,'yyyy-mm-dd hh24:mi:ss') as UPDATE_TIME
+        from TB_SUPPLIER
+
+    </select>
+    <!-- 增加商品 -->
+    <insert id="add">
+        insert into TB_SUPPLIER(SUPP_ID,SUPP_NAME,SUPP_ADDRESS,SUPP_PHONE,SUPP_STATE,
+        OPERATE_ID,UPDATE_TIME) values(tb_supplier_id.nextval,#{SUPP_NAME},#{SUPP_ADDRESS},
+        #{SUPP_PHONE},'1',1,sysdate)
+    </insert>
+    <!-- 根据id删除goods -->
+    <delete id="delete">
+        delete from TB_SUPPLIER where SUPP_ID=#{SUPP_ID}
+    </delete>
+</mapper>

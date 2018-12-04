@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>供应商列表</title>
+    <link rel="stylesheet" href="../lib/layui/css/layui.css">
+    <script src="../js/jquery-1.8.3.min.js"></script>
+    <script src="../lib/layui/layui.js"></script>
+
+    <style type="text/css">
+        .layui-table-cell .layui-form-checkbox[lay-skin="primary"] {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+<div class="demoTable" style="margin-top: 10px;width: 1662px;margin-left: 20px;">
+    <!--<div class="layui-btn" data-type="reload" id="redo"><i class="layui-icon">&#xe669;</i></div>-->
+    <div class="layui-btn layui-btn-warm" id="suppAdd" style="margin-left:10px;"><i class="layui-icon">&#xe608;</i>添加</div>
+</div>
+<table class="layui-hide" id="supplist" lay-filter="demo" ></table>
+<script>
+    layui.use('table', function() {
+        var table = layui.table;
+        table.render({
+            elem: '#supplist'
+            , title: '供应商'
+            , height: 790
+            , width: 1743
+            , url: '/pro/Supplier/List'
+            , toolbar: '#toolbarDemo'
+            , page: true
+            , even: true
+            , skin:'nob'    //line （行边框风格） row （列边框风格） nob （无边框风格）
+            , size: 'lg'
+            , cols: [ [
+                {checkbox: true, fixed: true}
+                , {field: 'SUPP_ID', title: '供应商id', width: 300, sort: true, unresize: true, fixed: 'left'}
+                , {field: 'SUPP_NAME', title: '供应商', width: 320}
+                , {field: 'SUPP_ADDRESS', title: '供应商详细地址', width: 350}
+                , {field: 'SUPP_PHONE', title: '供应商电话', width: 300}
+                , {field: 'UPDATE_TIME', title: '更新时间', width: 300}
+                , {fixed: 'right',title: '操作', toolbar: '#barDemo', width: 300}
+            ] ]
+            //隐藏id
+            , done: function () {
+                $("[data-field='SUPP_ID']").css('display', 'none');
+            }
+        })
+        //监听工具条
+        table.on('tool(demo)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'del'){
+                layer.confirm('确定要删除吗', function(index){
+                    $.ajax({
+                        url: "/pro/Supplier/delete",
+                        type: "post",
+                        data:{"SUPP_ID":data.SUPP_ID},
+                        dataType: "json",
+                        success: function(data){
+                            if(data.issuc==true){
+                                obj.del();
+                                layer.close(index);
+                                layer.msg("删除成功", {icon: 6});
+                            }else{
+                                layer.msg("删除失败", {icon: 5});
+                            }
+                        }
+                    });//ajax
+                });
+            }  //edit
+        });
+    })
+    //商品添加
+    $("#suppAdd").click(function () {
+        layer.open({
+            title:'供应商添加'
+            ,type: 1
+            ,area: ['700px', '600px']
+            ,anim: 1
+            ,content:$("#addDemo").html()
+            ,success:function (layero,index) {
+                var flag=true; //状态码
+                $("#SUPP_NAME,#SUPP_ADDRESS,#SUPP_PHONE").focus(function () {
+                    $("span").html("");
+                });
+                $("#SUPP_NAME,#SUPP_ADDRESS,#SUPP_PHONE").blur(function () {
+                    var state;
+                    var obj = $(this);
+                    var req = obj.attr("req");
+                    var email = obj.attr("email");
+                    var span_id = "#"+obj.attr("id")+"_span";//当前点击对应的span
+                    if (req=="req"){
+                        if (obj.val().trim()=="" || obj.val()==null){
+                            flag=false;
+                            $(span_id).text("内容不能为空").css("color","#FF0000");
+                        }else{
+                            flag=true;
+                        }
+                    }
+                    if(email=="email"){
+                        var reg=/^1[34578]\d{9}$/;//手机号验证
+                        if(obj.val()!=null&&!reg.test(obj.val())){
+                            flag=false;
+                            $(span_id).text("格式不正确").css("color","#FF0000");
+                        }else{
+                            flag=true;
+                        }
+                    }
+                })
+                $("#sbt2").click(function () {
+                    $("#SUPP_NAME,#SUPP_ADDRESS,#SUPP_PHONE").trigger("blur");
+                    if (flag==false){
+                        return;
+                    }
+                    $.ajax({
+                        url: '/pro/Supplier/addSupp',
+                        type:'post',
+                        data:{"SUPP_NAME":$("#SUPP_NAME").val(),"SUPP_ADDRESS":$("#SUPP_ADDRESS").val(),
+                            "SUPP_PHONE":$("#SUPP_PHONE").val()
+                        },
+                        dataType:"json",
+                        success:function (data) {
+                            // var pageNum = $(".layui-laypage-curr .layui-laypage-em").next().html();
+                            if(data.issuc==true){
+                                layer.close(index);
+                                layer.msg("添加成功", {icon: 6});
+                                setTimeout(function () {
+                                    //修改页码input框的值为当前页码
+                                    //$(".layui-laypage-skip .layui-input").val(pageNum);
+                                    //触发页码确定按钮 实现只刷新当前页面
+                                    //$(".layui-laypage-btn").trigger("click");
+                                    location.reload();
+                                }, 800);
+                            }else{
+                                layer.msg("添加失败", {icon: 5});
+                            }
+                        }
+                    })
+                })
+                //弹出层取消按钮
+                $("#cancel2").click(function(){
+                    layer.closeAll('page');
+                    location.reload();
+                })
+            }
+        })
+    })
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除<i class="layui-icon">&#xe640;</i></a>
+</script>
+<!-- 添加supplier -->
+<script type="text/html" id="addDemo">
+    <form   id="addForm">
+        <table align="center" style="margin-top: 30px;margin-bottom: 50px;">
+            <tr>
+                <td style="padding-right: 60px;">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">供应商</label>
+                        <div class="layui-input-inline">
+                            <input name="SUPP_NAME" class="layui-input"   id="SUPP_NAME" req="req" autocomplete="off">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="height:30px;padding-left:110px;"><span id="SUPP_NAME_span"></span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">地址</label>
+                        <div class="layui-input-inline">
+                            <input name="SUPP_ADDRESS" class="layui-input" id="SUPP_ADDRESS"  req="req" autocomplete="off">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="height:30px;padding-left:110px;"><span id="SUPP_ADDRESS_span"></span></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">供应商电话</label>
+                        <div class="layui-input-inline">
+                            <input name="SUPP_PHONE" class="layui-input" id="SUPP_PHONE"  req="req" email="email" autocomplete="off">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="height:30px;padding-left:110px;"><span id="SUPP_PHONE_span"></span></td>
+            </tr>
+        </table>
+    </form>
+    <div align="center">
+        <input type="button" value="确认添加" id="sbt2" class="layui-btn" style="margin-right: 40px;"/>
+        <input type="button" value="取消" id="cancel2" class="layui-btn layui-btn-warm"/>
+    </div>
+</script>
+</body>
+</html>
