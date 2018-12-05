@@ -30,7 +30,7 @@
 
     <!-- 向缺货单（TB_STOCKDET）中添加信息 -->
     <insert id="addStockDet">
-        insert into TB_STOCKDET values(tb_stockdet_id.nextval,'张三',to_char(sysdate,'yyyymmddhhmmss'),sysdate,#{SUPP_NAME})
+        insert into TB_STOCKDET values(tb_stockdet_id.nextval,'张三',to_char(sysdate,'yyyymmddhhmmss'),sysdate,#{SUPP_NAME},0)
     </insert>
 
 </mapper>

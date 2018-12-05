@@ -16,11 +16,24 @@ import java.util.Map;
 @Service
 public class PurchaseServiceImpl implements PurchaseService {
 
+
     @Autowired
     private PurchaseDao purchaseDao;
 
     @Override
     public List<Map> getList() {
+
         return purchaseDao.getList();
+    }
+
+    @Override
+    public List<Map> getListDet(Map map) {
+
+        return purchaseDao.getListDet(map);
+    }
+
+    @Override
+    public int updateState(Map map) {
+        return purchaseDao.updateState(map);
     }
 }

@@ -5,9 +5,6 @@
 <mapper namespace="com.pro.two.dao.Goods.GoodsDao">
     <!--分页-->
     <!-- 查询商品信息 -->
-    <!--  select * from
-        (select rownum rn,t.* from emp t where rownum &lt; #{end}) a
-        where a.rn &gt; #{start}-->
     <select id="getGoodsList" resultType="map">
         select * from
         (select rownum rn,t.GOODS_ID,t.GOODS_NAME,t.GOODS_SPE,t.GOODS_UNIT,t.GOODS_PRICE,d.TYPE_NAME,e.SUPP_NAME,t.SUPP_ID,

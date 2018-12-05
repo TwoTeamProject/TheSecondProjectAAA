@@ -127,10 +127,6 @@
                                 layer.close(index);
                                 layer.msg("添加成功", {icon: 6});
                                 setTimeout(function () {
-                                    //修改页码input框的值为当前页码
-                                    //$(".layui-laypage-skip .layui-input").val(pageNum);
-                                    //触发页码确定按钮 实现只刷新当前页面
-                                    //$(".layui-laypage-btn").trigger("click");
                                     location.reload();
                                 }, 800);
                             }else{

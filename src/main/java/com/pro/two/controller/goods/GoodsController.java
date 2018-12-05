@@ -50,6 +50,7 @@ public class GoodsController {
      */
     @RequestMapping("/toList")
     public String toGetList(){
+
         return "all-goods/goods";
     }
 
