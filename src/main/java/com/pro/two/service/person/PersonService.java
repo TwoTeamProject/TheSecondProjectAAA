@@ -47,6 +47,13 @@ public interface PersonService {
     int  add(Map map);
 
     /**
+     * 雇员修改
+     * @param map
+     * @return
+     */
+    int update(Map map);
+
+    /**
      * 雇员删除
      * @param user_id
      * @return

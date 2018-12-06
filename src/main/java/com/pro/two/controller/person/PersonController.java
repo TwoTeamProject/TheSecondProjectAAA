@@ -77,7 +77,6 @@ public class PersonController {
         Map map1 = new HashMap();
         map1.put("data",personService.personListDemo(map));
         map1.put("total",personService.getPageCount(map));
-        System.out.println(map1);
         return map1;
     }
 
@@ -90,12 +89,30 @@ public class PersonController {
     public Object add(@RequestBody Map map){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            Date user_create_date = sdf.parse(map.get("user_create_date")+"");
-            map.put("user_create_date",user_create_date);
+            Date user_create_date = sdf.parse(map.get("CREATE_DATE")+"");
+            map.put("CREATE_DATE",user_create_date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        //System.out.println(map);
         return personService.add(map);
+    }
+
+    /**
+     * 员工添加
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("update")
+    public Object update(@RequestBody Map map){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date user_create_date = sdf.parse(map.get("CREATE_DATE")+"");
+            map.put("CREATE_DATE",user_create_date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return personService.update(map);
     }
 
     /**
@@ -106,7 +123,6 @@ public class PersonController {
     @ResponseBody
     @RequestMapping("/del/{user_id}")
     public Object del(@PathVariable Integer user_id){
-        System.out.println(user_id);
         return personService.delete(user_id);
     }
     /**
@@ -120,10 +136,22 @@ public class PersonController {
         return personService.batchDelete(ids);
     }
 
+    /**
+     * 查询职位
+     * @return
+     */
     @ResponseBody
     @RequestMapping("role")
     public Object role(){
-        System.out.println(personService.role());
         return personService.role();
+    }
+
+    /**
+     * 跳转个人信息
+     * @return
+     */
+    @RequestMapping("topersonInfo")
+    public Object topersonalInfo(){
+        return "person/personInfo";
     }
 }
