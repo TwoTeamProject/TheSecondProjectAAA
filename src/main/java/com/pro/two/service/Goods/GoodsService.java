@@ -21,7 +21,7 @@ public interface GoodsService {
      * 获取分页总数量
      * @return
      */
-    int getGoodsCount();
+    int getGoodsCount(Map map);
 
     /**
      * 商品添加

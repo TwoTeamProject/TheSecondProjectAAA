@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.two.dao.Goods.PurchaseDao">
+    <!-- 获取缺货单信息 -->
+    <select id="getList" resultType="map">
+        select a.sd_id,a.sd_number,a.supp_name,b.supp_address,b.supp_phone,a.sd_emp,
+        to_char(a.sd_time,'yyyy-mm-dd hh24:mi:ss') as sd_time
+        from TB_STOCKDET a
+        join TB_SUPPLIER b on a.supp_name = b.supp_name
+        where SD_STATE = 0
+    </select>
+
+    <!-- 获取缺货单商品详情 -->
+    <select id="getListDet" resultType="map">
+        select a.GOODS_ID,a.GOODS_SURP,b.GOODS_NAME,b.GOODS_UNIT,b.GOODS_SPE,c.TYPE_ID,c.TYPE_NAME,a.GOODS_NUM,b.GOODS_PRICE
+        from TB_STOCK a
+        join TB_GOODS b on a.GOODS_ID = B.GOODS_ID
+        join TB_GOODSTYPE c on b.GOODS_TYPEID = c.TYPE_ID
+        where a.GOODS_NUM = #{GOODS_NUM}
+    </select>
+    <!-- 修改缺货单状态TB_STOCKDET（SD_STATE） (GOODS_NUM) -->
+    <update id="updateState">
+        update TB_STOCKDET set SD_STATE = 1 where SD_NUMBER = #{GOODS_NUM}
+    </update>
+</mapper>

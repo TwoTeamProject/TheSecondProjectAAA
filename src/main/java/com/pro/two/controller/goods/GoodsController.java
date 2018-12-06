@@ -39,7 +39,7 @@ public class GoodsController {
         Map tempMap = new HashMap();
         tempMap.put("code",0);
         tempMap.put("msg","");
-        tempMap.put("count",goodsService.getGoodsCount());
+        tempMap.put("count",goodsService.getGoodsCount(map));
         tempMap.put("data",goodsService.getGoodsList(map));
         return tempMap;
     }
@@ -50,6 +50,7 @@ public class GoodsController {
      */
     @RequestMapping("/toList")
     public String toGetList(){
+
         return "all-goods/goods";
     }
 
@@ -100,7 +101,7 @@ public class GoodsController {
         //System.out.println("更新传过来的参数："+map);
         Map tempMap = new HashMap();
         int result = goodsService.update(map);
-        System.out.println(result);
+        //System.out.println(result);
         if(result==-1){
             tempMap.put("issuc", false);
         }else{
@@ -108,4 +109,6 @@ public class GoodsController {
         }
         return tempMap;
     }
+
+
 }
