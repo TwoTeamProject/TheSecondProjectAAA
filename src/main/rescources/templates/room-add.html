@@ -37,7 +37,9 @@
                 <span class="x-red">*</span>房间类型
             </label>
             <div class="layui-input-inline">
-                <input type="text"  id="room_typename" class="layui-input">
+                <select id="room_typename">
+                </select>
+               <!-- <input type="text"  id="room_typename" class="layui-input">-->
             </div>
         </div>
         <div class="layui-form-item">
@@ -61,12 +63,25 @@
     </form>
 </div>
 <script>
+    $.ajax({
+        url:"/pro/room/type",
+        type:"post",
+        success : function(data){
+            var str = "";
+            if(data!=''){
+                for(var i=0;i<data.length;i++){
+                    str+="<option value=\"+data[i].ROOM_TYPEID+\">"+data[i].ROOM_TYPENAME+"</option>";
+                }
+            }
+            $("#room_typename").append(str)
+        }
+    })
     function add() {
         $.ajax({
             url : "/pro/room/addroom",
             type : "POST",
             data : {"room_code":$("#room_code").val(),
-            "room_typename":$("#room_typename").val(),
+            "room_typename":$("#room_typename option:selected").html(),
             "room_state":$("#room_state").val()},
             dataType : "json",
             success : function(data) {

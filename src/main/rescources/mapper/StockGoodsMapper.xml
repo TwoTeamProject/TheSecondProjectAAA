@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.two.dao.Goods.StockGoodsDao">
+
+    <!-- 获取商品表中数量小于100的 -->
+    <select id="getList" resultType="map">
+        select a.GOODS_ID,a.GOODS_NAME,a.GOODS_SPE,a.GOODS_UNIT,a.GOODS_PRICE,a.GOODS_NUM,b.TYPE_NAME,c.SUPP_NAME
+        from TB_GOODS a
+        JOIN TB_GOODSTYPE b on a.goods_typeid = b.type_id
+        JOIN TB_SUPPLIER c on a.supp_id = c.supp_id
+        <where>
+            <if test="SUPP_NAME!=null and SUPP_NAME!= '' ">
+                and SUPP_NAME = #{SUPP_NAME}
+            </if>
+        </where>
+        and Goods_Num &lt; 100
+    </select>
+
+    <!-- 供应商姓名 -->
+    <select id="getSupp" resultType="map">
+        select SUPP_NAME from TB_SUPPLIER
+    </select>
+
+    <!-- 向缺货表(TB_STOCK)添加商品信息 -->
+    <insert id="addStock">
+        insert into TB_STOCK values(tb_stock_id.nextval,#{GOODS_ID},#{hhh},0,1,'张三',sysdate,to_char(sysdate,'yyyymmddhhmmss'),0)
+    </insert>
+
+    <!-- 向缺货单（TB_STOCKDET）中添加信息 -->
+    <insert id="addStockDet">
+        insert into TB_STOCKDET values(tb_stockdet_id.nextval,'张三',to_char(sysdate,'yyyymmddhhmmss'),sysdate,#{SUPP_NAME},0)
+    </insert>
+
+</mapper>

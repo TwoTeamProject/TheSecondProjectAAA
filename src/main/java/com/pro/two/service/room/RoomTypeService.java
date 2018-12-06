@@ -58,4 +58,18 @@ public interface RoomTypeService {
      * @return
      */
     int updateState(Integer room_code);
+
+    /**
+     * 批量入住登记
+     * @param map
+     * @return
+     */
+    int insertBatchRoom(Map map);
+
+    /**
+     * 批量改变状态
+     * @param map
+     * @return
+     */
+    int batchUpdateState(Map map);
 }

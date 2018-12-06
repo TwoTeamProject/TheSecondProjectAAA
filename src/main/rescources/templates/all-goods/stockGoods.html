@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>库存警告</title>
+
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="This is my page">
+    <link rel="stylesheet" type="text/css" href="../easyui/themes/ui-sunny/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../easyui/themes/icon.css">
+
+    <script type="text/javascript" src="../easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="../easyui/jquery.easyui.min.js"></script>
+    <style>
+        .fitem{height:50px;font-size:15px;}
+        .fitem input{width:200px;height:20px;margin-left:30px}
+        .fitem label{width:100px}
+        #cha{float:left;margin-top:10px}
+        #ok{float:right}
+        #toolbar{height:50px;}
+        #too{margin-top:10px}
+        .easyui-linkbutton{margin-top:10px;background-color:#e9e9e9}
+        #cha .easyui-linkbutton{margin-top:-5px}
+    </style>
+</head>
+<body>
+<div id="div-dg">
+    <table id="dg" class="easyui-datagrid" title="缺货表" style="width:100%;height:700px"
+           toolbar="#toolbar" pagination="true"
+           data-options="singleSelect:true,collapsible:true,url:'/pro/stockGoods/list',method:'post'">
+        <thead>
+        <tr>
+            <th hidden data-options="field:'GOODS_ID',width:160,align:'center'" sortable="true">缺货商品ID</th>
+            <th data-options="field:'GOODS_NAME',width:200,align:'center'">商品名称</th>
+            <th data-options="field:'GOODS_PRICE',width:200,align:'center'">商品单价</th>
+            <th data-options="field:'GOODS_SPE',width:260,align:'center'">商品规格</th>
+            <th data-options="field:'GOODS_UNIT',width:260,align:'center'">计量单位</th>
+            <th data-options="field:'TYPE_NAME',width:160,align:'center'">商品类型</th>
+            <th data-options="field:'GOODS_NUM',width:160,align:'center'">商品余量</th>
+            <th data-options="field:'SUPP_NAME',width:260,align:'center'">供应商</th>
+            <th data-options="field:'status',align:'center',width:245,formatter:formatuper">需补充数</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<!-- 工具栏 -->
+<div id="toolbar">
+		<span id="cha" style="font-size: 20px;color:#4c3000" >
+			<span>供应商:</span>
+            <select id="userN" style="font-size: medium;padding-top:3px;padding-bottom: 3px;text-align: center; margin-left: 5px">
+                <option selected="selected"></option>
+            </select>
+			<!--<input id="userN" style="line-height:26px;border:1px solid #ccc">-->
+			<a  class="easyui-linkbutton" plain="true" onclick="doSearch()">查询</a>
+           <a  class="easyui-linkbutton" plain="true" onclick="load()">刷新</a>
+		</span>
+       <span id="ok">
+            <a  class="easyui-linkbutton" plain="true" onclick="keep()">生成缺货单</a>
+       </span>
+
+
+</div>
+<script type="text/javascript">
+    //获取供应商姓名
+    $(function () {
+        $.ajax({
+            url:"/pro/stockGoods/Supp",
+            type:"POST",
+            dataType:"json",
+            success:function (data) {
+                if(data!=''){
+                    var str = "";
+                    for( var i=0;i<data.length;i++){
+                        str += "<option value='"+data[i].SUPP_NAME+"'>"+data[i].SUPP_NAME+"</option>"
+                    }
+                    $("#userN").append(str);
+                }
+            }
+        })
+    })
+
+
+    //刷新
+    function load() {
+        location.reload();
+    }
+
+    function formatuper(val){
+        return '<input type="text" name="racknum" value=0 style="width:100px" />';
+    }
+    //查询方法
+    function doSearch(){
+        $('#dg').datagrid('load',{
+            SUPP_NAME: $('#userN').val(),
+            //email: $('#el').val()
+        });
+    }
+    function keep(){
+        SUPP_NAME=$('#userN').val();
+        if(SUPP_NAME==""){
+            $.messager.alert('提示','供应商不能为空！','info');
+            return;
+        }
+        //alert("生成完成");
+        var rows = $("#dg").datagrid('getRows');
+        //var total = "";
+        var hhh="" ;
+        var GOODS_ID="";
+        var GOODS_NAME="";
+        for (var i = 0; i < rows.length; i++) {
+            var trackNum = $("#div-dg input[name='racknum']").eq(i).val();
+            if(trackNum!=0){
+                //total += rows[i]["tab_good_num"]+",";
+                GOODS_ID += rows[i]["GOODS_ID"]+",";
+                GOODS_NAME+=rows[i]["GOODS_NAME"]+",";
+                hhh+=trackNum+",";
+            }
+        }
+
+        $.post(
+            "/pro/stockGoods/getStock",
+            {hhh:hhh,GOODS_ID:GOODS_ID,GOODS_NAME:GOODS_NAME,SUPP_NAME:SUPP_NAME},
+            function(data){
+                $("#dg").datagrid("reload");
+            }
+        );
+    }
+</script>
+</body>
+</html>

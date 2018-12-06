@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>table模块快速使用</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <script src="../js/jquery-1.8.3.min.js"></script>
+    <script src="../lib/layui/layui.js"></script>
+    <script src="../js/xadmin.js"></script>
+    <script>
+        layui.use('table', function(){
+            var table = layui.table;
+            table.render({
+                elem: '#demo'
+                ,height: 312
+                ,url: '/pro/person/list'
+                ,page: true
+                ,cols: [[
+                    {field: 'USER_ID', title: 'ID', width:80, sort: true, fixed: 'left'}
+                    ,{field: 'USER_NAME', title: '姓名', width:80}
+                    ,{field: 'USER_UNAME', title: '用户名', width:80}
+                    ,{field: 'USER_PASSWORD', title: '密码', width:80}
+                    ,{field: 'USER_GENDER', title: '性别', width:80, sort: true}
+                    ,{field: 'USER_AGE', title: '年龄', width:80}
+                    ,{field: 'TITLE', title: '职位', width: 177}
+                    ,{field: 'USER_PHONE', title: '联系方式', width: 80, sort: true}
+                    ,{field: 'USER_EMAIL', title: '邮箱', width: 80, sort: true}
+                    ,{field: 'USER_CREATE_DATE', title: '入职日期', width: 80}
+                    ,{field: 'USER_STATE', title: '状态', width: 135, sort: true}
+                ]]
+            });
+        });
+    </script>
+</head>
+<body>
+
+<table id="demo" lay-filter="test"></table>
+
+</body>
+</html>

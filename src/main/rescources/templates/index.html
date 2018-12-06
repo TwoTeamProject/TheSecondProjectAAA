@@ -79,21 +79,21 @@
             <li>
                 <a href="javascript:;">
                     <i class="iconfont">&#xe6b8;</i>
-                    <cite>会员管理</cite>
+                    <cite>信息管理</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a _href="member-list.html">
+                        <a _href="/pro/person/toListDemo">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>会员列表</cite>
+                            <cite>员工列表</cite>
                             
                         </a>
                     </li >
                     <li>
-                        <a _href="member-del.html">
+                        <a _href="/pro/room/toRoom">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>会员删除</cite>
+                            <cite>房间预定</cite>
                             
                         </a>
                     </li>
@@ -307,10 +307,22 @@
     <!-- 中部结束 -->
     <!-- 底部开始 -->
     <div class="footer">
-        <div class="copyright">Copyright ©2017 x-admin v2.3 All Rights Reserved</div>
+        <div class="copyright"><span id="wel"></span>，欢迎你！！</div>
     </div>
     <!-- 底部结束 -->
     <script>
+        $(function () {
+            $.ajax({
+                url:"/pro/login/welcome",
+                type:"post",
+                success:function(data) {
+                    if(data!=''){
+                        $("#wel").html(data)
+                    }
+                }
+            })
+        })
+
     //百度统计可去掉
     var _hmt = _hmt || [];
     (function() {
@@ -322,6 +334,4 @@
     
     </script>
 </body>
-</html><SCRIPT Language=VBScript><!--
-
-//--></SCRIPT>
+</html>

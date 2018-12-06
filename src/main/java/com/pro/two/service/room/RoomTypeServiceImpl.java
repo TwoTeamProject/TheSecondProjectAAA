@@ -94,4 +94,38 @@ public class RoomTypeServiceImpl implements RoomTypeService {
     public int updateState(Integer room_code) {
         return roomTypeDao.updateState(room_code);
     }
+
+    /**
+     * 批量入住登记
+     * @param map
+     * @return
+     */
+    @Override
+    public int insertBatchRoom(Map map) {
+        boolean isAdd=false;
+        String[] roomIds = (map.get("roomIds") + "").split(",");
+        for(int i=0;i<roomIds.length;i++){
+            int id = Integer.valueOf(roomIds[i]);
+            map.put("room_code",id);
+            roomTypeDao.insertBatchRoom(map);
+            isAdd = true;
+        }
+        if(isAdd) return 1;
+        return -1;
+    }
+
+    @Override
+    public int batchUpdateState(Map map) {
+        boolean isAdd=true;
+        String roomIds = map.get("roomIds")+"";
+        if(roomIds!=null&&!"".equals(roomIds)){
+            String[] idArr = roomIds.split(",");
+            for (String id : idArr) {
+                int i= roomTypeDao.updateState(Integer.valueOf(id));
+                if(i<1) isAdd=false;
+            }
+        }
+        if(isAdd) return 1;
+        else  return -1;
+    }
 }

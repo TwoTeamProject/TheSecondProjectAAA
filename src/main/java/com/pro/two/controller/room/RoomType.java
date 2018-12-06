@@ -47,7 +47,6 @@ public class RoomType {
     @RequestMapping("/type")
     public Object roomType(){
         List<Map> list = roomTypeService.selectRoomType();
-       /* System.out.println(list);*/
         return roomTypeService.selectRoomType();
     }
 
@@ -166,4 +165,43 @@ public class RoomType {
             }
             return maps;
         }
+
+    /**
+     * 跳转登记
+     * @return
+     */
+    @RequestMapping("/tobatchRoom")
+    public String tobatchRoom(String roomIds,Model model){
+        model.addAttribute("roomIds",roomIds);
+        return "batchRoom";
+    }
+
+    /**
+     * 批量入住登记
+     * @param map
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/batchRoom")
+    public Object batchRoom(@RequestParam Map map){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date indate = null;
+        try {
+            indate = sdf.parse(map.get("indate")+"");
+            Date outdate = sdf.parse(map.get("outdate")+"");
+            map.put("outdate",outdate);
+            map.put("indate",indate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Map maps = new HashMap();
+        int result = roomTypeService.insertBatchRoom(map);
+        roomTypeService.batchUpdateState(map);
+        if (result!=-1){
+            maps.put("issuc",true);
+        }else {
+            maps.put("issuc",false);
+        }
+        return maps;
+    }
 }

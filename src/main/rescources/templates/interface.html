@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>界面</title>
+    <script src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script src="../lib/layui/layui.js"></script>
+    <script src="../lib/layui/layui.all.js"></script>
+    <link rel="stylesheet" href="../lib/layui/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../lib/layui/css/layui.css" />
+    <link rel="stylesheet" href="../lib/layui/css/layui.mobile.css" />
+    <style>
+        #top{
+            width: 100%;
+            height:35px;
+            background: #F4F5F6;
+        }
+        .top1{
+            margin-right:80px;
+            float: right;
+            font-size: 17px;
+            font-family:"微软雅黑";
+            margin-top: 2px;
+        }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding-left: 500px;
+            overflow: hidden;
+            background-color:#333333;
+            height:50px;
+        }
+        li {
+            float: left;
+        }
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 60px;
+            text-decoration: none;
+        }
+        li a:hover {
+            background-color: #242424;
+        }
+        #lunbo{
+            width:100%;
+        }
+        #right{
+            float: right;
+            margin-right:350px;
+            margin-top:100px;
+        }
+        #left{
+            float: left;
+            margin-top:150px;
+            margin-left:400px;
+            width: 450px;
+        }
+        .haungjia{
+            line-height:35px;
+        }
+        .beijing{
+            height:500px;
+        }
+        #left1{
+            float: left;
+            margin-left:350px;
+            margin-top:100px;
+        }
+        #right1{
+            float: right;
+            margin-top:150px;
+            margin-right:400px;
+            width: 450px;
+        }
+        #left2{
+            float: left;
+            margin-left: 400px;
+            width: 400px;
+            margin-top:100px;
+        }
+        #right2{
+            float: right;
+            margin-right:430px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div id="top">
+        <table class="top1">
+            <tr>
+                <td class="top1"><a href="/pro/login/toLogin">登陆</a></td>
+                <td class="top1">网上预定</td>
+                <td class="top1">查找预定</td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <img src="../imgs/10.png"/>
+    </div>
+    <div>
+        <ul>
+            <li>
+                <a href="#home">主页</a>
+            </li>
+            <li>
+                <a href="#news">主页</a>
+            </li>
+            <li>
+                <a href="#contact">主页</a>
+            </li>
+            <li>
+                <a href="#about">主页</a>
+            </li>
+            <li>
+                <a href="#about">主页</a>
+            </li>
+            <li>
+                <a href="#about">主页</a>
+            </li>
+            <li>
+                <a href="#about">主页</a>
+            </li>
+        </ul>
+    </div>
+    <div id="lunbo">
+        <div id="myCarousel" class="carousel slide">
+            <!-- 轮播（Carousel）指标 -->
+            <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+                <li data-target="#myCarousel" data-slide-to="2"></li>
+            </ol>
+            <!-- 轮播（Carousel）项目 -->
+            <div class="carousel-inner">
+                <div class="item active">
+                    <img src="../imgs/17.png">
+                </div>
+                <div class="item">
+                    <img src="../imgs/18.png">
+                </div>
+                <div class="item">
+                    <img src="../imgs/19.png">
+                </div>
+            </div>
+            <!-- 轮播（Carousel）导航 -->
+            <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+            </a>
+            <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+            </a>
+        </div>
+    </div>
+    <div class="beijing">
+        <div id="left">
+            <table>
+                <tr>
+                    <td><h2>关于</h2></td>
+                </tr>
+                <tr class="haungjia">
+                    <td>皇家气派帝王之都的盛情款待
+                        踏入北京中国大饭店，有如置身于一座迷你的紫禁城。精雕细镂的明清风格艺术品，闪烁金叶所装饰的天花穹顶以及深红色巨型漆柱，无不衬托出大堂精致典雅和雍容气度。
+                        来到房间，整幅的落地式玻璃窗可鸟瞰北京城市迷人的风光。客房的设计将摩登时尚与奢华气息优雅融合，并由波西米亚式的水晶吊灯和现代亚洲艺术品优雅点缀，缔造高雅</td>
+                </tr>
+                <tr class="haungjia">
+                    <td>●&nbsp;&nbsp;&nbsp;地处商业中心</td>
+                </tr>
+                <tr class="haungjia">
+                    <td>●&nbsp;&nbsp;&nbsp;地处商业中心</td>
+                </tr>
+                <tr class="haungjia">
+                    <td>●&nbsp;&nbsp;&nbsp;地处商业中心</td>
+                </tr>
+            </table>
+        </div>
+        <div id="right">
+            <img src="../imgs/20.png" />
+        </div>
+    </div>
+    <div style="margin-top: 200px;margin-left: 50%;">
+        <h3>愉悦身心，恢复活力</h3>
+    </div>
+    <div>
+        <div id="left1">
+            <img src="../imgs/21.png" />
+        </div>
+        <div id="right1">
+            <table>
+                <tr class="haungjia">
+                    <td>健身俱乐部
+                        北京中国大饭店健身俱乐部设有室内温水游泳池和设施先进的健身房，健身房内宽敞明亮并拥有先进的有氧健身器械。健身俱乐部还拥有壁球场和室内网球场，以及汗蒸房和漩流浴。 宾客还可尽享传统中式按摩和氧气吧。</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div style="margin-top: 600px;margin-left: 50%;">
+        <h3>积极地、充满活力地入住</h3>
+    </div>
+    <div id="left2">
+        <table>
+            <tr>
+                <td><h3>CHI水疗</h3></td>
+            </tr>
+            <tr class="haungjia">
+                <td>CHI水疗提供了一个真实的空间，在这里，我们的治疗师会根据您的健康需求引导您进行一系列的全面治疗。</td>
+            </tr>
+        </table>
+
+    </div>
+    <div id="right2">
+        <img  src="../imgs/22.png"/>
+    </div>
+    <div style="width: 100%;height: 200px;background: #E0E0E0;margin-top:440px;">
+        <div style="float: left;">
+            <table style="margin-left:300px;margin-top: 40px;">
+                <tr>
+                    <td style="font-size:16px;">郑州香格里拉大酒店</td>
+                </tr>
+                <tr style="line-height:50px;color:#666666;">
+                    <td>地址:中国郑州金水区牛顿国际B座&nbsp;邮政编码:451100</td>
+                </tr>
+                <tr style="line-height:20px;color:#666666;">
+                    <td>电话:88888888</td>
+                </tr>
+                <tr style="line-height:50px;color:#666666;">
+                    <td>邮箱:970642193@qq.com</td>
+                </tr>
+            </table>
+            <table style="margin-left:900px;margin-top:-140px;font-size:16px;">
+                <tr>
+                    <td>入驻\退房</td>
+                </tr>
+                <tr style="line-height:40px;color:#666666;">
+                    <td>希望您入驻愉快</td>
+                </tr>
+                <tr style="line-height:30px;color:#666666;">
+                    <td>请留意入驻\退房时间</td>
+                </tr>
+                <tr style="line-height:30px;color:#666666;">
+                    <td>入住:下午2时</td>
+                </tr>
+                <tr style="line-height:30px;color:#666666;">
+                    <td>退房:中午12时</td>
+                </tr>
+            </table>
+        </div>
+        <div style="float: right;">
+            <table style="margin-right:230px;margin-top: 40px;font-size:16px;">
+                <tr>
+                    <td>支付方式</td>
+                </tr>
+                <tr style="line-height:50px;color:#666666;">
+                    <td>本酒店接受的支付方式</td>
+                </tr>
+                <tr style="line-height:50px;">
+                    <td><img src="../imgs/23.png"/></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div>
+        <img src="../imgs/24.png"/>
+    </div>
+    <div>
+        <h4 style="margin-left:800px;margin-top:20px;">隐私政策 | 条款与细则 | 人身与财产安全 | 供应商行为守则</h4>
+        <h4 style="margin-left:750px;margin-top: 20px;">? 2018 香格里拉国际饭店管理有限公司 保留所有权利 沪ICP备17055189号</h4>
+    </div>
+</div>
+</body>
+</html>
+

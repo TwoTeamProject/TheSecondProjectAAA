@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>缺货商品列表</title>
+    <link rel="stylesheet" href="../lib/layui/css/layui.css">
+    <script src="../js/jquery-1.8.3.min.js"></script>
+    <script src="../lib/layui/layui.js"></script>
+
+    <style type="text/css">
+        .layui-table-cell .layui-form-checkbox[lay-skin="primary"] {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+<div class="demoTable" style="margin-top: 10px;width: 1662px;margin-left: 20px;">
+    <div class="layui-btn" data-type="reload" id="redo"><i class="layui-icon">&#xe669;</i></div>
+</div>
+<table class="layui-hide" id="userlist" lay-filter="demo" ></table>
+<script>
+    layui.use('table', function() {
+        var table = layui.table;
+        table.render({
+            elem: '#userlist'
+            , title: '缺货商品信息表'
+            , height: 790
+            , width: 1743
+            , url: '/pro/Purchase/ListDet'
+            , toolbar: '#toolbarDemo'
+            , page: true
+            , even: true
+            , skin:'nob'
+            , size: 'lg'
+            , cols: [ [
+                {checkbox: true, fixed: true}
+                , {field: 'GOODS_ID', title: '商品id', width: 200, sort: true, unresize: true, fixed: 'left'}
+                , {field: 'GOODS_SURP', title: '购买数量', width: 220}
+                , {field: 'GOODS_NAME', title: '商品名称', width: 150}
+                , {field: 'GOODS_UNIT', title: '计量单位', width: 150}
+                , {field: 'GOODS_SPE', title: '规格', width: 200}
+                , {field: 'TYPE_NAME', title: '类型', width: 220}
+                , {field: 'GOODS_PRICE', title: '价格', width: 220}
+                , {fixed: 'right',title: '操作', toolbar: '#barDemo', width: 200}
+            ] ]
+            ,id: 'testReload'
+            //隐藏id
+            , done: function () {
+                $("[data-field='GOODS_ID']").css('display', 'none');
+            }
+        })
+        //监听工具条
+        table.on('tool(demo)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'edit'){
+                alert(data.SD_NUMBER+"-------")
+                $.ajax({
+                    url: "/pro/Purchase/ListDet",
+                    type: "post",
+                    data:{
+                        "SD_NUMBER":data.SD_NUMBER
+                    },
+                    dataType: "json",
+                    success: function(data){
+                        window.location.href="/pro/Goods/toList";
+                    }
+                });
+            }
+        });
+    })
+    //刷新按钮
+    $(function () {
+        $("#redo").click(function () {
+            location.reload();
+        })
+    })
+
+
+
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit" >查看<i class="layui-icon">&#xe642;</i></a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除<i class="layui-icon">&#xe640;</i></a>
+</script>
+</body>
+</html>

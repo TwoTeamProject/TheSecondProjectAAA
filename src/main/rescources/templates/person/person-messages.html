@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人主页</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <script src="../js/jquery-1.8.3.min.js"></script>
+    <script src="../lib/layui/layui.js"></script>
+    <script src="../js/xadmin.js"></script>
+</head>
+
+<body>
+    <table class="layui-hide" id="str">111111111</table>
+    <script>
+    layui.use('table', function() {
+        var table = layui.table;
+        table.render({
+            elem: '#str'
+            , title: '用户数据表'
+            , height: 790
+            , width: 1910
+            , url: '/pro/person/list'
+            , toolbar: '#toolbarDemo'
+            , page: true
+            , even: true
+            , size: 'lg'
+            , cols: [[
+                {checkbox: true, fixed: true}
+                , {field: 'USER_NAME', title: '房间号', width: 265, sort: true, unresize: true, fixed: 'left'}
+                , {field: 'USER_AGE', title: '姓名', width: 264}
+
+                , {field: 'USER_GENDER', title: '电话', width: 264}
+                , {field: 'TITLE', title: '身份证号', width: 264}
+                , {field: 'USER_PHONE', title: '入住时间', width: 258}
+                , {field: 'USER_EMAIL', title: '房间类型', width: 264}
+                , {field: 'USER_CREATE_DATE', title: '房间类型', width: 264}
+                , {fixed: 'USER_STATE', title: '操作', toolbar: '#barDemo', width: 270}
+            ]]
+            , request: {
+                pageName: 'pageNo',//页码的参数名称，默认：page
+                limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            },
+            limits: [5, 10, 15], //显示
+            limit: 5 //每页默认显示的数量
+        })
+    })
+
+</script>
+</body>
+</html>
