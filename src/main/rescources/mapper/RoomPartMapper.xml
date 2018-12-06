@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.two.dao.roompart.RoomPartDao">
+    <select id="getRoomPartList" resultType="map">
+       select * from
+        (select rownum rn, to_char(room_date,'yyyy-mm-dd') as room_date,a.room_part_id,a.room_part_state, a.room_code,a.room_part_name,a.room_part_phone,a.room_part_card,room_typename
+        from tb_room_part a join tb_roomtype b on a.room_typeid=b.room_typeid
+        join tb_room c on c.room_code=a.room_code
+        where rownum &lt; #{end }) a where a.rn &gt; #{start} and room_part_state = 0
+    </select>
+    <!--查询数量-->
+    <select id="getRoomCount" resultType="int">
+        select count(*) from tb_room_part
+    </select>
+    <!--退房-->
+    <update id="updateRoom">
+        update tb_room_part set room_part_state=1 where room_part_state=0
+    </update>
+   <!-- &lt;!&ndash;&ndash;&gt;
+    <update id="changeRoom">
+        update tb_room_part set room_code=#{room_code},room_typeid=#{room_typeid} where room_part_id=#{room_part_id}
+    </update>-->
+    <select id="emptyRoom" resultType="map">
+        select * from
+        (select rownum rn,a.room_state, a.room_code,b.room_typename,b.room_typeprice,b.room_deposit
+        from tb_room a join tb_roomtype b on a.room_typeid=b.room_typeid
+         and rownum &lt; #{end}) a where a.rn &gt; #{start} and room_state=0
+
+    </select>
+    <!--查询数量-->
+    <select id="emptyRoomCount" resultType="int">
+        select count(*) from tb_room where room_state=0
+    </select>
+</mapper>

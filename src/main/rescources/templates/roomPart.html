@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../lib/layui/css/layui.css">
+    <script src="../js/jquery-1.8.3.min.js"></script>
+    <script src="../lib/layui/layui.js"></script>
+
+    <style type="text/css">
+        .layui-table-cell .layui-form-checkbox[lay-skin="primary"] {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+<div class="demoTable" style="margin-top: 10px;width: 1662px;margin-left: 20px;">
+    顾客姓名:
+    <div class="layui-inline">
+        <input class="layui-input" name="name" id="demoReload" autocomplete="off">
+    </div>
+    顾客电话:
+    <div class="layui-inline">
+        <input class="layui-input" name="phone" id="demoReload2" autocomplete="off">
+    </div>
+    <div class="layui-btn" data-type="reload" id="searchBtn"><i class="layui-icon">&#xe615;</i>搜索</div>
+    <div class="layui-btn" data-type="reload" id="redo"><i class="layui-icon">&#xe669;</i></div>
+
+</div>
+<table class="layui-hide" id="roomPartList" lay-filter="demo"></table>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+
+        table.render({
+            elem: '#roomPartList'
+            ,title: '用户数据表'
+            ,height:790
+            ,width:1910
+            ,url: '/pro/roomPart/list'
+            ,toolbar: '#toolbarDemo'
+            ,page: true
+            ,even: true
+            ,size: 'lg'
+            ,cols:[ [
+                {checkbox: true, fixed: true}
+                ,{field: 'ROOM_CODE', title: '房间号', width:265, sort: true, unresize: true ,fixed: 'left'}
+                ,{field: 'ROOM_PART_NAME', title: '姓名', width:264}
+
+                ,{field: 'ROOM_PART_PHONE', title: '电话', width:264}
+                ,{field: 'ROOM_PART_CARD', title: '身份证号', width:264}
+                ,{field: 'ROOM_DATE', title: '入住时间', width:258}
+                ,{field: 'ROOM_TYPENAME', title: '房间类型', width:264}
+                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:270}
+            ] ]
+            ,request: {
+                pageName: 'pageNo',//页码的参数名称，默认：page
+                limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            },
+            limits: [5, 10, 15], //显示
+            limit: 5 //每页默认显示的数量
+        })
+        table.on('tool(demo)',function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit1'){
+                layer.confirm('确定退房吗？',function (index) {
+                    $.ajax({
+                        url:'/sb/roomPart/update',
+                        type:'post',
+                        data:{"room_part_id":data.room_part_id},
+                        dataType:"json",
+                        success:function (data) {
+                            //获取当前的页码
+                            var pageNum = $(".layui-laypage-curr .layui-laypage-em").next().html();
+                            if (data.issuc==true){
+                                layer.close(index);
+                                layer.msg("退房成功",{icon:6});
+                                setTimeout(function () {
+                                    $(".layui-laypage-skip .layui-input").val(pageNum);
+                                    $(".layui-laypage-btn").trigger("click");
+                                },700);
+                            }else{
+                                layer.msg("退房失败", {icon: 5});
+                            }
+                        }
+                    })
+                })
+            }else if (obj.event === 'edit2') {
+                layer.open({
+                    title: '换房信息'
+                    ,type: 1
+                    ,area: ['700px', '700px']
+                    ,anim: 1
+                    ,content:$("#huanFangDemo").html(),
+                })
+                        $.ajax({
+                            url: '/pro/roomPart/empty',
+                            type: "post",
+                            dataType: "json",
+                            success: function (data) {
+                                var str = "";
+                                for (var i = 0; i < data.data.length; i++) {
+                                    str += "<tr>" +
+                                        "<td>" + data.data[i].ROOM_CODE + "</td>" +
+                                        "<td>" + data.data[i].ROOM_TYPENAME + "</td>" +
+                                        "<td>" + data.data[i].ROOM_TYPEPRICE + "</td>" +
+                                        "<td>" + data.data[i].ROOM_DEPOSIT + "</td>" +
+                                        "</tr>"
+                                }
+                                $("#appendInfo").append(str);
+                            }
+
+                        })
+                //弹出层取消
+                    $("#cancel2").click(function(){
+                        layer.closeAll('page');
+                    })
+            }
+        })
+    })
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs layui-bg-red"  lay-event="edit1">退房<i class="layui-icon">&#xe642;</i></a>
+    <div class="layui-btn layui-btn-xs layui-bg-orange" lay-event="edit2" id="huan">换房<i class="layui-icon">&#xe642;</i></div>
+</script>
+
+<script type="text/html" id="huanFangDemo">
+    <div class="col-md-12 column">
+        <table class="table table-hover" id="checkChange">
+            <thead>
+            <tr>
+
+                <td style="width: 200px">房间号</td>
+                <td style="width: 200px">房间类型</td>
+                <td style="width: 200px">价格</td>
+                <td style="width: 200px">押金</td>
+            </tr>
+            </thead>
+            <tbody id="appendInfo">
+
+            </tbody>
+        </table>
+    </div>
+
+    <div align="center">
+        <input type="button" value="确认换房" id="sbt2" class="layui-btn layui-btn-sm" />
+        <input type="button" value="取消" id="cancel2" class="layui-btn layui-btn-sm layui-btn-normal" />
+    </div>
+</script>
+</body>
+</html>
