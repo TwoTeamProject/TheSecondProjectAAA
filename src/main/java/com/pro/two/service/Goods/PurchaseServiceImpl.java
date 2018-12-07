@@ -34,6 +34,22 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public int updateState(Map map) {
+
         return purchaseDao.updateState(map);
+    }
+
+    @Override
+    public int delete(Integer SD_ID) {
+        return purchaseDao.delete(SD_ID);
+    }
+
+    @Override
+    public List<Map> getHistory() {
+        return purchaseDao.getHistory();
+    }
+
+    @Override
+    public List<Map> getInStorage() {
+        return purchaseDao.getInStorage();
     }
 }

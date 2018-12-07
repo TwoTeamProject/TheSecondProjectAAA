@@ -27,4 +27,24 @@ public interface PurchaseDao {
      * @return
      */
     int updateState(Map map);
+
+    /**
+     * 根据SD_ID删除缺货单信息
+     * @param SD_ID
+     * @return
+     */
+    int delete(Integer SD_ID);
+
+
+    /**
+     * 缺货单历史记录表详情
+     * @return
+     */
+    List<Map> getHistory();
+
+    /**
+     * 缺货单历史记录表详情
+     * @return
+     */
+    List<Map> getInStorage();
 }
