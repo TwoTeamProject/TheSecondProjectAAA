@@ -71,6 +71,16 @@ public class PersonServiceImpl implements PersonService {
     }
 
     /**
+     * 员工修改
+     * @param map
+     * @return
+     */
+    @Override
+    public int update(Map map) {
+        return personDao.update(map);
+    }
+
+    /**
      * 删除
      * @param user_id
      * @return

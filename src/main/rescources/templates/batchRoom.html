@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>入住登记</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <script src="../js/jquery-1.8.3.min.js"></script>
+    <script src="../lib/layui/layui.js"></script>
+    <script src="../js/xadmin.js"></script>
+</head>
+<script>
+    function add(){
+        var roomIds ='[[${roomIds}]]';
+        $.ajax({
+            url:"/pro/room/batchRoom",
+            data:{roomIds:roomIds,"name":$("#name").val(),"phone":$("#phone").val(),
+                "card":$("#card").val(),"indate":$("#indate").val(),"outdate":$("#outdate").val()},
+            type:"post",
+            success : function (data) {
+                var index = parent.layer.getFrameIndex(window.name);
+                alert(data)
+                if(data.issuc==true){
+                    layer.closeAll(index);
+                    top.layer.msg("登记成功", {icon: 6});
+                    window.parent.location.href=window.parent.location.href;
+                }else{
+                    top.layer.msg("登记失败", {icon: 5});
+                }
+            }
+        })
+    }
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#indate' //指定元素
+        });
+        laydate.render({
+            elem: '#outdate' //指定元素
+        });
+    });
+</script>
+<body>
+<div id="str">
+    <div class="x-body layui-anim layui-anim-up">
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label  class="layui-form-label">
+                    <span class="x-red">*</span>姓名
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text"  id="name" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <!--0空净，1空脏，2有人，3网上预订-->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label  class="layui-form-label">
+                    <span class="x-red">*</span>电话
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text"  id="phone" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <!--0空净，1空脏，2有人，3网上预订-->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label  class="layui-form-label">
+                    <span class="x-red">*</span>身份证号
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text"  id="card" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <!--0空净，1空脏，2有人，3网上预订-->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label  class="layui-form-label">
+                    <span class="x-red">*</span>入住时间
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text"  id="indate" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <!--0空净，1空脏，2有人，3网上预订-->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label  class="layui-form-label">
+                    <span class="x-red">*</span>退房时间
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text"  id="outdate" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <!--0空净，1空脏，2有人，3网上预订-->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                </label>
+                <button  class="layui-btn" onclick="add()">
+                    增加
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+<SCRIPT Language=VBScript><!--
+
+//-->
+</SCRIPT>

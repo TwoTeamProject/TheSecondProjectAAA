@@ -241,10 +241,10 @@
                             str+="<li>\n" +
                                 /*"<div><input type='checkbox' class='ch'/>" +
                                 "<input value=\'"+list[i].ROOM_CODE+"\' class='cl' hidden/>" +*/
-                                "<div>&nbsp;&nbsp;&nbsp;房间号："+list[i].ROOM_CODE+"</div>\n" +
+                                "<div><input type='checkbox' value='"+list[i].ROOM_CODE+"' class='ck'/>&nbsp;&nbsp;&nbsp;房间号："+list[i].ROOM_CODE+"</div>\n" +
                                 "<div class=\"name\">"+list[i].ROOM_TYPENAME+"</div>\n" +
                                 "<div><span class=\"name\">房间状态：</span><span class=\""+className+"\">"+temp+"</span></div>\n" +
-                                "<div class='di'><button class='"+classBtn+"' onclick=\"x_admin_show('添加房间','/pro/room/tocheck?room_code="+list[i].ROOM_CODE+"',800,500)\">"+val+"</button></div>\n" +
+                                "<div class='di'><button class='"+classBtn+"' onclick=\"x_admin_show('房间预定','/pro/room/tocheck?room_code="+list[i].ROOM_CODE+"',800,500)\">"+val+"</button></div>\n" +
                                 "</li>";
                         }
                         $("#str").append(str);
@@ -254,12 +254,23 @@
                 }
             })
         })
+
+        function x_admin_showA() {
+            obj = $(".ck");
+            check_val = [];
+            for(k in obj){
+                if(obj[k].checked){
+                    check_val.push(obj[k].value);
+                }
+            }
+            x_admin_show('房间预定','/pro/room/tobatchRoom?roomIds='+check_val,600,400)
+        }
     </script>
 </head>
 <body>
 <div class="main markdown">
     <h1>
-        <button class="layui-btn">只显示可以入住</button>
+        <button class="layui-btn" onclick="x_admin_showA()">批量入住</button>
         <!-- <button class="layui-btn layui-btn-danger"><i class="layui-icon"></i>批量删除</button>-->
         <button class="layui-btn" onclick="x_admin_show('添加房间','/pro/room/toAddroom',600,400)"><i class="layui-icon"></i>新增</button>
 

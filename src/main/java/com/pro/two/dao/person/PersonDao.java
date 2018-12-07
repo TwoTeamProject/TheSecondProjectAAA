@@ -58,9 +58,16 @@ public interface PersonDao {
      * @param map
      * @return
      */
-    @Insert("insert into tb_user(user_id,user_name,user_gender,user_age,user_post_id,user_phone,user_create_date,user_uname,user_password,user_email,user_state) values(tb_user_id.nextval,#{user_name},#{user_gender},#{user_age},#{user_post_id},#{user_phone},#{user_create_date},#{user_uname},#{user_password},#{user_email},#{user_state})")
+    @Insert("insert into tb_user(user_id,user_name,user_gender,user_age,user_post_id,user_phone,user_create_date,user_uname,user_password,user_email,user_state) values(tb_user_id.nextval,#{USER_NAME},#{USER_GENDER},#{USER_AGE},#{USER_POST_ID},#{USER_PHONE},#{CREATE_DATE},#{USER_UNAME},#{USER_PASSWORD},#{USER_EMAIL},#{USER_STATE})")
     int  add(Map map);
 
+    /**
+     * 雇员修改
+     * @param map
+     * @return
+     */
+    @Update("update tb_user set user_name=#{USER_NAME},user_gender=#{USER_GENDER},user_age=#{USER_AGE},user_post_id=#{USER_POST_ID},user_phone=#{USER_PHONE},user_create_date=#{CREATE_DATE},user_uname=#{USER_UNAME},user_password=#{USER_PASSWORD},user_email=#{USER_EMAIL},user_state=#{USER_STATE} where user_id=#{USER_ID}")
+    int update(Map map);
     /**
      * 雇员删除
      * @param user_id

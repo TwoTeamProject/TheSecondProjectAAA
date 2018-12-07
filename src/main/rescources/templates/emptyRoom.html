@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../lib/layui/css/layui.css">
+    <script src="../js/jquery-1.8.3.min.js"></script>
+    <script src="../lib/layui/layui.js"></script>
+
+    <style type="text/css">
+        .layui-table-cell .layui-form-checkbox[lay-skin="primary"] {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+<div class="demoTable" style="margin-top: 10px;width: 1662px;margin-left: 20px;">
+    房间号:
+    <div class="layui-inline">
+        <input class="layui-input" name="ROOM_CODE" id="demoReload" autocomplete="off">
+    </div>
+    房间类型:
+    <div class="layui-inline">
+        <input class="layui-input" name="ROOM_TYPENAME" id="demoReload2" autocomplete="off">
+    </div>
+    <div class="layui-btn" data-type="reload" id="searchBtn"><i class="layui-icon">&#xe615;</i>搜索</div>
+    <div class="layui-btn" data-type="reload" id="redo"><i class="layui-icon">&#xe669;</i></div>
+
+</div>
+<table class="layui-hide" id="emptyRoomList" lay-filter="demo"></table>
+<script>
+    layui.use('table', function() {
+        var table = layui.table;
+
+        table.render({
+            elem: '#emptyRoomList'
+            , title: '用户数据表'
+            , height: 790
+            , width: 1910
+            , url: '/pro/roomPart/empty'
+            , toolbar: '#toolbarDemo'
+            , page: true
+            , even: true
+            , size: 'lg'
+            , cols: [ [
+                {checkbox: true, fixed: true}
+                , {field: 'ROOM_CODE', title: '房间号', width: 392, sort: true, unresize: true, fixed: 'left'}
+                , {field: 'ROOM_TYPENAME', title: '房间类型', width: 392}
+                , {field: 'ROOM_TYPEPRICE', title: '价格', width: 395,}
+                , {field: 'ROOM_DEPOSIT', title: '押金', width: 395}
+                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:280}
+            ] ]
+            ,id: 'testReload'
+            , request: {
+                pageName: 'pageNo',//页码的参数名称，默认：page
+                limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            },
+            limits: [5,15,20], //显示
+            limit: 20 //每页默认显示的数量
+        })
+        //搜索功能
+        var $ = layui.$, active = {
+            reload: function(){
+                var demoReload = $('#demoReload');
+                var demoReload2 = $('#demoReload2');
+                table.reload('testReload', {
+                    where: {
+                        ROOM_CODE: demoReload.val(),
+                        ROOM_TYPENAME:demoReload2.val()
+                    }
+                });
+            }
+        };
+        //搜索按钮
+        $("#searchBtn").on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        //取消搜索按钮
+        $("#redo").click(function(){
+            $("#demoReload").val("");
+            $("#demoReload2").val("");
+            $("#searchBtn").trigger("click");
+        })
+    })
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs layui-bg-red" lay-event="edit1">确认换房<i class="layui-icon">&#xe642;</i></a>
+</script>
+</body>
+</html>

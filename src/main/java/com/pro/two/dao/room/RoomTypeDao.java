@@ -57,4 +57,13 @@ public interface RoomTypeDao {
      * @return
      */
     int updateState(Integer room_state);
+
+
+    /**
+     * 批量入住登记
+     * @param map
+     * @return
+     */
+    int insertBatchRoom(Map map);
+
 }
