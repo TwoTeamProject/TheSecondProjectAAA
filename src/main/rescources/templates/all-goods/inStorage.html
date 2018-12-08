@@ -97,29 +97,27 @@
                                     "<td><input type='text' id='numb"+i+"'  /></td>" +
                                     "</tr>";
                             }
-                            $("#tby").append(str);
-                            $("#sbt").click(function () {
-                                var id = "";
-                                var surp = "";
-                                var dt = "";
-                                var num = "";
-                               for(var i=0;i<data.data.length;i++){
-                                  id += data.data[i].GOODS_ID + ",";
-                                  surp += data.data[i].GOODS_SURP + ",";
-                                  dt += $("#da"+i+"").val()+",";
-                                  num += $("#numb"+i+"").val()+",";
-
-                               }
-                               var gnum  = data.data[0].GOODS_NUM;
-                               $.ajax({
-                                   url:"/pro/inStorage/update",
-                                   type:"post",
-                                   data:{"GOODS_ID":id,"GOODS_SURP":surp,"GOODS_DATEINPRO":dt,
-                                       "GOODS_EXP":num,"SD_NUMBER":gnum},
-                                   success:function (data) {
-                                      location.reload();
-                                   }
-
+                        $("#tby").append(str);
+                        $("#sbt").click(function () {
+                            var id = "";
+                            var surp = "";
+                            var dt = "";
+                            var num = "";
+                            for(var i=0;i<data.data.length;i++){
+                                id += data.data[i].GOODS_ID + ",";
+                                surp += data.data[i].GOODS_SURP + ",";
+                                dt += $("#da"+i+"").val()+",";
+                                num += $("#numb"+i+"").val()+",";
+                            }
+                            var gnum  = data.data[0].GOODS_NUM;
+                            $.ajax({
+                                url:"/pro/inStorage/update",
+                                type:"post",
+                                data:{"GOODS_ID":id,"GOODS_SURP":surp,"GOODS_DATEINPRO":dt,
+                                    "GOODS_EXP":num,"SD_NUMBER":gnum},
+                                success:function (data) {
+                                    location.reload();
+                                }
                                })
 
                             })
@@ -156,9 +154,9 @@
                    class="layui-bg-gray">
                 <thead>
                 <tr><td >购买数量</td><td >商品名称</td>
-                    <td >计量单位</td><td >规格</td><td >价格</td>
+                    <td >计量单位</td><td >规格</td><td >价格(/元)</td>
                     <td >类型</td><td >需补充数</td>
-                    <td >生产日期</td><td >保质期</td>
+                    <td >生产日期</td><td >保质期(/天)</td>
                 </tr>
                 </thead>
                 <tbody id="tby">

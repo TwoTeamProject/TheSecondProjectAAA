@@ -30,7 +30,6 @@ public class InStorageController {
     @ResponseBody
     @RequestMapping("/update")
     public Object addStorage(@RequestParam Map map){
-        //System.out.println(map);
         return inStorageService.addStorage(map);
     }
 }

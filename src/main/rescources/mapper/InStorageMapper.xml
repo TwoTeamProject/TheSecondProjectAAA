@@ -4,12 +4,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pro.two.dao.Goods.InStorageDao">
     <!-- 入库 -->
-   <update id="addStorage">
+    <update id="addStorage">
        update TB_GOODS set GOODS_NUM = (GOODS_NUM + #{GOODS_SURP}),
        GOODS_DATEINPRO = TO_DATE(#{GOODS_DATEINPRO},'yyyy-mm-dd hh24:mi:ss'),
        GOODS_EXP = #{GOODS_EXP} where GOODS_ID = #{GOODS_ID}
    </update>
 
+
+    <!-- 修改提交供应商状态 SD_NUMBER=2（已入库） -->
     <update id="updateState">
         update TB_STOCKDET set SD_STATE = '2' where SD_NUMBER = #{SD_NUMBER}
     </update>
