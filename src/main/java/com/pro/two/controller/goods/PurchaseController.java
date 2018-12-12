@@ -1,11 +1,10 @@
 package com.pro.two.controller.goods;
 
 import com.pro.two.service.Goods.PurchaseService;
-import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -42,7 +41,7 @@ public class PurchaseController {
     }
 
     /**
-     * 跳转方法
+     * 获取缺货单信息跳转方法
      * @return
      */
         @RequestMapping("/toList")
@@ -61,18 +60,10 @@ public class PurchaseController {
         tempMap.put("code",0);
         tempMap.put("msg","");
         tempMap.put("data",purchaseService.getListDet(map));
+        //System.out.println(tempMap);
         return tempMap;
     }
 
-    /**
-     * 跳转方法
-     * @return
-     */
-    @RequestMapping("/toListDet")
-    public String togetListDet(){
-
-        return "/all-goods/purchaseDet";
-    }
 
     /**
      * 修改缺货单状态（SD_STATE）
@@ -82,7 +73,79 @@ public class PurchaseController {
     @ResponseBody
     @RequestMapping("/update")
     public Object updateState(@RequestParam Map map){
-        //System.out.println("--------------"+map.get("GOODS_NUM"));
         return purchaseService.updateState(map);
     }
+
+    /**
+     * 根据GOODS_ID删除缺货单信息
+     * @param SD_ID
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/delete")
+    public Object delete(@RequestParam Integer SD_ID){
+        int result = purchaseService.delete(SD_ID);
+        Map tempMap = new HashMap();
+        if(result==-1){
+            tempMap.put("issuc",false);
+        }else{
+            tempMap.put("issuc",true);
+        }
+        return tempMap;
+    }
+
+
+    /**
+     * 获取缺货单历史记录表详情
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getHistory")
+    public Object getHistory(){
+        Map tempMap = new HashMap();
+        tempMap.put("code",0);
+        tempMap.put("msg","");
+        tempMap.put("data",purchaseService.getHistory());
+        return tempMap;
+
+    }
+
+    /**
+     * 缺货历史表单跳转方法
+     * @return
+     */
+    @RequestMapping("/toGetHistory")
+    public String toGetHistory(){
+
+        return "/all-goods/purchaseDet";
+    }
+
+
+    /**
+     * 入库表单跳转方法
+     * @return
+     */
+    @RequestMapping("/toInStorage")
+    public String toInStorage(){
+
+        return "/all-goods/inStorage";
+    }
+
+
+    /**
+     * 获取入库记录表
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getInStorage")
+    public Object getInStorage(){
+        Map tempMap = new HashMap();
+        tempMap.put("code",0);
+        tempMap.put("msg","");
+        tempMap.put("data",purchaseService.getInStorage());
+        return tempMap;
+
+    }
+
+
 }

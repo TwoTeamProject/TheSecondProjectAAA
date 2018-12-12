@@ -25,8 +25,8 @@
         table.render({
             elem: '#userlist'
             , title: '缺货单'
-            , height: 790
-            , width: 1743
+            , height: 745
+            , width: 1698
             , url: '/pro/Purchase/List'
             , toolbar: '#toolbarDemo'
             , page: true
@@ -37,12 +37,12 @@
                   {checkbox: true, fixed: true}
                 , {field: 'SD_ID', title: '单号id', width: 200, sort: true, unresize: true, fixed: 'left'}
                 , {field: 'SD_NUMBER', title: '缺货单号', width: 220}
-                , {field: 'SUPP_NAME', title: '供应商', width: 150}
-                , {field: 'SUPP_ADDRESS', title: '供应商地址', width: 150}
-                , {field: 'SUPP_PHONE', title: '供应商电话', width: 200}
-                , {field: 'SD_TIME', title: '提交时间', width: 220}
-                , {field: 'SD_EMP', title: '操作人', width: 220}
-                , {fixed: 'right',title: '操作', toolbar: '#barDemo', width: 200}
+                , {field: 'SUPP_NAME', title: '供应商', width: 240}
+                , {field: 'SUPP_ADDRESS', title: '供应商地址', width: 240}
+                , {field: 'SUPP_PHONE', title: '供应商电话', width: 240}
+                , {field: 'SD_TIME', title: '提交时间', width: 260}
+                , {field: 'SD_EMP', title: '操作人', width: 205}
+                , {fixed: 'right',title: '操作', toolbar: '#barDemo', width: 240}
             ] ]
             ,id: 'testReload'
             //隐藏id
@@ -53,9 +53,29 @@
         //监听工具条
         table.on('tool(demo)', function(obj){
             var data = obj.data;
-            if(obj.event === 'edit'){
+            if(obj.event === 'del'){
+                layer.confirm('确定要删除吗', function(index){
+                    $.ajax({
+                        url: "/pro/Purchase/delete",
+                        type: "post",
+                        data:{"SD_ID":data.SD_ID},
+                        dataType: "json",
+                        success: function(data){
+                            if(data.issuc==true){
+                                obj.del();
+                                layer.close(index);
+                                layer.msg("删除成功", {icon: 6});
+                                location.reload();
+                            }else{
+                                layer.msg("删除失败", {icon: 5});
+                            }
+                        }
+                    });
+                });
+            }
+            else if(obj.event === 'edit'){
             layer.open({
-                title: '修改用户信息'
+                title: '获取缺货商品详情'
                 ,type: 1
                 ,area: ['1000px', '720px']
                 ,anim: 1
@@ -73,7 +93,6 @@
                         var str="";
                         for (var i = 0; i < data.data.length; i++) {
                             str += "<tr >" +
-                                "<td >"+data.data[i].GOODS_ID+"</td>" +
                                 "<td>"+data.data[i].GOODS_SURP+"</td>" +
                                 "<td>"+data.data[i].GOODS_NAME+"</td>"
                             if(data.data[i].GOODS_UNIT!=undefined){
@@ -93,15 +112,16 @@
                             }
                             str +=
                                 "<td>"+data.data[i].TYPE_NAME+"</td>" +
+                                "<td>"+data.data[i].GOODS_SURP+"</td>" +
                                 "</tr>";
                     }
                         $("#tby").append(str);
                     }
                 }
+
             });
                 //点击提交供应商
                 $("#sbt").click(function () {
-                    alert(33333)
                     $.ajax({
                         url: "/pro/Purchase/update",
                         type: "post",
@@ -111,6 +131,7 @@
                         success:function (data) {
                             layer.closeAll('page');
                             location.reload();
+                            window.location.href="/pro/Purchase/toInStorage";
                         }
                     })
                 })
@@ -141,9 +162,9 @@
                    height: 35px"
                    class="layui-bg-gray">
                 <thead>
-                <tr><td>商品id</td><td>购买数量</td><td>商品名称</td>
+                <tr><td>购买数量</td><td>商品名称</td>
                     <td>计量单位</td><td>规格</td><td>价格</td>
-                    <td>类型</td>
+                    <td>类型</td><td>需补充数</td>
                 </tr>
                 </thead>
                 <tbody id="tby">

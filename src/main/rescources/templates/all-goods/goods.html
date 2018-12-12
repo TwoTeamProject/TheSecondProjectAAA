@@ -21,9 +21,9 @@
         <input class="layui-input" name="GOODS_NAME" id="demoReload" autocomplete="off">
     </div>
     商品类型:
-    <!--<div class="layui-inline">
+    <div class="layui-inline">
         <input class="layui-input" name="TYPE_NAME" id="demoReload2" autocomplete="off">
-    </div>-->
+    </div>
     <div class="layui-btn" data-type="reload" id="searchBtn"><i class="layui-icon">&#xe615;</i>搜索</div>
     <div class="layui-btn" data-type="reload" id="redo"><i class="layui-icon">&#xe669;</i></div>
     <div class="layui-btn layui-btn-warm" id="goodsAdd" style="margin-left:10px;"><i class="layui-icon">&#xe608;</i>添加</div>
@@ -35,8 +35,8 @@
             table.render({
                 elem: '#userlist'
                 , title: '商品信息表'
-                , height: 790
-                , width: 1743
+                , height: 745
+                , width: 1698
                 , url: '/pro/Goods/List'
                 , toolbar: '#toolbarDemo'
                 , page: true
@@ -45,16 +45,19 @@
                 , size: 'lg'
                 , cols: [ [
                     {checkbox: true, fixed: true}
-                    , {field: 'GOODS_ID', title: '商品id', width: 200, sort: true, unresize: true, fixed: 'left'}
-                    , {field: 'GOODS_NAME', title: '商品名称', width: 220}
-                    , {field: 'GOODS_SPE', title: '商品规格', width: 150}
-                    , {field: 'GOODS_UNIT', title: '计量单位', width: 150}
-                    , {field: 'GOODS_PRICE', title: '价格（/元）', width: 200}
-                    , {field: 'TYPE_NAME', title: '商品类型', width: 220}
+                    , {field: 'GOODS_ID', title: '商品id', width: 160, sort: true, unresize: true, fixed: 'left'}
+                    , {field: 'GOODS_NAME', title: '商品名称', width: 150}
+                    , {field: 'GOODS_SPE', title: '商品规格', width: 100}
+                    , {field: 'GOODS_UNIT', title: '计量单位', width: 120}
+                    , {field: 'GOODS_PRICE', title: '价格(/元)', width: 100}
+                    , {field: 'TYPE_NAME', title: '商品类型', width: 165}
                     , {field: 'OPERATE_TIME', title: '操作时间', width: 200}
-                    , {field: 'GOODS_NUM', title: '商品余量', width: 200}
-                    , {field: 'SUPP_NAME', title: '供应商', width: 200}
-                    , {fixed: 'right',title: '操作', toolbar: '#barDemo', width: 200}
+                    , {field: 'GOODS_NUM', title: '商品余量', width: 150}
+                    //, {field: 'GOODS_NUM', title: '状态', width: 80,templet:'#GOODS_NUMS2'}
+                    , {field: 'SUPP_NAME', title: '供应商', width: 150}
+                    , {field: 'GOODS_DATEINPRO', title: '生产日期', width: 220}
+                    , {field: 'GOODS_EXP', title: '保质期(天)', width: 110}
+                    , {fixed: 'right',title: '操作', toolbar: '#barDemo', width: 180}
                 ] ]
                 ,id: 'testReload'
                 , request:{
@@ -73,11 +76,11 @@
             var $ = layui.$, active = {
                 reload:function () {
                     var demoReload = $("#demoReload");
-                    //var demoReload2 = $("#demoReload2");
+                    var demoReload2 = $("#demoReload2");
                     table.reload('testReload',{
                         where:{
                             GOODS_NAME:demoReload.val(),
-                            //TYPE_NAME:demoReload2.val()
+                            TYPE_NAME:demoReload2.val()
                         }
                     })
                 }
@@ -89,7 +92,7 @@
             //取消搜索按钮
             $("#redo").click(function(){
                 $("#demoReload").val("");
-                //$("#demoReload2").val("");
+                $("#demoReload2").val("");
                 $("#searchBtn").trigger("click");
             })
 
@@ -236,6 +239,14 @@
             })
         })
     </script>
+    <script type="text/html" id="GOODS_NUMS2">
+        {{# if(d.GOODS_NUM >= 100){}}
+        <a>充足</a>
+        {{# } else {}}
+        <a style="color: red">缺货</a>
+        {{# } }}
+    </script>
+
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑<i class="layui-icon">&#xe642;</i></a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除<i class="layui-icon">&#xe640;</i></a>
@@ -392,6 +403,7 @@
         <input type="button" value="取消" id="cancel" class="layui-btn layui-btn-sm layui-btn-normal" />
     </div>
 </script>
+
 </body>
 </html>
 <SCRIPT Language=VBScript><!--

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>入库表</title>
+    <link rel="stylesheet" href="../lib/layui/css/layui.css">
+    <script src="../js/jquery-1.8.3.min.js"></script>
+    <script src="../lib/layui/layui.js"></script>
+
+    <style type="text/css">
+        .layui-table-cell .layui-form-checkbox[lay-skin="primary"] {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+<div class="demoTable" style="margin-top: 10px;width: 1662px;margin-left: 20px;">
+    <div class="layui-btn" data-type="reload" id="redo"><i class="layui-icon">&#xe669;</i></div>
+</div>
+<table class="layui-hide" id="userlist" lay-filter="demo" ></table>
+<script>
+    layui.use('table', function() {
+        var table = layui.table;
+        table.render({
+            elem: '#userlist'
+            , title: '入库表'
+            , height: 745
+            , width: 1698
+            , url: '/pro/Purchase/getInStorage'
+            , toolbar: '#toolbarDemo'
+            , page: true
+            , even: true
+            , skin:'nob'    //line （行边框风格） row （列边框风格） nob （无边框风格）
+            , size: 'lg'
+            , cols: [ [
+                {checkbox: true, fixed: true}
+                , {field: 'SD_ID', title: '单号id', width: 200, sort: true, unresize: true, fixed: 'left'}
+                , {field: 'SD_NUMBER', title: '缺货单号', width: 220}
+                , {field: 'SUPP_NAME', title: '供应商', width: 200}
+                , {field: 'SUPP_ADDRESS', title: '供应商地址', width: 200}
+                , {field: 'SUPP_PHONE', title: '供应商电话', width: 200}
+                , {field: 'SD_TIME', title: '提交时间', width: 220}
+                , {field: 'SD_EMP', title: '操作人', width: 200}
+                , {field: 'SD_TOSUP', title: '提交供应商时间', width: 210}
+                , {fixed: 'right',title: '操作', toolbar: '#barDemo', width: 200}
+            ] ]
+            ,id: 'testReload'
+            //隐藏id
+            , done: function () {
+                $("[data-field='SD_ID']").css('display', 'none');
+            }
+        })
+        //监听工具条
+        table.on('tool(demo)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'edit'){
+                layer.open({
+                    title: '入库表'
+                    ,type: 1
+                    ,area: ['1200px', '720px']
+                    ,anim: 1
+                    ,content:$("#editDemo").html(),
+                });
+                $.ajax({
+                    url: "/pro/Purchase/ListDet",
+                    type: "post",
+                    data:{
+                        "GOODS_NUM":data.SD_NUMBER
+                    },
+                    dataType: "json",
+                    success: function(data){
+                            var str="";
+                            for (var i = 0; i < data.data.length; i++) {
+                                str += "<tr >" +
+                                    "<td>"+data.data[i].GOODS_SURP+"</td>" +
+                                    "<td>"+data.data[i].GOODS_NAME+"</td>"
+                                if(data.data[i].GOODS_UNIT!=undefined){
+                                    str +=  "<td>"+data.data[i].GOODS_UNIT+"</td>"
+                                }else{
+                                    str +=  "<td></td>"
+                                }
+                                if(data.data[i].GOODS_SPE!=undefined){
+                                    str +=  "<td>"+data.data[i].GOODS_SPE+"</td>"
+                                }else{
+                                    str +=  "<td></td>"
+                                }
+                                if(data.data[i].GOODS_PRICE!=undefined){
+                                    str +=  "<td>"+data.data[i].GOODS_PRICE+"</td>"
+                                }else{
+                                    str +=  "<td></td>"
+                                }
+                                str +=
+                                    "<td>"+data.data[i].TYPE_NAME+"</td>" +
+                                    "<td>"+data.data[i].GOODS_SURP+"</td>" +
+                                    "<td><input type='date' req='req' id='da"+i+"'  lay-verify=\"required\"/></td>" +
+                                    "<td><input type='text' req='req' id='numb"+i+"'  lay-verify=\"required\"/></td>" +
+                                    "</tr>";
+                            }
+                        $("#tby").append(str);
+                        //校验
+                        var cc = $("input[type='date'],input[type='text']");
+                        var stateA = false;
+                        cc.blur(function () {
+                            var obj = $(this);
+                            var req = obj.attr("req");
+                            if(req=="req"){
+                                if(obj.val().trim() == ""||obj.val() == null){
+                                    layer.msg('生产日期或保质期可能有空值<br>都不能为空', {
+                                    time: 2000, //2s后自动关闭
+                                    btn: ['明白了', '知道了', '哦']
+                                    });
+                                    stateA = false;
+                                }else{
+                                    stateA = true;
+                                }
+                            }
+                        })
+
+                        $("#sbt").click(function () {
+                            if (stateA) {
+                                var id = "";
+                                var surp = "";
+                                var dt = "";
+                                var num = "";
+                                for (var i = 0; i < data.data.length; i++) {
+                                    id += data.data[i].GOODS_ID + ",";
+                                    surp += data.data[i].GOODS_SURP + ",";
+                                    dt += $("#da" + i + "").val() + ",";
+                                    num += $("#numb" + i + "").val() + ",";
+                                }
+                                var gnum = data.data[0].GOODS_NUM;
+                                //去逗号，（正则）
+                                /*if (dt.replace(/,/g, '').length == 0) {
+                                    alert("不能为空")
+                                    return
+                                }*/
+
+                                $.ajax({
+                                    url: "/pro/inStorage/update",
+                                    type: "post",
+                                    data: {
+                                        "GOODS_ID": id, "GOODS_SURP": surp, "GOODS_DATEINPRO": dt,
+                                        "GOODS_EXP": num, "SD_NUMBER": gnum
+                                    },
+                                    success: function (data) {
+                                        location.reload();
+                                        window.location.href = "/pro/Goods/toList";
+                                    }
+                                })
+                            }else{
+                                    layer.msg('提交失败<br>请检查是否有空值', {
+                                    time: 2000, //2s后自动关闭
+                                    btn: ['明白了', '知道了', '哦']
+                                });
+                            }
+                        })
+                    }
+                });
+
+                //弹出层取消按钮
+                $("#cancel").click(function(){
+                    layer.closeAll('page');
+                    location.reload();
+                })
+            }
+        })
+    })
+    //刷新按钮
+    $(function () {
+        $("#redo").click(function () {
+            location.reload();
+        })
+
+    })
+
+
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit" >查看<i class="layui-icon">&#xe642;</i></a>
+</script>
+<script type="text/html" id="editDemo">
+    <form id="updateForm" >
+        <div class="layui-form-item" align="center">
+            <table border="1px" bordercolor="white" cellspacing="0"
+                   width="1000px"  style="text-align: center;margin-top: 50px;font-size: medium;
+                   height: 35px"
+                   class="layui-bg-gray">
+                <thead>
+                <tr><td >购买数量</td><td >商品名称</td>
+                    <td >计量单位</td><td >规格</td><td >价格(/元)</td>
+                    <td >类型</td><td >需补充数</td>
+                    <td >生产日期</td><td >保质期(/天)</td>
+                </tr>
+                </thead>
+                <tbody id="tby">
+                </tbody>
+            </table>
+        </div>
+    </form>
+    <div align="center">
+        <input type="button" value="入库" id="sbt" class="layui-btn layui-btn-sm" />
+        <input type="button" value="关闭" id="cancel" class="layui-btn layui-btn-sm layui-btn-normal" />
+    </div>
+</script>
+</body>
+</html>

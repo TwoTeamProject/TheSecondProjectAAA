@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>缺货商品列表</title>
+    <title>缺货单历史记录表</title>
     <link rel="stylesheet" href="../lib/layui/css/layui.css">
     <script src="../js/jquery-1.8.3.min.js"></script>
     <script src="../lib/layui/layui.js"></script>
@@ -24,50 +24,90 @@
         var table = layui.table;
         table.render({
             elem: '#userlist'
-            , title: '缺货商品信息表'
-            , height: 790
-            , width: 1743
-            , url: '/pro/Purchase/ListDet'
+            , title: '缺货单历史记录表'
+            , height: 745
+            , width: 1698
+            , url: '/pro/Purchase/getHistory'
             , toolbar: '#toolbarDemo'
             , page: true
             , even: true
-            , skin:'nob'
+            , skin:'nob'    //line （行边框风格） row （列边框风格） nob （无边框风格）
             , size: 'lg'
             , cols: [ [
                 {checkbox: true, fixed: true}
-                , {field: 'GOODS_ID', title: '商品id', width: 200, sort: true, unresize: true, fixed: 'left'}
-                , {field: 'GOODS_SURP', title: '购买数量', width: 220}
-                , {field: 'GOODS_NAME', title: '商品名称', width: 150}
-                , {field: 'GOODS_UNIT', title: '计量单位', width: 150}
-                , {field: 'GOODS_SPE', title: '规格', width: 200}
-                , {field: 'TYPE_NAME', title: '类型', width: 220}
-                , {field: 'GOODS_PRICE', title: '价格', width: 220}
+                , {field: 'SD_ID', title: '单号id', width: 200, sort: true, unresize: true, fixed: 'left'}
+                , {field: 'SD_NUMBER', title: '缺货单号', width: 220}
+                , {field: 'SUPP_NAME', title: '供应商', width: 180}
+                , {field: 'SUPP_ADDRESS', title: '供应商地址', width: 200}
+                , {field: 'SUPP_PHONE', title: '供应商电话', width: 200}
+                , {field: 'SD_TIME', title: '提交时间', width: 210}
+                , {field: 'SD_EMP', title: '操作人', width: 220}
+                , {field: 'SD_TOSUP', title: '提交供应商时间', width: 220}
                 , {fixed: 'right',title: '操作', toolbar: '#barDemo', width: 200}
             ] ]
             ,id: 'testReload'
             //隐藏id
             , done: function () {
-                $("[data-field='GOODS_ID']").css('display', 'none');
+                $("[data-field='SD_ID']").css('display', 'none');
             }
         })
         //监听工具条
         table.on('tool(demo)', function(obj){
             var data = obj.data;
-            if(obj.event === 'edit'){
-                alert(data.SD_NUMBER+"-------")
+
+             if(obj.event === 'edit'){
+                layer.open({
+                    title: '获取缺货商品详情历史记录'
+                    ,type: 1
+                    ,area: ['1000px', '720px']
+                    ,anim: 1
+                    ,content:$("#editDemo").html(),
+                });
                 $.ajax({
                     url: "/pro/Purchase/ListDet",
                     type: "post",
                     data:{
-                        "SD_NUMBER":data.SD_NUMBER
+                        "GOODS_NUM":data.SD_NUMBER
                     },
                     dataType: "json",
                     success: function(data){
-                        window.location.href="/pro/Goods/toList";
+                        if(data!=''){
+                            var str="";
+                            for (var i = 0; i < data.data.length; i++) {
+                                str += "<tr >" +
+                                    "<td>"+data.data[i].GOODS_SURP+"</td>" +
+                                    "<td>"+data.data[i].GOODS_NAME+"</td>"
+                                if(data.data[i].GOODS_UNIT!=undefined){
+                                    str +=  "<td>"+data.data[i].GOODS_UNIT+"</td>"
+                                }else{
+                                    str +=  "<td></td>"
+                                }
+                                if(data.data[i].GOODS_SPE!=undefined){
+                                    str +=  "<td>"+data.data[i].GOODS_SPE+"</td>"
+                                }else{
+                                    str +=  "<td></td>"
+                                }
+                                if(data.data[i].GOODS_PRICE!=undefined){
+                                    str +=  "<td>"+data.data[i].GOODS_PRICE+"</td>"
+                                }else{
+                                    str +=  "<td></td>"
+                                }
+                                str +=
+                                    "<td>"+data.data[i].TYPE_NAME+"</td>" +
+                                    "<td>"+data.data[i].GOODS_SURP+"</td>" +
+                                    "</tr>";
+                            }
+                            $("#tby").append(str);
+                        }
                     }
                 });
+                //弹出层取消按钮
+                $("#cancel").click(function(){
+                    layer.closeAll('page');
+                    location.reload();
+                })
             }
-        });
+        })
     })
     //刷新按钮
     $(function () {
@@ -75,13 +115,31 @@
             location.reload();
         })
     })
-
-
-
 </script>
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" lay-event="edit" >查看<i class="layui-icon">&#xe642;</i></a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除<i class="layui-icon">&#xe640;</i></a>
+</script>
+<script type="text/html" id="editDemo">
+    <form id="updateForm" >
+        <div class="layui-form-item" align="center">
+            <table border="1px" bordercolor="white" cellspacing="0"
+                   width="800px"  style="text-align: center;margin-top: 50px;font-size: medium;
+                   height: 35px"
+                   class="layui-bg-gray">
+                <thead>
+                <tr><td>购买数量</td><td>商品名称</td>
+                    <td>计量单位</td><td>规格</td><td>价格</td>
+                    <td>类型</td><td>需补充数</td>
+                </tr>
+                </thead>
+                <tbody id="tby">
+                </tbody>
+            </table>
+        </div>
+    </form>
+    <div align="center">
+        <input type="button" value="关闭" id="cancel" class="layui-btn layui-btn-sm layui-btn-normal" />
+    </div>
 </script>
 </body>
 </html>

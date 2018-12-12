@@ -14,7 +14,8 @@
 
     <!-- 获取缺货单商品详情 -->
     <select id="getListDet" resultType="map">
-        select a.GOODS_ID,a.GOODS_SURP,b.GOODS_NAME,b.GOODS_UNIT,b.GOODS_SPE,c.TYPE_ID,c.TYPE_NAME,a.GOODS_NUM,b.GOODS_PRICE
+        select a.GOODS_ID,a.GOODS_SURP,b.GOODS_NAME,b.GOODS_UNIT,b.GOODS_SPE,c.TYPE_ID,c.TYPE_NAME,a.GOODS_NUM,
+        b.GOODS_PRICE,a.GOODS_SURP
         from TB_STOCK a
         join TB_GOODS b on a.GOODS_ID = B.GOODS_ID
         join TB_GOODSTYPE c on b.GOODS_TYPEID = c.TYPE_ID
@@ -22,6 +23,32 @@
     </select>
     <!-- 修改缺货单状态TB_STOCKDET（SD_STATE） (GOODS_NUM) -->
     <update id="updateState">
-        update TB_STOCKDET set SD_STATE = 1 where SD_NUMBER = #{GOODS_NUM}
+        update TB_STOCKDET set SD_STATE = 1,SD_TOSUP = sysdate where SD_NUMBER = #{GOODS_NUM}
     </update>
+
+    <!-- 根据SD_ID删除缺货单信息 -->
+    <delete id="delete">
+        delete from TB_STOCKDET where SD_ID = #{SD_ID}
+    </delete>
+
+
+    <!-- 缺货单历史记录表 -->
+    <select id="getHistory" resultType="map">
+        select a.sd_id,a.sd_number,a.supp_name,b.supp_address,b.supp_phone,a.sd_emp,
+        to_char(a.sd_time,'yyyy-mm-dd hh24:mi:ss') as sd_time,
+        to_char(a.sd_tosup,'yyyy-mm-dd hh24:mi:ss') as sd_tosup
+        from TB_STOCKDET a
+        join TB_SUPPLIER b on a.supp_name = b.supp_name
+        where SD_STATE = 2
+    </select>
+
+    <!-- 入库单详情 -->
+    <select id="getInStorage" resultType="map">
+        select a.sd_id,a.sd_number,a.supp_name,b.supp_address,b.supp_phone,a.sd_emp,
+        to_char(a.sd_time,'yyyy-mm-dd hh24:mi:ss') as sd_time,
+        to_char(a.sd_tosup,'yyyy-mm-dd hh24:mi:ss') as sd_tosup
+        from TB_STOCKDET a
+        join TB_SUPPLIER b on a.supp_name = b.supp_name
+        where SD_STATE = 1
+    </select>
 </mapper>

@@ -69,7 +69,19 @@ public class RoomPartController {
         tempMap.put("code",0);
         tempMap.put("msg","");
         tempMap.put("data",roomPartService.emptyRoom(map));
-        System.out.println(tempMap);
+        return tempMap;
+    }
+    @RequestMapping("/updateRoom")
+    @ResponseBody
+    public Object update(@RequestParam Map map){
+        int result = roomPartService.update(map);
+        Map tempMap = new HashMap();
+        if (result==-1){
+            tempMap.put("issuc",false);
+        }else{
+            tempMap.put("issuc",true);
+        }
+        System.out.println(map);
         return tempMap;
     }
 
