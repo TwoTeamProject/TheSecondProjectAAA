@@ -66,7 +66,7 @@
             if (obj.event === 'edit1'){
                 layer.confirm('确定退房吗？',function (index) {
                     $.ajax({
-                        url:'/sb/roomPart/update',
+                        url:'/pro/roomPart/update',
                         type:'post',
                         data:{"room_part_id":data.room_part_id},
                         dataType:"json",
@@ -90,7 +90,7 @@
                 layer.open({
                     title: '换房信息'
                     ,type: 1
-                    ,area: ['700px', '700px']
+                    ,area: ['1000px', '800px']
                     ,anim: 1
                     ,content:$("#huanFangDemo").html(),
                 })
@@ -102,23 +102,46 @@
                                 var str = "";
                                 for (var i = 0; i < data.data.length; i++) {
                                     str += "<tr>" +
-                                        "<td>" + data.data[i].ROOM_CODE + "</td>" +
+                                        "<td style='line-height:40px' class='code' >" + data.data[i].ROOM_CODE + "</td>" +
                                         "<td>" + data.data[i].ROOM_TYPENAME + "</td>" +
                                         "<td>" + data.data[i].ROOM_TYPEPRICE + "</td>" +
                                         "<td>" + data.data[i].ROOM_DEPOSIT + "</td>" +
+                                        "<td><input type=\"button\" value=\"确认换房\"  class='layui-btn layui-btn-xs layui-bg-red sbt2'/></td>"+
                                         "</tr>"
                                 }
                                 $("#appendInfo").append(str);
+                               $(".sbt2").click(function () {
+                                   var ss = $(this).parent().parent().find(".code").html();
+                                    $.ajax({
+                                        url:'/pro/roomPart/updateRoom',
+                                        type:'post',
+                                        dataType:'json',
+                                        data:{room_code:ss},
+                                        success:function (data) {
+                                            if (data[i].issuc==true){
+                                                layer.close(index);
+                                                layer.msg("换房成功",{icon:6});
+                                                setTimeout(function () {
+                                                    $(".layui-laypage-skip .layui-input").val(pageNum);
+                                                    $(".layui-laypage-btn").trigger("click");
+                                                },700);
+                                            }else{
+                                                layer.msg("换房失败", {icon: 5});
+                                            }
+                                        }
+                                    })
+                                })
                             }
-
                         })
                 //弹出层取消
                     $("#cancel2").click(function(){
                         layer.closeAll('page');
                     })
+
             }
         })
     })
+
 </script>
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs layui-bg-red"  lay-event="edit1">退房<i class="layui-icon">&#xe642;</i></a>
@@ -131,10 +154,11 @@
             <thead>
             <tr>
 
-                <td style="width: 200px">房间号</td>
-                <td style="width: 200px">房间类型</td>
-                <td style="width: 200px">价格</td>
-                <td style="width: 200px">押金</td>
+                <td style="width: 200px;">房间号</td>
+               <td style="width: 200px;">房间类型</td>
+               <td style="width: 200px;">价格</td>
+               <td style="width: 200px;">押金</td>
+               <td style="width: 200px;">操作</td>
             </tr>
             </thead>
             <tbody id="appendInfo">
@@ -144,7 +168,6 @@
     </div>
 
     <div align="center">
-        <input type="button" value="确认换房" id="sbt2" class="layui-btn layui-btn-sm" />
         <input type="button" value="取消" id="cancel2" class="layui-btn layui-btn-sm layui-btn-normal" />
     </div>
 </script>

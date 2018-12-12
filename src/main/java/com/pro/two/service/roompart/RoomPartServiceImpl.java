@@ -60,4 +60,9 @@ public class RoomPartServiceImpl implements RoomPartService{
     public int emptyRoomCount() {
         return roomPartDao.emptyRoomCount();
     }
+
+    @Override
+    public int update(Map map) {
+        return roomPartDao.update(map);
+    }
 }
