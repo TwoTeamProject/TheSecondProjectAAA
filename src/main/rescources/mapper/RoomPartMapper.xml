@@ -23,14 +23,16 @@
         update tb_room_part set room_code=#{room_code},room_typeid=#{room_typeid} where room_part_id=#{room_part_id}
     </update>-->
     <select id="emptyRoom" resultType="map">
-        select * from
-        (select rownum rn,a.room_state, a.room_code,b.room_typename,b.room_typeprice,b.room_deposit
+        select a.room_state, a.room_code,b.room_typename,b.room_typeprice,b.room_deposit
         from tb_room a join tb_roomtype b on a.room_typeid=b.room_typeid
-         and rownum &lt; #{end}) a where a.rn &gt; #{start} and room_state=0
+        where room_state=0
 
     </select>
     <!--查询数量-->
     <select id="emptyRoomCount" resultType="int">
         select count(*) from tb_room where room_state=0
     </select>
+    <update id="update">
+        update tb_room set room_state=2 where room_code=#{room_code}
+    </update>
 </mapper>

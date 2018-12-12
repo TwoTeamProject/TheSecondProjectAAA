@@ -39,4 +39,10 @@ public interface RoomPartService {
      * @return
      */
     int emptyRoomCount();
+    /**
+     *                                                                                                                更换房间
+     * @param map
+     * @return
+     */
+    int update(Map map);
 }
