@@ -16,7 +16,7 @@
 </head>
 <body>
 <div class="demoTable" style="margin-top: 10px;width: 1662px;margin-left: 20px;">
-    <!--<div class="layui-btn" data-type="reload" id="redo"><i class="layui-icon">&#xe669;</i></div>-->
+    <div class="layui-btn" data-type="reload" id="redo"><i class="layui-icon">&#xe669;</i></div>
     <div class="layui-btn layui-btn-warm" id="suppAdd" style="margin-left:10px;"><i class="layui-icon">&#xe608;</i>添加</div>
 </div>
 <table class="layui-hide" id="supplist" lay-filter="demo" ></table>
@@ -26,8 +26,8 @@
         table.render({
             elem: '#supplist'
             , title: '供应商'
-            , height: 790
-            , width: 1743
+            , height: 745
+            , width: 1698
             , url: '/pro/Supplier/List'
             , toolbar: '#toolbarDemo'
             , page: true
@@ -36,17 +36,13 @@
             , size: 'lg'
             , cols: [ [
                 {checkbox: true, fixed: true}
-                , {field: 'SUPP_ID', title: '供应商id', width: 300, sort: true, unresize: true, fixed: 'left'}
-                , {field: 'SUPP_NAME', title: '供应商', width: 320}
+                , {field: 'SUPP_ID', title: '供应商id', width: 200, sort: true, unresize: true, fixed: 'left'}
+                , {field: 'SUPP_NAME', title: '供应商', width: 195}
                 , {field: 'SUPP_ADDRESS', title: '供应商详细地址', width: 350}
                 , {field: 'SUPP_PHONE', title: '供应商电话', width: 300}
                 , {field: 'UPDATE_TIME', title: '更新时间', width: 300}
                 , {fixed: 'right',title: '操作', toolbar: '#barDemo', width: 300}
             ] ]
-            //隐藏id
-            , done: function () {
-                $("[data-field='SUPP_ID']").css('display', 'none');
-            }
         })
         //监听工具条
         table.on('tool(demo)', function(obj){
@@ -142,6 +138,14 @@
                 })
             }
         })
+
+    })
+    //刷新按钮
+    $(function () {
+        $("#redo").click(function () {
+            location.reload();
+        })
+
     })
 </script>
 <script type="text/html" id="barDemo">

@@ -25,8 +25,8 @@
         table.render({
             elem: '#userlist'
             , title: '缺货单'
-            , height: 790
-            , width: 1743
+            , height: 745
+            , width: 1698
             , url: '/pro/Purchase/List'
             , toolbar: '#toolbarDemo'
             , page: true
@@ -37,12 +37,12 @@
                   {checkbox: true, fixed: true}
                 , {field: 'SD_ID', title: '单号id', width: 200, sort: true, unresize: true, fixed: 'left'}
                 , {field: 'SD_NUMBER', title: '缺货单号', width: 220}
-                , {field: 'SUPP_NAME', title: '供应商', width: 150}
-                , {field: 'SUPP_ADDRESS', title: '供应商地址', width: 150}
-                , {field: 'SUPP_PHONE', title: '供应商电话', width: 200}
-                , {field: 'SD_TIME', title: '提交时间', width: 220}
-                , {field: 'SD_EMP', title: '操作人', width: 220}
-                , {fixed: 'right',title: '操作', toolbar: '#barDemo', width: 200}
+                , {field: 'SUPP_NAME', title: '供应商', width: 240}
+                , {field: 'SUPP_ADDRESS', title: '供应商地址', width: 240}
+                , {field: 'SUPP_PHONE', title: '供应商电话', width: 240}
+                , {field: 'SD_TIME', title: '提交时间', width: 260}
+                , {field: 'SD_EMP', title: '操作人', width: 205}
+                , {fixed: 'right',title: '操作', toolbar: '#barDemo', width: 240}
             ] ]
             ,id: 'testReload'
             //隐藏id
@@ -131,6 +131,7 @@
                         success:function (data) {
                             layer.closeAll('page');
                             location.reload();
+                            window.location.href="/pro/Purchase/toInStorage";
                         }
                     })
                 })

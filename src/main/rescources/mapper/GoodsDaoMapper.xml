@@ -7,7 +7,8 @@
     <!-- 查询商品信息 -->
     <select id="getGoodsList" resultType="map">
         select * from
-        (select rownum rn,t.GOODS_ID,t.GOODS_NAME,t.GOODS_SPE,t.GOODS_UNIT,t.GOODS_PRICE,d.TYPE_NAME,e.SUPP_NAME,t.SUPP_ID,
+        (select rownum rn,t.GOODS_ID,t.GOODS_NAME,t.GOODS_SPE,t.GOODS_UNIT,t.GOODS_PRICE,
+        d.TYPE_NAME,e.SUPP_NAME,t.SUPP_ID,t.GOODS_STATE,
         to_char(t.OPERATE_TIME,'yyyy-mm-dd hh24:mi:ss') as OPERATE_TIME,t.GOODS_NUM,
         to_char(t.GOODS_DATEINPRO,'yyyy-mm-dd hh24:mi:ss') as GOODS_DATEINPRO,
         t.GOODS_EXP
@@ -19,6 +20,10 @@
                 and GOODS_NAME like '%'||#{GOODS_NAME}||'%'
             </if>
 
+            <if test="TYPE_NAME!=null and TYPE_NAME!= '' ">
+                and TYPE_NAME like '%'||#{TYPE_NAME}||'%'
+            </if>
+
             <if test="pageNo!=null and pageNo!= '' ">
                 and rownum &lt; #{end}) a where a.rn &gt; #{start}
             </if>
@@ -26,12 +31,20 @@
     </select>
     <!-- 查询数量 -->
     <select id="getGoodsCount" resultType="int">
-        select count(*) from tb_goods
+        select count(*) from
+        (select a.*,b.TYPE_NAME
+        from tb_goods a
+        join TB_GOODSTYPE b on a.GOODS_TYPEID = b.TYPE_ID
         <where>
             <if test="GOODS_NAME!=null and GOODS_NAME!= '' ">
                 and GOODS_NAME like '%'||#{GOODS_NAME}||'%'
             </if>
-
+            <if test="TYPE_NAME!=null and TYPE_NAME!= '' ">
+                and TYPE_NAME like '%'||#{TYPE_NAME}||'%'
+            </if>
+            <if test="1==1">
+                and 1=1) t where 1=1
+            </if>
         </where>
     </select>
     <!-- 增加商品 -->
