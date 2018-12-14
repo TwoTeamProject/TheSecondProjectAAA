@@ -99,7 +99,7 @@ public class PersonController {
     }
 
     /**
-     * 员工更新
+     * 员工添加
      * @return
      */
     @ResponseBody

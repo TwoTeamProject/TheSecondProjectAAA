@@ -277,7 +277,7 @@
             axios.post('/pro/person/listDemo',{'start':start,'end':end}).then(function(response){
                 // console.log(response.data);
                 // console.log(response.data);
-                /*alert(response.data.total);*/
+                //alert(response.data.total);
                 //alert(JOSN(response.data().data));
                 self.total=response.data.total;
                 self.tableData = response.data.data;
@@ -319,7 +319,7 @@
                     _self.tableData = response.data.data;
                     //_self.multipleSelection=response.data.data;
                 })
-                //console.log(_self.currentPage);
+                console.log(_self.currentPage);
                 setTimeout(function(){
                     console.info("加载数据成功");
                     _self.loading = false;
