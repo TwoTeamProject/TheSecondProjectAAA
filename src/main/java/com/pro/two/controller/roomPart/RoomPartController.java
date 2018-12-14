@@ -29,7 +29,7 @@ public class RoomPartController {
         Map tempMap = new HashMap();
         tempMap.put("code",0);
         tempMap.put("msg","");
-        tempMap.put("count",roomPartService.getRoomCount());
+        tempMap.put("count",roomPartService.getRoomCount(map));
         tempMap.put("data",roomPartService.getRoomPartList(map));
         return tempMap;
     }
@@ -37,18 +37,37 @@ public class RoomPartController {
     public String toList(Map map){
         return "roomPart";
     }
+
+    /**
+     * 获取商品价格信息
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/toGetGoods")
+    public Object getGoods(){
+        Map tempMap = new HashMap();
+        tempMap.put("code",0);
+        tempMap.put("msg","");
+        tempMap.put("data",roomPartService.getGoods());
+        return tempMap;
+    }
+
+    /**
+     * 退房
+     * @param map
+     * @return
+     */
     @RequestMapping("/update")
     @ResponseBody
     public Object updateRoom(@RequestParam Map map){
-        int result = roomPartService.updateRoom(map);
-        Map tempMap = new HashMap();
-        if (result==-1){
-            tempMap.put("issuc",false);
-        }else{
-            tempMap.put("issuc",true);
-        }
-        return tempMap;
+        return roomPartService.updateRoom(map);
     }
+
+    /**
+     * 换房
+     * @param map
+     * @return
+     */
     @RequestMapping("/change")
     @ResponseBody
     public Object changeRoom(@RequestParam Map map){

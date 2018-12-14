@@ -4,14 +4,56 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pro.two.dao.allRoom.AllRoomDao">
+    <!--
+        <where>
+            <if test="GOODS_NAME!=null and GOODS_NAME!= '' ">
+                and GOODS_NAME like '%'||#{GOODS_NAME}||'%'
+            </if>
+
+            <if test="TYPE_NAME!=null and TYPE_NAME!= '' ">
+                and TYPE_NAME like '%'||#{TYPE_NAME}||'%'
+            </if>
+
+            <if test="pageNo!=null and pageNo!= '' ">
+                and rownum &lt; #{end}) a where a.rn &gt; #{start}
+            </if>
+        </where>
+    -->
     <select id="getAllRoom" resultType="map">
         select * from
         (select rownum rn,a.room_code,b.room_typename,b.room_typeprice,b.room_deposit,a.room_typeid
-        from tb_room a join tb_roomtype b on a.room_typeid=b.room_typeid
-        where rownum &lt; #{end}) a where a.rn &gt; #{start}
+        from tb_room a
+        join tb_roomtype b on a.room_typeid=b.room_typeid
+        <where>
+            <if test="ROOM_CODE!=null and ROOM_CODE!= '' ">
+                and ROOM_CODE like '%'||#{ROOM_CODE}||'%'
+            </if>
+
+            <if test="ROOM_TYPENAME!=null and ROOM_TYPENAME!= '' ">
+                and ROOM_TYPENAME like '%'||#{ROOM_TYPENAME}||'%'
+            </if>
+
+            <if test="pageNo!=null and pageNo!= '' ">
+                and rownum &lt; #{end}) a where a.rn &gt; #{start}
+            </if>
+        </where>
     </select>
     <select id="getAllRoomCount" resultType="int">
-        select count(*) from tb_room
+        select count(*) from
+        (select rownum rn,a.room_code,b.room_typename,b.room_typeprice,b.room_deposit,a.room_typeid
+        from tb_room a
+        join tb_roomtype b on a.room_typeid=b.room_typeid
+        <where>
+            <if test="ROOM_CODE!=null and ROOM_CODE!= '' ">
+                and ROOM_CODE like '%'||#{ROOM_CODE}||'%'
+            </if>
+            <if test="ROOM_TYPENAME!=null and ROOM_TYPENAME!= '' ">
+                and ROOM_TYPENAME like '%'||#{ROOM_TYPENAME}||'%'
+            </if>
+            <if test="1==1">
+                and 1=1) t where 1=1
+            </if>
+        </where>
     </select>
     <update id="updateRoomPart">
         update tb_room set ROOM_TYPEID=#{ROOM_TYPEID} where room_code = #{ROOM_CODE}

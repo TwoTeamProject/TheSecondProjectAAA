@@ -19,11 +19,11 @@
 <div class="demoTable" style="margin-top: 10px;width: 1662px;margin-left: 20px;">
     房间号:
     <div class="layui-inline">
-        <input class="layui-input" name="room_code" id="demoReload" autocomplete="off">
+        <input class="layui-input" name="ROOM_CODE" id="demoReload" autocomplete="off">
     </div>
     房间类型:
     <div class="layui-inline">
-        <input class="layui-input" name="room_typeid" id="demoReload2" autocomplete="off">
+        <input class="layui-input" name="ROOM_TYPENAME" id="demoReload2" autocomplete="off">
     </div>
     <div class="layui-btn" data-type="reload" id="searchBtn"><i class="layui-icon">&#xe615;</i>搜索</div>
     <div class="layui-btn" data-type="reload" id="redo"><i class="layui-icon">&#xe669;</i></div>
@@ -52,12 +52,37 @@
                 , {field: 'ROOM_DEPOSIT', title: '押金', width: 395}
                 ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:280}
             ] ]
+            ,id: 'testReload'
             , request: {
                 pageName: 'pageNo',//页码的参数名称，默认：page
                 limitName: 'pageSize' //每页数据量的参数名，默认：limit
             },
             limits: [5,15,20], //显示
             limit: 20 //每页默认显示的数量
+        })
+
+        //模糊查询（搜索）
+        var $ = layui.$, active = {
+            reload:function () {
+                var demoReload = $("#demoReload");
+                var demoReload2 = $("#demoReload2");
+                table.reload('testReload',{
+                    where:{
+                        ROOM_CODE:demoReload.val(),
+                        ROOM_TYPENAME:demoReload2.val()
+                    }
+                })
+            }
+        }
+        $("#searchBtn").on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        })
+        //取消搜索按钮
+        $("#redo").click(function(){
+            $("#demoReload").val("");
+            $("#demoReload2").val("");
+            $("#searchBtn").trigger("click");
         })
 
         table.on('tool(demo)',function (obj) {
