@@ -28,14 +28,14 @@ public class AllRoomServiceImpl implements AllRoomService{
     }
 
     @Override
-    public int getAllRoomCount() {
-        System.out.println(allRoomDao.getAllRoomCount());
-        return allRoomDao.getAllRoomCount();
+    public int getAllRoomCount(Map map) {
+        //System.out.println(allRoomDao.getAllRoomCount());
+        return allRoomDao.getAllRoomCount(map);
     }
 
     @Override
     public int updateRoomPart(Map map) {
-        System.out.println(map);
+        //System.out.println(map);
         return allRoomDao.updateRoomPart(map);
     }
 }

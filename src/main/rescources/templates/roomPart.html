@@ -16,13 +16,13 @@
 </head>
 <body>
 <div class="demoTable" style="margin-top: 10px;width: 1662px;margin-left: 20px;">
+    电话:
+    <div class="layui-inline">
+        <input class="layui-input" name="ROOM_PART_PHONE" id="demoReload" autocomplete="off">
+    </div>
     顾客姓名:
     <div class="layui-inline">
-        <input class="layui-input" name="name" id="demoReload" autocomplete="off">
-    </div>
-    顾客电话:
-    <div class="layui-inline">
-        <input class="layui-input" name="phone" id="demoReload2" autocomplete="off">
+        <input class="layui-input" name="ROOM_PART_NAME" id="demoReload2" autocomplete="off">
     </div>
     <div class="layui-btn" data-type="reload" id="searchBtn"><i class="layui-icon">&#xe615;</i>搜索</div>
     <div class="layui-btn" data-type="reload" id="redo"><i class="layui-icon">&#xe669;</i></div>
@@ -45,48 +45,139 @@
             ,size: 'lg'
             ,cols:[ [
                 {checkbox: true, fixed: true}
-                ,{field: 'ROOM_CODE', title: '房间号', width:265, sort: true, unresize: true ,fixed: 'left'}
-                ,{field: 'ROOM_PART_NAME', title: '姓名', width:264}
-
-                ,{field: 'ROOM_PART_PHONE', title: '电话', width:264}
-                ,{field: 'ROOM_PART_CARD', title: '身份证号', width:264}
+                ,{field: 'ROOM_CODE', title: '房间号', width:165, sort: true, unresize: true ,fixed: 'left'}
+                ,{field: 'PART_ID', title: '单号id', width:164}
+                ,{field: 'ROOM_PART_NAME', title: '姓名', width:164}
+                ,{field: 'ROOM_PART_PHONE', title: '电话', width:200}
+                ,{field: 'ROOM_PART_CARD', title: '身份证号', width:214}
                 ,{field: 'ROOM_DATE', title: '入住时间', width:258}
-                ,{field: 'ROOM_TYPENAME', title: '房间类型', width:264}
+                ,{field: 'ROOM_TIME', title: '结账时间', width:264}
+                ,{field: 'ROOM_LIVETIME', title: '入住天数（/天）', width:264}
+                ,{field: 'ROOM_TYPEPRICE', title: '单价（/元）', width:150}
+                ,{field: 'ROOM_TYPENAME', title: '房间类型', width:164}
                 ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:270}
             ] ]
+            ,id: 'testReload'
             ,request: {
                 pageName: 'pageNo',//页码的参数名称，默认：page
                 limitName: 'pageSize' //每页数据量的参数名，默认：limit
             },
             limits: [5, 10, 15], //显示
-            limit: 5 //每页默认显示的数量
+            limit: 10 //每页默认显示的数量
+            //隐藏id
+            , done: function () {
+                $("[data-field='ROOM_LIVETIME']").css('display', 'none');
+                $("[data-field='PART_ID']").css('display', 'none');
+
+            }
+        })
+        //模糊查询（搜索）
+        var $ = layui.$, active = {
+            reload:function () {
+                var demoReload = $("#demoReload");
+                var demoReload2 = $("#demoReload2");
+                table.reload('testReload',{
+                    where:{
+                        ROOM_PART_PHONE:demoReload.val(),
+                        ROOM_PART_NAME:demoReload2.val()
+                    }
+                })
+            }
+        }
+        $("#searchBtn").on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        })
+        //取消搜索按钮
+        $("#redo").click(function(){
+            $("#demoReload").val("");
+            $("#demoReload2").val("");
+            $("#searchBtn").trigger("click");
         })
         table.on('tool(demo)',function (obj) {
             var data = obj.data;
-            if (obj.event === 'edit1'){
-                layer.confirm('确定退房吗？',function (index) {
-                    $.ajax({
-                        url:'/pro/roomPart/update',
-                        type:'post',
-                        data:{"room_part_id":data.room_part_id},
-                        dataType:"json",
-                        success:function (data) {
-                            //获取当前的页码
-                            var pageNum = $(".layui-laypage-curr .layui-laypage-em").next().html();
-                            if (data.issuc==true){
-                                layer.close(index);
-                                layer.msg("退房成功",{icon:6});
-                                setTimeout(function () {
-                                    $(".layui-laypage-skip .layui-input").val(pageNum);
-                                    $(".layui-laypage-btn").trigger("click");
-                                },700);
-                            }else{
-                                layer.msg("退房失败", {icon: 5});
-                            }
-                        }
-                    })
-                })
-            }else if (obj.event === 'edit2') {
+             if(obj.event === 'edit1'){
+                layer.open({
+                    title: '结账'
+                    ,type: 1
+                    ,area: ['700px', '640px']
+                    ,anim: 1
+                    ,content:$("#editDemo").html()
+                    ,success:function(layero,index){
+                        var nodes=layero[0];
+                        $("#PART_ID").val(data.PART_ID);
+                        $("#ROOM_CODE").val(data.ROOM_CODE);
+                        $("#ROOM_DATE").val(data.ROOM_DATE);
+                        $("#ROOM_TIME").val(data.ROOM_TIME);
+                        $("#ROOM_LIVETIME").val(data.ROOM_LIVETIME);
+                        $("#ALL_PRICE").val(data.ROOM_TYPEPRICE*data.ROOM_LIVETIME);
+
+                    }  //success(layero)
+                }) //open
+                 $.ajax({
+                     url: "/pro/roomPart/toGetGoods",
+                     type: "post",
+                     dataType: "json",
+                     success: function(data){
+                         var str="";
+                         for (var i = 0; i < data.data.length; i++) {
+                             str +=
+                                 "<tr >" +
+                                 "<td class='cc'>"+data.data[i].GOODS_ID+"</td>" +
+                                 "<td>"+data.data[i].GOODS_NAME+"</td>" +
+                                 "<td class='ss'>"+data.data[i].GOODS_PRICE+"</td>"+
+                                 "<td><input type='text' req='req' id='numb"+i+"'  /></td>" +
+                                 "</tr>";
+                         }
+                         $("#tby").append(str);
+                         $("#sbt").click(function () {
+                             var nu = "";
+                             var pr = "";
+                             var price = "";
+                             var pricess = 0;
+                             var goodsid = "";
+                             var goodsids = "";
+                             var goodsnums = "";
+                             for (var j = 0; j < data.data.length; j++){
+                                 if($("#numb" + j + "").val()!=""){
+                                     nu = $("#numb" + j + "").val();
+                                     //拼接商品id
+                                     goodsid = $("#numb" + j + "").parent().parent().find(".cc").html();
+                                     goodsids += goodsid +",";
+                                     //拼接商品数量
+                                     goodsnums += nu + ",";
+
+                                     pr = $("#numb" + j + "").parent().parent().find(".ss").html();
+                                     price = Number(nu)*Number(pr);
+                                     pricess = Number(price)+Number(pricess)
+                                 }
+                             }
+                             var ss = Number($("#ALL_PRICE").val())+Number(pricess);
+                             layer.msg('其他花费：'+pricess+'元；'+
+                             '<br>共花费：'+ss+'元。'
+                                 , {
+                                 time: 3500, //3.5s后自动关闭
+                                 btn: ['明白了', '知道了', '哦']
+                             });
+                                 $.ajax({
+                                     url: "/pro/roomPart/update",
+                                     type: "post",
+                                     data: {
+                                         "ROOM_SUM": ss,"PART_ID":$("#PART_ID").val(),
+                                         "ROOM_CODE":$("#ROOM_CODE").val(),"GOODS_ID":goodsids,
+                                         "GOODS_NUM":goodsnums
+                                     },
+                                     success: function (data) {
+                                         //3.5秒后执行刷新
+                                         setTimeout("location.reload();",3500)
+                                     }
+                                 })
+
+                         })
+                     }
+                 });
+
+            }  else if (obj.event === 'edit2') {
                 layer.open({
                     title: '换房信息'
                     ,type: 1
@@ -148,6 +239,74 @@
     <div class="layui-btn layui-btn-xs layui-bg-orange" lay-event="edit2" id="huan">换房<i class="layui-icon">&#xe642;</i></div>
 </script>
 
+<!-- 编辑框弹出模板-->
+<script type="text/html" id="editDemo">
+    <form id="updateForm">
+        <div class="layui-form-item" align="center">
+            <div class="layui-inline" style="display: none">
+                <label class="layui-form-label">单号ID</label>
+                <div class="layui-input-inline">
+                    <input name="client_name" class="layui-input" id="PART_ID" />
+                </div>
+            </div>
+            <br/>
+            <div class="layui-inline">
+                <label class="layui-form-label">房间号</label>
+                <div class="layui-input-inline">
+                    <input name="client_name" class="layui-input" id="ROOM_CODE" readonly/>
+                </div>
+            </div>
+            <br/>
+            <div class="layui-inline">
+                <label class="layui-form-label">入住时间</label>
+                <div class="layui-input-inline">
+                    <input name="client_name" class="layui-input" id="ROOM_DATE" readonly/>
+                </div>
+            </div>
+            <br/>
+            <div class="layui-inline">
+            <label class="layui-form-label">退房时间</label>
+            <div class="layui-input-inline">
+                <input name="client_username" class="layui-input" id="ROOM_TIME" readonly/>
+            </div>
+            </div>
+            <br/>
+            <div class="layui-inline">
+                    <label class="layui-form-label">入住天数</label>
+                <div class="layui-input-inline">
+                    <input name="client_username" class="layui-input" id="ROOM_LIVETIME" readonly/>
+                </div>
+            </div>
+            <br/>
+            <div class="layui-inline">
+                <label class="layui-form-label">花费(/元)</label>
+                <div class="layui-input-inline">
+                    <input name="client_username" class="layui-input" id="ALL_PRICE" readonly/>
+                </div>
+            </div>
+            <br/>
+        <table border="1px" bordercolor="white" cellspacing="0"
+               width="500px"  style="text-align: center;margin-top: 50px;font-size: medium;
+                   height: 35px"
+               class="layui-bg-gray">
+            <thead>
+            <tr><td >商品ID</td>
+                <td >商品名称</td>
+                <td >商品单价(/元)</td>
+                <td >个数</td>
+            </tr>
+            </thead>
+            <tbody id="tby">
+            </tbody>
+        </table>
+
+        </div>
+    </form>
+    <div align="center">
+        <input type="button" value="确认更新" id="sbt" class="layui-btn layui-btn-sm" />
+        <input type="button" value="取消" id="cancel" class="layui-btn layui-btn-sm layui-btn-normal" />
+    </div>
+</script>
 <script type="text/html" id="huanFangDemo">
     <div class="col-md-12 column">
         <table class="table table-hover" id="checkChange">

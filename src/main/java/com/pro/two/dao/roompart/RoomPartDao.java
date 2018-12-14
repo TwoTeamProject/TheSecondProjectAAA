@@ -15,14 +15,34 @@ public interface RoomPartDao {
      * 获取分页总数量
      * @return
      */
-    int getRoomCount();
+    int getRoomCount(Map map);
 
     /**
-     * 退房
+     * 获取商品价格信息
+     * @return
+     */
+    List<Map> getGoods();
+
+    /**
+     * 退房 1、更改TB_ROOM房间状态
      * @param map
      * @return
      */
     int updateRoom(Map map);
+
+    /**
+     * 退房 2、更改TB_ROOM_PART房间状态
+     * @param map
+     * @return
+     */
+    int updateRoomPart(Map map);
+
+    /**
+     * 退房 3、TB_GOODS表中商品数量
+     * @param map
+     * @return
+     */
+    int updateGoods(Map map);
 
     /**
      * 换房

@@ -14,7 +14,7 @@ public interface AllRoomService {
      * 查询所有房间的数量
      * @return
      */
-    int getAllRoomCount();
+    int getAllRoomCount(Map map);
 
     /**
      * 修改房间

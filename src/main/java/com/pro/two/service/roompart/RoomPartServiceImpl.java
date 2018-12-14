@@ -28,14 +28,31 @@ public class RoomPartServiceImpl implements RoomPartService{
     }
 
     @Override
-    public int getRoomCount() {
-        return roomPartDao.getRoomCount();
+    public int getRoomCount(Map map) {
+        return roomPartDao.getRoomCount(map);
+    }
+
+    @Override
+    public List<Map> getGoods() {
+        return roomPartDao.getGoods();
     }
 
     @Override
     public int updateRoom(Map map) {
-        return roomPartDao.updateRoom(map);
+        roomPartDao.updateRoomPart(map);
+        roomPartDao.updateRoom(map);
+        if(map.get("GOODS_ID")!= null || map.get("GOODS_ID")!=""){
+            String[] GOODS_ID = (map.get("GOODS_ID") + "").split(",");
+            String[] GOODS_NUM = (map.get("GOODS_NUM") + "").split(",");
+            for (int i = 0;i<GOODS_ID.length;i++){
+                map.put("GOODS_ID",GOODS_ID[i]);
+                map.put("GOODS_NUM",GOODS_NUM[i]);
+                roomPartDao.updateGoods(map);
+            }
+        }
+        return 0;
     }
+
 
     @Override
     public int changeRoom(Map map) {
