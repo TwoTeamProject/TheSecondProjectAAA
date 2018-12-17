@@ -45,11 +45,12 @@ public interface RoomPartDao {
     int updateGoods(Map map);
 
     /**
-     * 换房
+     * 续订房间
      * @param map
      * @return
      */
-    int changeRoom(Map map);
+    int extendRoom(Map map);
+
 
     /**
      * 查询空房
@@ -62,12 +63,27 @@ public interface RoomPartDao {
      * 空房分页数量
      * @return
      */
-    int emptyRoomCount();
+    //int emptyRoomCount();
 
     /**
-     *                                                                                                                更换房间
+     *  更换房间1
      * @param map
      * @return
      */
     int update(Map map);
+
+    /**
+     * 更换房间2
+     * @param map
+     * @return
+     */
+    int updateO(Map map);
+
+    /**
+     * 更换房间3
+     * @param map
+     * @return
+     */
+    int updateT(Map map);
+
 }

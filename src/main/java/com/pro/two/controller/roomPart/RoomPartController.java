@@ -3,6 +3,7 @@ package com.pro.two.controller.roomPart;
 import com.pro.two.service.roompart.RoomPartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,9 +21,15 @@ import java.util.Map;
 @Controller
 @RequestMapping("/roomPart")
 public class RoomPartController {
+
     @Autowired
     private RoomPartService roomPartService;
 
+    /**
+     * 客人入住房间信息
+     * @param map
+     * @return
+     */
     @RequestMapping("/list")
     @ResponseBody
     public Object getRoomPartList(@RequestParam Map map){
@@ -33,6 +40,12 @@ public class RoomPartController {
         tempMap.put("data",roomPartService.getRoomPartList(map));
         return tempMap;
     }
+
+    /**
+     * 页面跳转方法
+     * @param map
+     * @return
+     */
     @RequestMapping("/toRoomPart")
     public String toList(Map map){
         return "roomPart";
@@ -64,23 +77,24 @@ public class RoomPartController {
     }
 
     /**
+     * 续订
+     * @param map
+     * @return
+     */
+    @RequestMapping("/extend")
+    @ResponseBody
+    public Object extendRoom(@RequestParam Map map){
+        //System.out.println(map);
+        return roomPartService.extendRoom(map);
+    }
+
+    /**
      * 换房
      * @param map
      * @return
      */
-    @RequestMapping("/change")
-    @ResponseBody
-    public Object changeRoom(@RequestParam Map map){
-        int result = roomPartService.changeRoom(map);
-        Map tempMap = new HashMap();
-        if (result==-1){
-            tempMap.put("issuc",false);
-        }else{
-            tempMap.put("issuc",true);
-        }
-        System.out.println(map);
-        return tempMap;
-    }
+
+    //查询空房
     @RequestMapping("/empty")
     @ResponseBody
     public Object emptyRoom(@RequestParam Map map){
@@ -90,18 +104,18 @@ public class RoomPartController {
         tempMap.put("data",roomPartService.emptyRoom(map));
         return tempMap;
     }
-    @RequestMapping("/updateRoom")
+
+    /**
+     * 换房
+     * @param map
+     * @return
+     */
+    @RequestMapping("/ceRoom")
     @ResponseBody
     public Object update(@RequestParam Map map){
-        int result = roomPartService.update(map);
-        Map tempMap = new HashMap();
-        if (result==-1){
-            tempMap.put("issuc",false);
-        }else{
-            tempMap.put("issuc",true);
-        }
-        System.out.println(map);
-        return tempMap;
+        int updateARoom = roomPartService.update(map);
+        //System.out.println(updateARoom);
+        return updateARoom;
     }
 
 }

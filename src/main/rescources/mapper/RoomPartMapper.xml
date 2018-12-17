@@ -8,7 +8,7 @@
        select * from
         (select rownum rn, to_char(room_date,'yyyy-mm-dd') as room_date,a.room_part_id,a.room_part_state,a.part_id,
         a.room_code,a.room_part_name,a.room_part_phone,a.room_part_card,room_typename,a.room_livetime,b.room_typeprice,
-        to_char(ROOM_TIME,'yyyy-mm-dd') as ROOM_TIME
+        to_char(ROOM_TIME,'yyyy-mm-dd') as ROOM_TIME,a.room_typeid
         from tb_room_part a
         join tb_roomtype b on a.room_typeid=b.room_typeid
         join tb_room c on c.room_code=a.room_code
@@ -52,18 +52,41 @@
     </update>
 
 
+    <!-- 续订 更改TB_ROOM_PART表中房间的到期时间，和天数
+       -->
+    <update id="extendRoom">
+        update tb_room_part set ROOM_TIME = to_date(#{ROOM_XU3},'yyyy-mm-dd '),
+        ROOM_LIVETIME = #{ROOM_LIVETIME} where PART_ID = #{PART_ID}
+    </update>
 
+    <!-- 换房管理：空房查询 -->
     <select id="emptyRoom" resultType="map">
-        select a.room_state, a.room_code,b.room_typename,b.room_typeprice,b.room_deposit
-        from tb_room a join tb_roomtype b on a.room_typeid=b.room_typeid
-        where room_state=0
-
+        select a.room_state, a.room_code,b.room_typename,b.room_typeprice,b.room_deposit,a.room_typeid
+        from tb_room a
+        join tb_roomtype b on a.room_typeid=b.room_typeid
+        where room_state=0 and a.ROOM_TYPEID = #{ROOM_TYPEID}
     </select>
     <!--查询数量-->
     <select id="emptyRoomCount" resultType="int">
         select count(*) from tb_room where room_state=0
     </select>
+    <!--
+     点击提交，换房操作
+     1、根据 TB_ROOM 表中的ROOM_CODE更改ROOM_STATE（0空净，2有人）
+     将原房间状态2改为0
+     将换后房间状态0改为2
+
+     -->
     <update id="update">
-        update tb_room set room_state=2 where room_code=#{room_code}
+        update tb_room set room_state=0 where room_code=#{Q_ROOM_CODE5}
+    </update>
+    <update id="updateO">
+        update tb_room set room_state=2 where room_code=#{H_ROOM_CODE5}
+    </update>
+    <!--
+        2、根据 TB_ROOM_PART 中的 PART_ID 更改 ROOM_CODE
+    -->
+    <update id="updateT">
+        update TB_ROOM_PART set room_code=#{H_ROOM_CODE5} where part_id = #{Q_PART_ID5}
     </update>
 </mapper>

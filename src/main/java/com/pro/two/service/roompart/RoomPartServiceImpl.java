@@ -53,11 +53,12 @@ public class RoomPartServiceImpl implements RoomPartService{
         return 0;
     }
 
-
     @Override
-    public int changeRoom(Map map) {
-        return roomPartDao.changeRoom(map);
+    public int extendRoom(Map map) {
+        return roomPartDao.extendRoom(map);
     }
+
+
 
     /**
      * 查询空房
@@ -73,13 +74,12 @@ public class RoomPartServiceImpl implements RoomPartService{
         return roomPartDao.emptyRoom(map);
     }
 
-    @Override
-    public int emptyRoomCount() {
-        return roomPartDao.emptyRoomCount();
-    }
+
 
     @Override
     public int update(Map map) {
-        return roomPartDao.update(map);
+        roomPartDao.update(map);
+        roomPartDao.updateO(map);
+        return roomPartDao.updateT(map);
     }
 }
