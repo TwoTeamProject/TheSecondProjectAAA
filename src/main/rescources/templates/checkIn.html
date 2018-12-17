@@ -41,6 +41,15 @@
             })
         })
         function add(){
+            //时间处理
+            var sDate=$("#indate").val();
+            var eDate=$("#outdate").val();
+            var sArr = sDate.split("-");
+            var eArr = eDate.split("-");
+            var sRDate = new Date(sArr[0], sArr[1], sArr[2]);
+            var eRDate = new Date(eArr[0], eArr[1], eArr[2]);
+            var result = (eRDate-sRDate)/(24*60*60*1000);
+
             var param = {
                 "room_code" :$("#room_code").val(),
                 "room_typename" :$("#room_typename").val(),
@@ -56,7 +65,7 @@
                 data: {"room_code":$("#room_code").val(),
                     "room_typename":$("#room_typename").val(),
                     "name":$("#name").val(),"phone":$("#phone").val(),
-                    "card":$("#card").val(),"indate":$("#indate").val(),"outdate":$("#outdate").val()},
+                    "card":$("#card").val(),"indate":$("#indate").val(),"outdate":$("#outdate").val(),"result":result},
                 dataType: "json",
                 success : function (data) {
                     var index = parent.layer.getFrameIndex(window.name);

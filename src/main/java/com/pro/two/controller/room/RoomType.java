@@ -143,6 +143,7 @@ public class RoomType {
         @ResponseBody
         @RequestMapping("/part")
         public Object part(@RequestParam Map map){
+            System.out.println(map+"2222222222222222222222");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 Date indate = sdf.parse(map.get("indate")+"");
@@ -152,8 +153,8 @@ public class RoomType {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            /*System.out.println(map.get("indate"));
-            System.out.println(map);*/
+            //System.out.println(map.get("indate"));
+            System.out.println(map+"1111111111111");
             Map maps = new HashMap();
             int result = roomTypeService.insertPart(map);
             roomTypeService.updateState(Integer.valueOf(map.get("room_code")+""));
