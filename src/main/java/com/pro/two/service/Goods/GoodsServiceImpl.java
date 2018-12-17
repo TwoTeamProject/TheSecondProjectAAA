@@ -26,6 +26,7 @@ public class GoodsServiceImpl implements GoodsService {
         int pageSize = map.get("pageSize") == null ? 10 : Integer.valueOf(map.get("pageSize")+"");
         map.put("start",(pageNo-1)*pageSize);
         map.put("end",pageNo*pageSize+1);
+        //System.out.println(map.get("start")+"---"+map.get("end"));
         return goodsDao.getGoodsList(map);
     }
 

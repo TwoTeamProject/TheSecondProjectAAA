@@ -4,21 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pro.two.dao.allRoom.AllRoomDao">
-    <!--
-        <where>
-            <if test="GOODS_NAME!=null and GOODS_NAME!= '' ">
-                and GOODS_NAME like '%'||#{GOODS_NAME}||'%'
-            </if>
 
-            <if test="TYPE_NAME!=null and TYPE_NAME!= '' ">
-                and TYPE_NAME like '%'||#{TYPE_NAME}||'%'
-            </if>
-
-            <if test="pageNo!=null and pageNo!= '' ">
-                and rownum &lt; #{end}) a where a.rn &gt; #{start}
-            </if>
-        </where>
-    -->
     <select id="getAllRoom" resultType="map">
         select * from
         (select rownum rn,a.room_code,b.room_typename,b.room_typeprice,b.room_deposit,a.room_typeid
