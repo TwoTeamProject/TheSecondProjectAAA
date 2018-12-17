@@ -10,6 +10,7 @@
         (select rownum rn,a.room_code,b.room_typename,b.room_typeprice,b.room_deposit,a.room_typeid
         from tb_room a
         join tb_roomtype b on a.room_typeid=b.room_typeid
+
         <where>
             <if test="ROOM_CODE!=null and ROOM_CODE!= '' ">
                 and ROOM_CODE like '%'||#{ROOM_CODE}||'%'
@@ -23,6 +24,7 @@
                 and rownum &lt; #{end}) a where a.rn &gt; #{start}
             </if>
         </where>
+        ORDER BY room_typeid
     </select>
     <select id="getAllRoomCount" resultType="int">
         select count(*) from

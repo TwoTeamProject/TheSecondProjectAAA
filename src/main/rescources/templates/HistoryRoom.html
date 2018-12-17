@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../lib/layui/css/layui.css">
+    <script src="../js/jquery-1.8.3.min.js"></script>
+    <script src="../lib/layui/layui.js"></script>
+
+    <style type="text/css">
+        .layui-table-cell .layui-form-checkbox[lay-skin="primary"] {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+<div class="demoTable" style="margin-top: 10px;width: 1662px;margin-left: 20px;">
+    电话:
+    <div class="layui-inline">
+        <input class="layui-input" name="ROOM_PART_PHONE" id="demoReload" autocomplete="off">
+    </div>
+    顾客姓名:
+    <div class="layui-inline">
+        <input class="layui-input" name="ROOM_PART_NAME" id="demoReload2" autocomplete="off">
+    </div>
+    <div class="layui-btn" data-type="reload" id="searchBtn"><i class="layui-icon">&#xe615;</i>搜索</div>
+    <div class="layui-btn" data-type="reload" id="redo"><i class="layui-icon">&#xe669;</i></div>
+
+</div>
+<table class="layui-hide" id="roomPartList" lay-filter="demo"></table>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+        table.render({
+            elem: '#roomPartList'
+            ,title: '历史住房信息表'
+            ,height:745
+            ,width:1698
+            ,url: '/pro/history/getList'
+            ,toolbar: '#toolbarDemo'
+            ,page: true
+            ,even: true
+            ,size: 'lg'
+            ,cols:[ [
+                {checkbox: true, fixed: true}
+                ,{field: 'ROOM_CODE', title: '房间号', width:135, sort: true, unresize: true ,fixed: 'left'}
+                ,{field: 'PART_ID', title: '单号id', width:164}
+                ,{field: 'ROOM_PART_NAME', title: '姓名', width:154}
+                ,{field: 'ROOM_PART_PHONE', title: '电话', width:150}
+                ,{field: 'ROOM_PART_CARD', title: '身份证号', width:224}
+                ,{field: 'ROOM_DATE', title: '入住时间', width:185}
+                ,{field: 'ROOM_TIME', title: '结账时间', width:198}
+                ,{field: 'ROOM_LIVETIME', title: '入住天数（/天）', width:164}
+                ,{field: 'ROOM_TYPEPRICE', title: '单价（/元）', width:130}
+
+                ,{field: 'ROOM_SUM', title: '消费（/元）', width:130}
+
+                ,{field: 'ROOM_TYPENAME', title: '房间类型', width:164}
+                ,{field: 'ROOM_TYPEID', title: '房间类型ID', width:164}
+            ] ]
+            ,id: 'testReload'
+            ,request: {
+                pageName: 'pageNo',//页码的参数名称，默认：page
+                limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            },
+            limits: [5, 10, 20], //显示
+            limit: 10 //每页默认显示的数量
+            //隐藏id
+            , done: function () {
+                $("[data-field='PART_ID']").css('display', 'none');
+                $("[data-field='ROOM_TYPEID']").css('display', 'none');
+
+            }
+        })
+        //模糊查询（搜索）
+        var $ = layui.$, active = {
+            reload:function () {
+                var demoReload = $("#demoReload");
+                var demoReload2 = $("#demoReload2");
+                table.reload('testReload',{
+                    where:{
+                        ROOM_PART_PHONE:demoReload.val(),
+                        ROOM_PART_NAME:demoReload2.val()
+                    }
+                })
+            }
+        }
+        $("#searchBtn").on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        })
+        //取消搜索按钮
+        $("#redo").click(function(){
+            $("#demoReload").val("");
+            $("#demoReload2").val("");
+            $("#searchBtn").trigger("click");
+        })
+    })
+</script>
+</body>
+</html>

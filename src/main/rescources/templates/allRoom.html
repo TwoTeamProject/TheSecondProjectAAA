@@ -37,8 +37,8 @@
         table.render({
             elem: '#emptyRoomList'
             , title: '用户数据表'
-            , height: 790
-            , width: 1910
+            , height: 745
+            , width: 1698
             , url: '/pro/allRoom/all'
             , toolbar: '#toolbarDemo'
             , page: true
@@ -46,19 +46,19 @@
             , size: 'lg'
             , cols: [ [
                 {checkbox: true, fixed: true}
-                , {field: 'ROOM_CODE', title: '房间号', width: 392, sort: true, unresize: true, fixed: 'left'}
-                , {field: 'ROOM_TYPENAME', title: '房间类型', width: 392}
-                , {field: 'ROOM_TYPEPRICE', title: '价格', width: 395,}
-                , {field: 'ROOM_DEPOSIT', title: '押金', width: 395}
-                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:280}
+                , {field: 'ROOM_CODE', title: '房间号', width: 352, sort: true, unresize: true, fixed: 'left'}
+                , {field: 'ROOM_TYPENAME', title: '房间类型', width: 352}
+                , {field: 'ROOM_TYPEPRICE', title: '价格', width: 350,}
+                , {field: 'ROOM_DEPOSIT', title: '押金', width: 315}
+                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:270}
             ] ]
             ,id: 'testReload'
             , request: {
                 pageName: 'pageNo',//页码的参数名称，默认：page
                 limitName: 'pageSize' //每页数据量的参数名，默认：limit
             },
-            limits: [5,15,20], //显示
-            limit: 20 //每页默认显示的数量
+            limits: [5,10,15], //显示
+            limit: 10 //每页默认显示的数量
         })
 
         //模糊查询（搜索）
