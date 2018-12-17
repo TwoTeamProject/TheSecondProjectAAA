@@ -21,13 +21,19 @@ import java.util.Map;
 public class AllRoomController {
     @Autowired
     private AllRoomService allRoomService;
+
+    /**
+     * 查询酒店所有房间
+     * @param map
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/all")
     public Object allRoomList(@RequestParam Map map){
         Map tempMap = new HashMap();
         tempMap.put("code",0);
         tempMap.put("msg","");
-        tempMap.put("count",allRoomService.getAllRoomCount());
+        tempMap.put("count",allRoomService.getAllRoomCount(map));
         tempMap.put("data",allRoomService.getAllRoom(map));
         return tempMap;
     }
@@ -35,6 +41,12 @@ public class AllRoomController {
     public Object toAllRoom(){
         return "allRoom";
     }
+
+    /**
+     * 修改房间
+     * @param map
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/update")
     public Object updateRoom(@RequestParam Map map){

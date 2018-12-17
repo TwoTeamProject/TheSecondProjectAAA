@@ -15,21 +15,42 @@ public interface RoomPartDao {
      * 获取分页总数量
      * @return
      */
-    int getRoomCount();
+    int getRoomCount(Map map);
 
     /**
-     * 退房
+     * 获取商品价格信息
+     * @return
+     */
+    List<Map> getGoods();
+
+    /**
+     * 退房 1、更改TB_ROOM房间状态
      * @param map
      * @return
      */
     int updateRoom(Map map);
 
     /**
-     * 换房
+     * 退房 2、更改TB_ROOM_PART房间状态
      * @param map
      * @return
      */
-    int changeRoom(Map map);
+    int updateRoomPart(Map map);
+
+    /**
+     * 退房 3、TB_GOODS表中商品数量
+     * @param map
+     * @return
+     */
+    int updateGoods(Map map);
+
+    /**
+     * 续订房间
+     * @param map
+     * @return
+     */
+    int extendRoom(Map map);
+
 
     /**
      * 查询空房
@@ -42,12 +63,27 @@ public interface RoomPartDao {
      * 空房分页数量
      * @return
      */
-    int emptyRoomCount();
+    //int emptyRoomCount();
 
     /**
-     *                                                                                                                更换房间
+     *  更换房间1
      * @param map
      * @return
      */
     int update(Map map);
+
+    /**
+     * 更换房间2
+     * @param map
+     * @return
+     */
+    int updateO(Map map);
+
+    /**
+     * 更换房间3
+     * @param map
+     * @return
+     */
+    int updateT(Map map);
+
 }

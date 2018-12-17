@@ -18,7 +18,7 @@ public interface UserService {
      * @param userid
      * @return
      */
-   User findByUserId(String userid,String password);
+   User findByUserId(String userid, String password);
 
 
 
