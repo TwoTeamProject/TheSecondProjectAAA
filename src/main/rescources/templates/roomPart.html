@@ -63,7 +63,7 @@
                 pageName: 'pageNo',//页码的参数名称，默认：page
                 limitName: 'pageSize' //每页数据量的参数名，默认：limit
             },
-            limits: [5, 10, 15], //显示
+            limits: [5, 10, 20], //显示
             limit: 10 //每页默认显示的数量
             //隐藏id
             , done: function () {
@@ -113,7 +113,6 @@
                         $("#ROOM_TIME").val(data.ROOM_TIME);
                         $("#ROOM_LIVETIME").val(data.ROOM_LIVETIME);
                         $("#ALL_PRICE").val(data.ROOM_TYPEPRICE*data.ROOM_LIVETIME);
-
                     }  //success(layero)
                 }) //open
                 $.ajax({

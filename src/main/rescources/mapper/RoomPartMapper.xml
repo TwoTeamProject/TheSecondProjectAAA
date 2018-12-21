@@ -20,16 +20,19 @@
             <if test="ROOM_PART_NAME!=null and ROOM_PART_NAME!= '' ">
                 and ROOM_PART_NAME like '%'||#{ROOM_PART_NAME}||'%'
             </if>
-
-            <if test="pageNo!=null and pageNo!= '' ">
-                and rownum &lt; #{end}) t where t.rn &gt; #{start} and room_part_state = 0
+            <if test="1==1">
+                and room_part_state = 0
             </if>
+            <if test="pageNo!=null and pageNo!= '' ">
+                and rownum &lt; #{end}) t where t.rn &gt; #{start}
+            </if>
+
         </where>
 
     </select>
     <!--查询数量-->
     <select id="getRoomCount" resultType="int">
-        select count(*) from tb_room_part
+        select count(*) from tb_room_part where room_part_state = 0
     </select>
 
     <!-- 商品价格列表 -->
