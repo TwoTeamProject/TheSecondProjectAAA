@@ -143,7 +143,6 @@ public class RoomType {
         @ResponseBody
         @RequestMapping("/part")
         public Object part(@RequestParam Map map){
-            System.out.println(map+"2222222222222222222222");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 Date indate = sdf.parse(map.get("indate")+"");
@@ -154,7 +153,6 @@ public class RoomType {
                 e.printStackTrace();
             }
             //System.out.println(map.get("indate"));
-            System.out.println(map+"1111111111111");
             Map maps = new HashMap();
             int result = roomTypeService.insertPart(map);
             roomTypeService.updateState(Integer.valueOf(map.get("room_code")+""));
@@ -198,6 +196,7 @@ public class RoomType {
         Map maps = new HashMap();
         int result = roomTypeService.insertBatchRoom(map);
         roomTypeService.batchUpdateState(map);
+        System.out.println(result);
         if (result!=-1){
             maps.put("issuc",true);
         }else {

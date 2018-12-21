@@ -35,10 +35,18 @@ public class NewsController {
     @Autowired
     private FtpUtil ftpUtil;
 
-    @Autowired
     private ResourceLoader resourceLoader;
 
-    @Value("${upload.path}")
+    @Value("${ftp.remoteIp}")
+    private String remoteIp;
+    @Value("${ftp.ftpUserName}")
+    private String ftpUserName;
+    @Value("${ftp.ftpPassWord}")
+    private String ftpPassWord;
+    @Value("${ftp.remotePath}")
+    private String remotePath;
+
+    @Value("${ftp.localPath}")
     private String filePath; // D:/images/
 
     @Autowired
@@ -113,7 +121,7 @@ public class NewsController {
     }
 
     /**
-     * 添加使用ftp 上传新闻
+     *添加使用ftp 上传新闻
      * @param map
      * @return
      */
@@ -138,6 +146,30 @@ public class NewsController {
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    /**
+     * 图片显示方法
+     * @param fileName
+     * @return
+     */
+    @RequestMapping("showFtp")
+    public ResponseEntity showFtp(String fileName){
+        try {
+            // 由于是读取本机的文件，file是一定要加上的， path是在application配置文件中的路径
+//            System.out.println("ftp://"+ftpUserName+":"+ftpPassWord+"@"+remoteIp+remotePath+fileName+"1111");
+            Resource resource = resourceLoader.getResource("ftp://"+ftpUserName+":"+ftpPassWord+"@"+remoteIp+remotePath+fileName);
+            return ResponseEntity.ok(resourceLoader.getResource("ftp://"+ftpUserName+":"+ftpPassWord+"@"+remoteIp+remotePath+fileName));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @RequestMapping("/test")
+    @ResponseBody
+    public String test(){
+        System.out.println("ftpUserName:"+ftpUserName);
+        return "";
     }
 
     @ResponseBody

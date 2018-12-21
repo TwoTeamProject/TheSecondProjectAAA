@@ -70,6 +70,11 @@ public class LoginController {
     }
 
     /*跳转登陆*/
+    @RequestMapping("toDemo")
+    public String toDemo(){
+        return "demo";
+    }
+    /*跳转登陆*/
     @RequestMapping("toLogin")
     public String userLogin(){
         return "login";
