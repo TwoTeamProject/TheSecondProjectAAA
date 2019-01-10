@@ -22,20 +22,67 @@
     </script>
 </head>
 <body>
-<h1><span id="sp"></span>欢迎你！</h1>
-    <div>
-        <table>
-            <tr><td><img src=""/></td><td></td></tr>
-            <tr><td>姓名</td><span></span><td></td></tr>
-            <tr><td>年龄</td><span></span><td></td></tr>
-            <tr><td>性别</td><span></span><td></td></tr>
-            <tr><td>用户名</td><span></span><td></td></tr>
-            <tr><td>邮箱</td><span></span><td></td></tr>
-            <tr><td>职位</td><span></span><td></td></tr>
-            <tr><td>联系方式</td><span></span><td></td></tr>
-            <tr><td>入职日期</td><span></span><td></td></tr>
-        </table>
-    </div>
+<div class="x-body layui-anim layui-anim-up">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名：</label>
+            <div class="layui-input-inline">
+                <span  id="USER_NAME" class="layui-form-label"  style="text-align:center;padding-left:80px"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别：</label>
+            <div class="layui-input-inline">
+                <span  id="USER_GENDER" class="layui-form-label" style="text-align:center;padding-left:80px"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系方式：</label>
+            <div class="layui-input-inline">
+                <span  id="USER_PHONE" class="layui-form-label" style="text-align:center;padding-left:80px"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">职位：</label>
+            <div class="layui-input-inline">
+                <span  id="TITLE" class="layui-form-label" style="text-align:center;padding-left:80px"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名：</label>
+            <div class="layui-input-inline">
+                <span  id="USER_UNAME" class="layui-form-label" style="text-align:center;padding-left:80px"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码：</label>
+            <div class="layui-input-inline">
+                <span  id="USER_PASSWORD" class="layui-form-label" style="text-align:center;padding-left:80px"/>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    //获取登陆信息
+    $(function () {
+        $.ajax({
+            url:"/pro/login/welcome",
+            type:"post",
+            success:function(data) {
+                    $("#USER_NAME").html(data.USER_NAME);
+                    if(data.USER_GENDER==1){
+                        $("#USER_GENDER").html("男");
+                    }else{
+                        $("#USER_GENDER").html("女");
+                    }
+                    $("#USER_PHONE").html(data.USER_PHONE);
+                    $("#TITLE").html(data.TITLE);
+                    $("#USER_UNAME").html(data.USER_UNAME);
+                    $("#USER_PASSWORD").html("*****");
+            }
+        })
+    })
+</script>
 </body>
 </html>
 <SCRIPT Language=VBScript><!--

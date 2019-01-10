@@ -17,4 +17,13 @@ public interface LoginService {
      * @return
      */
     List<Map> userLogin(Map map);
+
+    /**
+     * 根据账号查询姓名
+     * @param map
+     * @return
+     */
+    Map selectUserName(String USER_ID);
+
+
 }

@@ -72,4 +72,11 @@ public interface PersonService {
      * @return
      */
     List<Map> role();
+
+    /**
+     * 更新密码
+     * @param map
+     * @return
+     */
+    int updatePassWord(Map map);
 }

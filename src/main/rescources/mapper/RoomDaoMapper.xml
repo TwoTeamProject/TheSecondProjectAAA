@@ -35,6 +35,9 @@
         update tb_room set room_state=2 where room_code=#{room_code}
     </update>
     <insert id="insertBatchRoom">
-        insert into tb_room_part values(#{room_code},#{name},#{phone},#{card},(select room_typeid from tb_room where room_code=#{room_code}),#{indate},0,tb_room_part_id.nextval,#{outdate})
+        insert into tb_room_part(room_code,room_part_name,room_part_phone,room_part_card,
+        room_typeid,room_date,room_part_state,room_time,room_livetime,part_id)
+        values(#{room_code},#{name},#{phone},#{card},(select room_typeid from tb_room where room_code=#{room_code}),
+        #{indate},0,#{outdate},#{result},part_id.nextval)
     </insert>
 </mapper>

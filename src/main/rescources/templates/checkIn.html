@@ -83,12 +83,22 @@
             var laydate = layui.laydate;
             //执行一个laydate实例
             laydate.render({
-                elem: '#indate' //指定元素
+                elem: '#indate',//指定元素
+                min:minDate()
             });
             laydate.render({
-                elem: '#outdate' //指定元素
+                elem: '#outdate', //指定元素
+                min:minDate2()
             });
         });
+        function minDate(){
+            var now = new Date();
+            return now.getFullYear()+"-" + (now.getMonth()+1) + "-" + now.getDate();
+        }
+        function minDate2(){
+            var now = new Date();
+            return now.getFullYear()+"-" + (now.getMonth()+1) + "-" + (now.getDate()+1);
+        }
     </script>
 
 </head>
@@ -117,7 +127,7 @@
                     <span class="x-red">*</span>姓名
                 </label>
                 <div class="layui-input-inline">
-                    <input type="text"  id="name" class="layui-input">
+                    <input type="text"  id="name" class="layui-input" lay-verify="required">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
                     <!--0空净，1空脏，2有人，3网上预订-->
@@ -128,7 +138,7 @@
                     <span class="x-red">*</span>电话
                 </label>
                 <div class="layui-input-inline">
-                    <input type="text"  id="phone" class="layui-input">
+                    <input type="text"  id="phone" class="layui-input" lay-verify="phone">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
                     <!--0空净，1空脏，2有人，3网上预订-->
@@ -139,7 +149,7 @@
                     <span class="x-red">*</span>身份证号
                 </label>
                 <div class="layui-input-inline">
-                    <input type="text"  id="card" class="layui-input">
+                    <input type="text"  id="card" class="layui-input" lay-verify="identity">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
                     <!--0空净，1空脏，2有人，3网上预订-->
@@ -150,7 +160,7 @@
                     <span class="x-red">*</span>入住时间
                 </label>
                 <div class="layui-input-inline">
-                    <input type="text"  id="indate" class="layui-input" onclick="timeAdd()">
+                    <input type="text"  id="indate" class="layui-input" onclick="timeAdd()" lay-verify="required">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
                     <!--0空净，1空脏，2有人，3网上预订-->
@@ -161,7 +171,7 @@
                     <span class="x-red">*</span>退房时间
                 </label>
                 <div class="layui-input-inline">
-                    <input type="text"  id="outdate" class="layui-input">
+                    <input type="text"  id="outdate" class="layui-input" lay-verify="required">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
                     <!--0空净，1空脏，2有人，3网上预订-->

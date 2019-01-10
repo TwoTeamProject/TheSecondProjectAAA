@@ -1,5 +1,6 @@
 package com.pro.two.controller.login;
 
+import com.pro.two.Entity.User;
 import com.pro.two.service.login.LoginService;
 import com.pro.two.service.login.UserService;
 import org.apache.shiro.SecurityUtils;
@@ -70,6 +71,11 @@ public class LoginController {
     }
 
     /*跳转登陆*/
+    @RequestMapping("toDemo")
+    public String toDemo(){
+        return "demo";
+    }
+    /*跳转登陆*/
     @RequestMapping("toLogin")
     public String userLogin(){
         return "login";
@@ -98,10 +104,31 @@ public class LoginController {
         return "interface";
     }
 
+    /**
+     * 跳转个人信息
+     * @return
+     */
+    @RequestMapping("toWel")
+    public String toWel(){
+        return "person/personInfo";
+    }
+
+    /**
+     * 跳转修改密码
+     * @return
+     */
+    @RequestMapping("toPassWord")
+    public String toPassWord(){
+        return "person/updatePassWord";
+    }
+
     @ResponseBody
     @RequestMapping("welcome")
     public Object welcome(HttpSession session){
-        return session.getAttribute("username")+"";
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        String USER_ID = user.getUserId()+"";
+        return loginService.selectUserName(USER_ID);
     }
+
 
 }

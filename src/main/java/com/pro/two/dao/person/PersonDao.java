@@ -82,4 +82,7 @@ public interface PersonDao {
      */
     @Select("select id,title from tb_role")
     List<Map> role();
+
+    @Update("update tb_user set user_uname=#{userName},user_password=#{passWord} where user_id=#{userId}")
+    int updatePassWord(Map map);
 }

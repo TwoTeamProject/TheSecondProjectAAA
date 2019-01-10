@@ -6,4 +6,7 @@
     <select id="userLogin" resultType="map">
         select user_uname,user_password from tb_user where user_uname = #{username} and user_password = #{password}
     </select>
+    <select id="selectUserName" resultType="map">
+        select user_name,user_gender,user_phone,b.title,user_uname,user_password from tb_user a,tb_role b where a.user_post_id = b.id and user_id = #{USER_ID}
+    </select>
 </mapper>

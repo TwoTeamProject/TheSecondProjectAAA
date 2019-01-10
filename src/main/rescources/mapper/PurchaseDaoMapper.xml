@@ -40,6 +40,7 @@
         from TB_STOCKDET a
         join TB_SUPPLIER b on a.supp_name = b.supp_name
         where SD_STATE = 2
+        order by sd_id desc
     </select>
 
     <!-- 入库单详情 -->

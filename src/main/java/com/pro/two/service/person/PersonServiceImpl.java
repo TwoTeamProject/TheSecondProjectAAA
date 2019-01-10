@@ -117,4 +117,9 @@ public class PersonServiceImpl implements PersonService {
     public List<Map> role() {
         return personDao.role();
     }
+
+    @Override
+    public int updatePassWord(Map map) {
+        return personDao.updatePassWord(map);
+    }
 }
