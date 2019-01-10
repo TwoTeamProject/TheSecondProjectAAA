@@ -11,6 +11,27 @@
         insert into TB_MEMBER(MEM_ID,MEM_NAME,MEM_TEL,MEM_PASSWORD,MEM_IDCORD)
         values (TB_MEMBER_ID.NEXTVAL,#{MEM_NAME},#{MEM_TEL},#{MEM_PASSWORD},#{MEM_IDCORD})
     </insert>
+    <select id="getMemberMsg" resultType="map">
+        select MEM_IDCORD,MEM_ID,MEM_NAME,MEM_TEL,MEM_PASSWORD from TB_MEMBER
+        <where>
+            <if test="MEM_TEL">
+                MEM_TEL=#{MEM_TEL}
+            </if>
+        </where>
+    </select>
+    <select id="getOrderMsg" resultType="map">
+        select ORDER_ID,INPERSON,INTIME,OUTTIME,ROOM_TYPENAME,ROOMNUM,ORDERPRICE,LINKMAN,CONTACTNUM,INPERSONID,PAYTYPE,MESSAGE,STATE,ROOM_IMG
+        from TB_ORDER,TB_ROOMTYPE
+        <where>
+            TB_ORDER.ROOMTYPE = TB_ROOMTYPE.ROOM_TYPEID
+            <if test="MEM_TEL">
+               and CONTACTNUM=#{MEM_TEL}
+            </if>
+            <if test="ORDER_ID">
+               and ORDER_ID=#{ORDER_ID}
+            </if>
+        </where>
+    </select>
     <select id="getRoomType" resultType="map">
         select ROOM_TYPEID,ROOM_TYPENAME,ROOM_TYPEPRICE,ROOM_DEPOSIT,ROOM_INFO,ROOM_IMG from TB_ROOMTYPE
         <where>
@@ -20,8 +41,8 @@
         </where>
     </select>
     <insert id="submitOrder">
-        insert into TB_ORDER(ORDER_ID,INPERSON,INTIME,OUTTIME,ROOMTYPE,ROOMNUM,ORDERPRICE,LINKMAN,CONTACTNUM,CONTACTEMAIL,PAYTYPE,MESSAGE)
-        values (TB_ORDER_ID.NEXTVAL,#{inperson},to_date(#{intime},'yyyy-mm-dd'),to_date(#{outtime},'yyyy-mm-dd'),#{roomtype},#{roomnum},#{orderprice},#{linkman},#{contactnum},#{contactemai},#{paytype},#{message})
+        insert into TB_ORDER(ORDER_ID,INPERSON,INPERSONID,INTIME,OUTTIME,ROOMTYPE,ROOMNUM,ORDERPRICE,LINKMAN,CONTACTNUM,CONTACTEMAIL,PAYTYPE,MESSAGE,STATE)
+        values (TB_ORDER_ID.NEXTVAL,#{inperson},#{inpersonID},to_date(#{intime},'yyyy-mm-dd'),to_date(#{outtime},'yyyy-mm-dd'),#{roomtype},#{roomnum},#{orderprice},#{linkman},#{contactnum},#{contactemai},#{paytype},#{message},0)
     </insert>
     <select id="QueryVacancy" resultType="map">
         select count(*) from(
@@ -30,4 +51,8 @@
         or (room_typeid = #{ROOM_TYPEID} and t.room_date &lt; to_date(#{intime},'yyyy-mm-dd') and t.room_time &gt; to_date(#{outtime},'yyyy-mm-dd'))
         )
     </select>
+
+    <delete id="deleteOrder" >
+        delete from TB_ORDER where ORDER_ID=#{ORDER_ID}
+    </delete>
 </mapper>

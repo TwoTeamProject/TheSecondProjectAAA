@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>房间选择</title>
+
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <link rel="stylesheet" href="../lib/layui/css/layui.css">
+
+    <script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../lib/laydate/laydate.js"></script>
+    <script type="text/javascript" src="../lib/layui/layui.js"></script>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-container">
+            <div class="layui-logo">香格里拉大酒店</div>
+            <!-- 头部区域（可配合layui已有的水平导航） -->
+            <ul class="layui-nav layui-layout-left">
+                <li class="layui-nav-item"><a href="../login/toInterface">主页</a></li>
+                <li class="layui-nav-item"><a href="../member/toChoose">预定房间</a></li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">其它</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="">关于我们</a></dd>
+                        <dd><a href="">加盟</a></dd>
+                    </dl>
+                </li>
+            </ul>
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item">
+                    <a id="MEM_NAME">
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="">基本资料</a></dd>
+                        <dd><a href="">预定信息</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a id="exit">退出登陆</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-container" style="height:850px;width: 80%;">
+        <div class="layui-container">
+            <div class="layui-container "  style="height:700px; overflow: auto">
+                <table class="layui-table">
+                    <thead>
+                    <th>
+                        <td>房型</td>
+                        <td>房间数</td>
+                        <td>总金额(元)</td>
+                        <td>联系人</td>
+                        <td>状态</td>
+                        <td></td>
+                    </th>
+                    </thead>
+                    <tbody id="tby">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //JavaScript代码区域
+    layui.use('layer', function(){
+
+        var layer = layui.layer;
+        var MEM_TEL = sessionStorage.getItem('inPersonTel')
+        if (sessionStorage.getItem('inPersonTel')==null) {
+            $("#MEM_NAME").html("未登录");
+        }else{
+            $.ajax({
+                url:"/pro/member/getMemberMsg",
+                type:"POST",
+                data:{"MEM_TEL":MEM_TEL},
+                dataType:"json",
+                success(data){
+                    var MEM_NAME = data[0].MEM_NAME;
+                    $("#MEM_NAME").html(MEM_NAME);
+                }
+            })
+        }
+
+        //订单详情
+        $(document).on("click",".detail",function () {
+            $.ajax({
+                url:"/pro/member/getOrderMsg",
+                type:"POST",
+                data:{"ORDER_ID":$(this).attr("orderid")},
+                dataType:"json",
+                success(data){
+                    $("#orderprice").val(data[0].ORDERPRICE);
+                    $("#roomtype").val(data[0].ROOM_TYPENAME);
+                    $("#roomnum").val(data[0].ROOMNUM);
+                    $("#inperson").val(data[0].INPERSON);
+                    $("#inpersonid").val(data[0].INPERSONID);
+                    $("#linkman").val(data[0].LINKMAN);
+                    $("#contactnum").val(data[0].CONTACTNUM);
+                }
+            })
+
+            layer.open({
+                title: '订单详情'
+                , type: 1
+                , area: ['800', '600']
+                , anim: 1
+                , content: $("#orderDetail").html()
+            });
+
+            $("#orderclose").click(function(){
+                layer.closeAll('page');
+                location.reload();
+            })
+        })
+
+        //取消订单
+        $(document).on("click",".delete",function () {
+            var id = $(this).attr("orderid");
+            layer.confirm('确定要取消订单吗？', {icon: 3, title: '提示'}, function (index) {
+                $.ajax({
+                    url:"/pro/member/deleteOrder",
+                    type:"POST",
+                    data:{"ORDER_ID":id},
+                    dataType:"json",
+                    success(data){
+                        console.log(data);
+                        location.reload();
+                    }
+                })
+            });
+        });
+    });
+
+    $(document).on("click","#exit",function () {
+        sessionStorage.clear();
+        window.location="/pro/login/toInterface";
+    })
+
+
+    $(function () {
+        $.ajax({
+            url:"/pro/member/getOrderMsg",
+            type:"POST",
+            dataType:"json",
+            success(data){
+                var tp="";
+                for(i=0;i<data.length;i++){
+                    tp+="<tr>" +
+                        "<td><img src='"+data[i].ROOM_IMG+"' style='width:150px;height:100px'></td>" +
+                        "<td>"+data[i].ROOM_TYPENAME+"</td>" +
+                        "<td>"+data[i].ROOMNUM+"间</td>" +
+                        "<td>"+data[i].ORDERPRICE+"</td>" +
+                        "<td>"+data[i].LINKMAN+"</td>"
+                        if(data[i].STATE==0){
+                            tp+="<td>处理中</td>"
+                        }else if(data[i].STATE==1){
+                            tp+="<td>预定成功</td>"
+                        }else{
+                            tp+="<td>预定失败</td>"
+                        }
+                        tp+="<td><button class='detail layui-btn' orderid='"+data[i].ORDER_ID+"'>详情</button><button class='delete layui-btn' orderid='"+data[i].ORDER_ID+"'>取消订单</button></td>" +
+                        "</tr>"
+                }
+                $("#tby").append(tp);
+            }
+        })
+    })
+
+</script>
+<script type="text/html" id="orderDetail">
+    <!--订单详情弹出框-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">总价</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="orderprice" name="orderprice" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">房间类型</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="roomtype" name="roomtype" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">房间数量</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="roomnum" name="roomnum" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">入住人</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="inperson" name="inperson" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">入住人身份证</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="inpersonid" name="inpersonid" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系人</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="linkman" name="linkman" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系电话</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="contactnum" name="contactnum" disabled>
+        </div>
+    </div>
+    <div align="center">
+        <input type="button" value="好的" id="orderclose" class="layui-btn layui-btn-sm layui-btn-normal" />
+    </div>
+</script>
+</body>
+</html>

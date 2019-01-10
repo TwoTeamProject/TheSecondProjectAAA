@@ -31,15 +31,14 @@
             </ul>
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item">
-                    <a href="javascript:;">
-                        赵一凡
+                    <a id="MEM_NAME">
                     </a>
                     <dl class="layui-nav-child">
                         <dd><a href="">基本资料</a></dd>
-                        <dd><a href="">预定信息</a></dd>
+                        <dd><a href="../member/toOrder">预定信息</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item"><a href="">退出登陆</a></li>
+                <li class="layui-nav-item"><a id="exit">退出登陆</a></li>
             </ul>
         </div>
     </div>
@@ -52,7 +51,7 @@
                     <td>入住城市:<select class="room"><option value="0">郑州市</option></select></td>
                     <td>入住时间:<input type="text" class="layui-input layer-date" id="inTime" name="inTime"></td>
                     <td>离店时间:<input type="text" class="layui-input layer-date" id="outTime" name="outTime"></td>
-                    <td>
+                    <!--<td>
                         <select id="roomnum">
                             <option value="1">1间</option>
                             <option value="2">2间</option>
@@ -60,7 +59,7 @@
                             <option value="4">4间</option>
                             <option value="5">5间</option>
                         </select>
-                    </td>
+                    </td>-->
                 </tr>
                 </tbody>
             </table>
@@ -72,6 +71,7 @@
                         <td>房型</td>
                         <td>房间说明</td>
                         <td>房费(元/日)</td>
+                        <td>房间数</td>
                         <td></td>
                     </th>
                     </thead>
@@ -82,16 +82,26 @@
             </div>
         </div>
     </div>
-
-    <!--<div class="layui-footer">
-        &lt;!&ndash; 底部固定区域 &ndash;&gt;
-        © layui.com - 底部固定区域
-    </div>-->
 </div>
 <script>
     //JavaScript代码区域
     layui.use('element', function(){
         var element = layui.element;
+        var MEM_TEL = sessionStorage.getItem('inPersonTel')
+        if (sessionStorage.getItem('inPersonTel')==null) {
+            $("#MEM_NAME").html("未登录");
+        }else{
+            $.ajax({
+                url:"/pro/member/getMemberMsg",
+                type:"POST",
+                data:{"MEM_TEL":MEM_TEL},
+                dataType:"json",
+                success(data){
+                    var MEM_NAME = data[0].MEM_NAME;
+                    $("#MEM_NAME").html(MEM_NAME);
+                }
+            })
+        }
     });
 
     $("#tby").on("click",".reserve",function () {
@@ -99,14 +109,20 @@
         sessionStorage.setItem('outTime',$("#outTime").val());
         sessionStorage.setItem('roomtype',$(this).attr("roomtype"));
         sessionStorage.setItem('roomprice',$(this).attr("roomprice"));
-        sessionStorage.setItem('roomnum',$("#roomnum").val());
+        sessionStorage.setItem('roomnum',$(this).parent().prev().find("select").val());
         window.location="/pro/member/toSub";
+    })
+
+
+    $(document).on("click","#exit",function () {
+        sessionStorage.clear();
+        window.location="/pro/login/toInterface";
     })
 
     //查询空房数量
     /*function QueryVacancy(){
         $.ajax({
-            url:"/pro/member/getRoomType",
+            url:"/pro/member/getRoomNum",
             type:"POST",
             data:{""},
             dataType:"json",
@@ -128,8 +144,17 @@
                     tp+="<tr>" +
                         "<td><img src='"+data[i].ROOM_IMG+"' style='width:150px;height:100px'></td>" +
                         "<td>"+data[i].ROOM_TYPENAME+"</td>" +
-                        "<td>"+data[i].ROOM_INFO+"</td>" +
+                        "<td style='width:450px'>"+data[i].ROOM_INFO+"</td>" +
                         "<td>"+data[i].ROOM_TYPEPRICE+"</td>" +
+                        "<td>\n" +
+                        "  <select class='' \"roomnum\">\n" +
+                        "     <option value=\"1\">1间</option>" +
+                        "     <option value=\"2\">2间</option>" +
+                        "     <option value=\"3\">3间</option>" +
+                        "     <option value=\"4\">4间</option>" +
+                        "     <option value=\"5\">5间</option>" +
+                        "   </select>" +
+                        "</td>"+
                         "<td><button class='reserve layui-btn' roomprice='"+data[i].ROOM_TYPEPRICE+"' roomtype='"+data[i].ROOM_TYPEID+"'>预定</button></td>" +
                         "</tr>"
                 }
@@ -140,8 +165,10 @@
 
         var startDate=laydate.render({
             elem: '#inTime',
+            format: 'yyyy-MM-dd',
             min:'new Date()',
             max:+30,
+            value: new Date(),
             done:function(value,date){
                 if(value!=""){
                     date.date=date.date+1;
@@ -206,9 +233,25 @@
 
         var endDate = laydate.render({
             elem: '#outTime',
+            format: 'yyyy-MM-dd',
             min:+1,
-            max:+30
+            max:+30,
+            value:GetNextDate()
         });
+
+    function GetNextDate() {
+        var dd = new Date();
+        dd.setDate(dd.getDate()+1);//获取AddDayCount天后的日期
+        var y = dd.getFullYear();
+        var m = dd.getMonth()+1;//获取当前月份的日期
+        var d = dd.getDate();
+        if(m<10){
+            return y+"-0"+m+"-"+d;
+        }else if(m>=10){
+            return y+"-"+m+"-"+d;
+        }
+    }
+
 
 </script>
 </body>
