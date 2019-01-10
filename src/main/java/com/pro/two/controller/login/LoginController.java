@@ -1,5 +1,6 @@
 package com.pro.two.controller.login;
 
+import com.pro.two.Entity.User;
 import com.pro.two.service.login.LoginService;
 import com.pro.two.service.login.UserService;
 import org.apache.shiro.SecurityUtils;
@@ -106,7 +107,9 @@ public class LoginController {
     @ResponseBody
     @RequestMapping("welcome")
     public Object welcome(HttpSession session){
-        return session.getAttribute("username")+"";
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        String USER_ID = user.getUserId()+"";
+        return loginService.selectUserName(USER_ID);
     }
 
 }

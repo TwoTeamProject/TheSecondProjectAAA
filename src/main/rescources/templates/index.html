@@ -58,15 +58,16 @@
           </li>
         </ul>-->
         <ul class="layui-nav right" lay-filter="">
-          <li class="layui-nav-item">
-            <span id="time"></span>
-            <!--<dl class="layui-nav-child"> &lt;!&ndash; 二级菜单 &ndash;&gt;
-              <dd><a onclick="x_admin_show('个人信息','http://www.baidu.com')">个人信息</a></dd>
-              <dd><a onclick="x_admin_show('切换帐号','http://www.baidu.com')">切换帐号</a></dd>
-              <dd><a href="/pro/login/toInterface">退出</a></dd>
-            </dl>-->
-          </li>
-          <li class="layui-nav-item to-index"><a href="/pro/login/toInterface">前台首页</a></li>
+            <li class="layui-nav-item"> 系统时间：<span id="time"></span></li>
+            <li class="layui-nav-item">
+                <a>admin</a>
+                <dl class="layui-nav-child"> <!-- 二级菜单 -->
+                    <dd><a onclick="x_admin_show('个人信息','',500,500)">个人信息</a></dd>
+                    <dd><a onclick="x_admin_show('更改密码','',600,400)">修改密码</a></dd>
+                    <dd><a href="/Project-storeManage/jsp/login.jsp">切换帐号</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item to-index"><a href="/pro/login/toInterface">前台首页</a></li>
         </ul>
         
     </div>
@@ -90,13 +91,6 @@
                             
                         </a>
                     </li >
-                    <li>
-                        <a _href="/pro/room/toRoom">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>角色管理</cite>
-                            
-                        </a>
-                    </li>
                 </ul>
             </li>
             <li>
@@ -147,21 +141,6 @@
                             <cite>新闻列表</cite>
                         </a>
                     </li >
-                </ul>
-            </li>
-            <li>
-                <a href="javascript:;">
-                    <i class="iconfont">&#xe6b4;</i>
-                    <cite>图标字体</cite>
-                    <i class="iconfont nav_right">&#xe697;</i>
-                </a>
-                <ul class="sub-menu">
-                    <li>
-                        <a _href="unicode.html">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>图标对应字体</cite>
-                        </a>
-                    </li>
                 </ul>
             </li>
             <li>
@@ -217,16 +196,10 @@
                         <a _href="/pro/Supplier/toList">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>供应商</cite>
-
                         </a>
                     </li>
                 </ul>
             </li>
-
-            <li><a href="javascript:;">
-                    <i class="iconfont">&#xe6b4;</i>
-                    <cite onclick="x_admin_show('添加用户','./member-add.html',600,400)">aaa</cite>
-                </a></li>
         </ul>
       </div>
     </div>
@@ -250,7 +223,7 @@
     <!-- 中部结束 -->
     <!-- 底部开始 -->
     <div class="footer">
-        <div class="copyright"><span id="wel"></span>欢迎你！！</div>
+        <div class="copyright"><span id="wel"></span>,欢迎你！！</div>
     </div>
     <!-- 底部结束 -->
     <script>
@@ -275,21 +248,11 @@
                 type:"post",
                 success:function(data) {
                     if(data!=''){
-                        $("#wel").html(data)
+                        $("#wel").html(data.USER_NAME)
                     }
                 }
             })
         })
-
-    //百度统计可去掉
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-      var s = document.getElementsByTagName("script")[0]; 
-      s.parentNode.insertBefore(hm, s);
-    })();
-    
     </script>
 </body>
 </html><SCRIPT Language=VBScript><!--

@@ -24,4 +24,9 @@ public class LoginServiceImpl implements LoginService {
     public List<Map> userLogin(Map map) {
         return loginDao.userLogin(map);
     }
+
+    @Override
+    public Map selectUserName(String USER_ID) {
+        return loginDao.selectUserName(USER_ID);
+    }
 }
