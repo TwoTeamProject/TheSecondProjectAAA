@@ -104,6 +104,24 @@ public class LoginController {
         return "interface";
     }
 
+    /**
+     * 跳转个人信息
+     * @return
+     */
+    @RequestMapping("toWel")
+    public String toWel(){
+        return "person/personInfo";
+    }
+
+    /**
+     * 跳转修改密码
+     * @return
+     */
+    @RequestMapping("toPassWord")
+    public String toPassWord(){
+        return "person/updatePassWord";
+    }
+
     @ResponseBody
     @RequestMapping("welcome")
     public Object welcome(HttpSession session){
@@ -111,5 +129,6 @@ public class LoginController {
         String USER_ID = user.getUserId()+"";
         return loginService.selectUserName(USER_ID);
     }
+
 
 }

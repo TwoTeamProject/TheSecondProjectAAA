@@ -1,6 +1,8 @@
 package com.pro.two.controller.person;
 
+import com.pro.two.Entity.User;
 import com.pro.two.service.person.PersonService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -153,5 +155,19 @@ public class PersonController {
     @RequestMapping("topersonInfo")
     public Object topersonalInfo(){
         return "person/personInfo";
+    }
+
+    /**
+     * 更新密码
+     * @param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("updatePassWord")
+    public Object updatePassWord(@RequestParam Map map){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        String userId = user.getUserId()+"";
+        map.put("userId",userId);
+        return personService.updatePassWord(map);
     }
 }
