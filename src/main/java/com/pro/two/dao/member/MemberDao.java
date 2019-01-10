@@ -23,8 +23,22 @@ public interface MemberDao {
     int memberRegister(Map map);
 
     /**
-     * 获取select信息
+     * 获取房间类型信息
      * @return
      */
-    List<Map> getSelect();
+    List<Map> getRoomType(Map map);
+
+    /**
+     * 提交订单
+     * @param map
+     * @return
+     */
+    int submitOrder(Map map);
+
+    /**
+     * 查询空房数量
+     * @param map
+     * @return
+     */
+    List<Map> QueryVacancy(Map map);
 }

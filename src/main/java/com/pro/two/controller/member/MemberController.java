@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,6 +26,11 @@ public class MemberController {
 
     @Autowired
     private MemberService memberService;
+
+    @RequestMapping("/toChoose")
+    public String toTest(){
+        return "member/member-roomchoose";
+    }
 
     /**
      * 跳转至登陆
@@ -47,9 +54,9 @@ public class MemberController {
      * 跳转至主界面
      * @return
      */
-    @RequestMapping("/toMain")
+    @RequestMapping("/toSub")
     public String toMain(){
-        return "member/member-main";
+        return "member/member-submission";
     }
 
     /**
@@ -57,9 +64,20 @@ public class MemberController {
      * @param map
      * @return
      */
+    @ResponseBody
+    @RequestMapping("/Login")
+    public Object memberLogin(@RequestParam Map map ){
+        List<Map> resultMap = memberService.memberLogin(map);
+        return resultMap;
+    }
 
+    /**
+     * 会员注册
+     * @param map
+     * @return
+     */
     @RequestMapping("/Register")
-    public Object memberRegister(@RequestParam Map map, HttpSession session){
+    public String memberRegister(@RequestParam Map map, HttpSession session){
         int result = memberService.memberRegister(map);
         if (result==-1){
             session.setAttribute("issuc",false);
@@ -70,10 +88,27 @@ public class MemberController {
         }
     }
 
+    /**
+     * 获取房间类型
+     * @param map
+     * @return
+     */
     @ResponseBody
-    @RequestMapping("/getSelete")
-    public Object getSelect(HttpServletRequest request){
-        System.out.println(memberService.getSelect());
-        return memberService.getSelect();
+    @RequestMapping("/getRoomType")
+    public Object getRoomType(@RequestParam Map map){
+        Object obj = memberService.getRoomType(map);
+        return obj;
+    }
+
+
+    /**
+     * 提交订单
+     * @param map
+     * @return
+     */
+    @RequestMapping("/submitOrder")
+    public String submitOrder(@RequestParam  Map map){
+        memberService.submitOrder(map);
+        return "member/member-roomchoose";
     }
 }

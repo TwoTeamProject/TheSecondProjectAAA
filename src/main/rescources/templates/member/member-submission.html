@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>提交订单</title>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <link rel="stylesheet" href="../lib/layui/css/layui.css">
+    <script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../lib/laydate/laydate.js"></script>
+    <script type="text/javascript" src="../lib/layui/layui.js"></script>
+
+    <style>
+        .rz{width: 200px;}
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-container">
+            <div class="layui-logo">香格里拉大酒店</div>
+            <!-- 头部区域（可配合layui已有的水平导航） -->
+            <ul class="layui-nav layui-layout-left">
+                <!--<li class="layui-nav-item"><a href="">控制台</a></li>-->
+                <li class="layui-nav-item"><a href="">主页</a></li>
+                <li class="layui-nav-item"><a href="">预定房间</a></li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">其它</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="">关于我们</a></dd>
+                        <dd><a href="">加盟</a></dd>
+                    </dl>
+                </li>
+            </ul>
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item">
+                    <a href="javascript:;">
+                        赵一凡
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="">基本资料</a></dd>
+                        <dd><a href="">预定信息</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="">退出登陆</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-container" style="height:850px;width: 80%;">
+        <div class="layui-container ">
+            <div class="layui-row">
+                <div class="layui-col-md4" id="left">
+                    <!--动态生成-->
+                </div>
+                <div class="layui-col-md1">
+                    <br>
+                </div>
+                <div class="layui-col-md7" style="border: 1px gray">
+                    <form class="layui-form" action="/pro/member/submitOrder" method="POST">
+                        <div class="layui-form-item" hidden>
+                            <!--房间类型 隐藏-->
+                            <div class="layui-input-inline">
+                                <input type="text" id="formRoomType" name="roomtype" value="">
+                            </div>
+                        </div>
+                        <div class="layui-form-item" style="background-color: #F8C75C">
+                            <h3 style="color: white;font-family:微软雅黑;padding: 5px">预订信息</h3>
+                        </div>
+                        <div class="layui-form-item" id="timeitem">
+                            <input id="formInTime" name="intime" value="" hidden>
+                            <input id="formOutTime" name="outtime" value="" hidden>
+                            <!--动态添加时间-->
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">入住人</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="inperson" lay-verify="required" placeholder="请输入身份证上的姓名" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">房间数</label>
+                            <div class="layui-input-inline">
+                                <select id="formRoomNum" name="roomnum" lay-verify="required">
+                                    <option value="1">1间</option>
+                                    <option value="2">2间</option>
+                                    <option value="3">3间</option>
+                                    <option value="4">4间</option>
+                                    <option value="5">5间</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">订单总价</label>
+                            <div class="layui-input-inline">
+                                <input id="formOrderPrice" name="orderprice" hidden>
+                                <span id="spanOrderPrice" style="color: red;font-size: large;font-family: 微软雅黑"></span>
+                                <a id="" style="color:red;font-size: large"></a>
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">
+                                <button id="orderdetail" type="button" class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger layui-bg-red">订单详情</button></div>
+                        </div>
+                        <div class="layui-form-item" style="background-color: #F8C75C">
+                            <h3 style="color: white;font-family:微软雅黑;padding: 5px">联系信息</h3>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">联系人</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="linkman" lay-verify="required" placeholder="请确认联系人姓名" class="layui-input">
+                            </div>
+                            <!--<div class="layui-form-mid layui-word-aux">辅助文字</div>-->
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">联系电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="contactnum" lay-verify="required|telephone" placeholder="" class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">请确认联系人电话</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">联系邮箱</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="contactemai" lay-verify="email" placeholder="" class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">请确认联系人邮箱</div>
+                        </div>
+                        <div class="layui-form-item" style="background-color: #F8C75C">
+                            <h3 style="color: white;font-family:微软雅黑;padding: 5px">其他信息</h3>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">支付方式</label>
+                            <div class="layui-input-block">
+                                <input type="radio" name="paytype" value="1" title="在线支付" disabled>
+                                <input type="radio" name="paytype" value="2" title="到店支付" checked>
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">留言</label>
+                            <div class="layui-input-inline">
+                                <textarea name="message" placeholder="请输入内容" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn layui-btn-danger" lay-submit lay-filter="submitOrder">提交订单</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+<script>
+    layui.use('form', function(){
+        var form = layui.form;
+        //监听提交
+        form.on('submit(submitOrder)', function(data){
+            var index = layer.load();
+        });
+    });
+
+    layui.use('element', function(){
+        var element = layui.element;
+        /*console.log(sessionStorage.getItem('inTime'));
+        console.log(sessionStorage.getItem('outTime'));
+        console.log(sessionStorage.getItem('roomtype'));
+        console.log(sessionStorage.getItem('roomprice'));
+        console.log(sessionStorage.getItem('roomnum'));*/
+
+        var intime =  sessionStorage.getItem('inTime');
+        var outtime =  sessionStorage.getItem('outTime');
+        var roomtype = sessionStorage.getItem('roomtype');
+        var roomnum = sessionStorage.getItem('roomnum');
+        var roomprice = sessionStorage.getItem('roomprice')
+        //房型
+        $("#formRoomType").val(roomtype);
+        //房间数
+        $("#formRoomNum").find("option[value = '"+roomnum+"']").attr("selected","selected");
+        //入住时间
+        $("#formInTime").val(intime);
+        //离开时间
+        $("#formOutTime").val(outtime);
+        //订单总价
+        $("#formOrderPrice").val(roomprice*roomnum*DateMinus(intime,outtime));
+        $("#spanOrderPrice").html("￥"+roomprice*roomnum*DateMinus(intime,outtime));
+
+        //时间
+        var time=""
+        if ((!(sessionStorage.getItem('inTime')==""))&&(!(sessionStorage.getItem('outTime')==""))){
+            time +="<label class=\"layui-form-label\">入住时间</label>\n" +
+                "<div class=\"layui-input-blocck\">\n" +
+                "<span class=\"layui-badge layui-bg-blue\" id=\"inspan\" style=\"color: white;font-family:微软雅黑;padding: 5px\">"+intime+"</span> 至\n" +
+                "<span class=\"layui-badge layui-bg-blue\" id=\"outspan\" style=\"color: white;font-family:微软雅黑;padding: 5px\">"+outtime+"</span>\n" +
+                "<button id=\"changeTime\" type=\"button\" class=\"layui-btn layui-btn-xs layui-btn-radius layui-btn-danger layui-bg-red\">更改预定时间</button>\n" +
+                "</div>"
+        }else{
+            time +="<label class=\"layui-form-label\">入住时间</label>\n" +
+                "<div class=\"layui-input-blocck\">\n" +
+                "<button id=\"changeTime\" type=\"button\" class=\"layui-btn layui-btn-xs layui-btn-radius layui-btn-danger layui-bg-red\">请确认预定时间</button>\n" +
+                "</div>"
+        }
+        $("#timeitem").append(time)
+
+        //左侧信息
+        $.ajax({
+            url:"/pro/member/getRoomType",
+            type:"POST",
+            data:{"ROOM_TYPEID":roomtype},
+            dataType:"json",
+            success(data){
+                var tp="";
+                for(i=0;i<data.length;i++){
+                    tp+="<div class=\"layui-form-item\">\n" +
+                        "                        <div class=\"layui-input-block\">\n" +
+                        "                            <h2 >香格里拉大酒店郑州杨金路牛顿国际店</h2>\n" +
+                        "                        </div>\n" +
+                        "                    </div>\n" +
+                        "                    <div class=\"layui-form-item\">\n" +
+                        "                        <div class=\"layui-input-block\">\n" +
+                        "                            <img src='"+data[i].ROOM_IMG+"' height=\"150\" width=\"220\"/>\n" +
+                        "                        </div>\n" +
+                        "                    </div>\n" +
+                        "                    <div class=\"layui-form-item\">\n" +
+                        "                        <div class=\"layui-input-block\">\n" +
+                        "                            <div class=\"layui-input-inline\">\n" +
+                        "                                房型:<span id=\"spanroomtype\">"+data[i].ROOM_TYPENAME+"</span>\n" +
+                        "                            </div>\n" +
+                        "                        </div>\n" +
+                        "                    </div>\n" +
+                        "                    <div class=\"layui-form-item\">\n" +
+                        "                        <div class=\"layui-input-block\">\n" +
+                        "                            <div class=\"layui-input-inline\">\n" +
+                        "                                房型说明:<span id=\"roomtypex\">"+data[i].ROOM_INFO+"</span>\n" +
+                        "                            </div>\n" +
+                        "                        </div>\n" +
+                        "                    </div>"
+                }
+                $("#left").append(tp);
+            }
+        })
+    });
+
+    //更改时间
+    $(document).on("click","#changeTime",function () {
+        layer.open({
+            title: '更改入住时间'
+            ,type: 1
+            ,area: ['400px', '320px']
+            ,anim: 1
+            ,content:$("#editDemo").html()
+        });
+
+        var startDate=laydate.render({
+            elem: '#inTime',
+            value:sessionStorage.getItem("inTime"),
+            min:'new Date()',
+            max:+30,
+            done:function(value,date){
+                if(value!=""){
+                    date.date=date.date+1;
+                    /*默认时间增加一天 然后如果日期超过界限 则根据月份进入下一月*/
+                    if((date.month==1)||(date.month==3)||(date.month==5)||(date.month==7)||(date.month==8)||(date.month==10)){
+                        //console.log("大月")
+                        if (date.date==32){
+                            date.date=1;
+                            date.month=date.month+1;
+                        }
+                    }else if((date.month==4)||(date.month==6)||(date.month==9)||(date.month==11)){
+                        //console.log("小月")
+                        if (date.date==31){
+                            date.date=1;
+                            date.month=date.month+1;
+                        }
+                    }else if(date.month==2){
+                        if (((date.year%4==0)&&(date.year%100!=0))||date.year% 400==0) {
+                            //console.log("闰年")
+                            if (date.date==30){
+                                date.date=1;
+                                date.month=date.month+1;
+                            }
+                        } else{
+                            //console.log("平年")
+                            if (date.date==29){
+                                date.date=1;
+                                date.month=date.month+1;
+                            }
+                        }
+                    }else if((date.month==12)){
+                        //console.log("腊月")
+                        if (date.date==32){
+                            date.date=1;
+                            date.month=1;
+                            date.year=date.year+1;
+                        }
+                    }
+
+                    var iod ="";
+                    iod +=date.year+"-";
+                    if(date.month<10){
+                        iod +="0"+date.month+"-";
+                    }else{
+                        iod +=date.month+"-";
+                    }
+                    if(date.date<10){
+                        iod +="0"+date.date;
+                    }else{
+                        iod +=date.date;
+                    }
+                    $("#outTime").val(iod);
+
+                    //月份加1更改endDate下限
+                    date.month=date.month-1;
+                    endDate.config.min=date;
+                }else{
+                    endDate.config.min=startDate.config.min;
+                }
+            },
+        });
+
+        var endDate = laydate.render({
+            elem: '#outTime',
+            value:sessionStorage.getItem("outTime"),
+            min:+1,
+            max:+30
+        });
+
+
+        //弹出层改变时间按钮
+        $("#change").click(function(){
+            if(DateMinus($("#inTime").val(),$("#outTime").val())<0){
+                alert("时间不正确，请确认入住时间！！");
+            }else {
+                sessionStorage.setItem('inTime', $("#inTime").val());
+                sessionStorage.setItem('outTime', $("#outTime").val());
+                layer.closeAll('page');
+                location.reload();
+            }
+        })
+        //弹出层取消按钮
+        $("#cancel").click(function(){
+            layer.closeAll('page');
+            location.reload();
+        })
+    })
+
+
+    $(document).on("click","#orderdetail",function () {
+        var roomprice = sessionStorage.getItem('roomprice');
+        var roomnum = $("#formRoomNum").val();
+        var intime = $("#inspan").html();
+        var outtime = $("#outspan").html();
+
+        layer.open({
+            title: '房费详情'
+            , type: 1
+            , area: ['400px', '320px']
+            , anim: 1
+            , content: $("#orderDemo").html()
+        });
+
+        $("#daycost").val(roomprice);
+        $("#alertroomnum").val(roomnum);
+        $("#alertdays").val(DateMinus(intime,outtime));
+        $("#heji").html("￥"+roomprice*roomnum*DateMinus(intime,outtime));
+
+        $("#ordercancel").click(function(){
+            layer.closeAll('page');
+            location.reload();
+        })
+    })
+
+    function DateMinus(Date1,Date2){//date1:小日期   date2:大日期
+        var sdate = new Date(Date1);
+        var now = new Date(Date2);
+        var days = now.getTime() - sdate.getTime();
+        var day = parseInt(days / (1000 * 60 * 60 * 24));
+        return day;
+
+        /*var dateSpan,
+            tempDate,
+            iDays;
+        sDate1 = Date.parse(sDate1);
+        sDate2 = Date.parse(sDate2);
+        dateSpan = sDate2 - sDate1;
+        dateSpan = Math.abs(dateSpan);
+        iDays = Math.floor(dateSpan / (24 * 3600 * 1000));
+        return iDays*/
+    }
+
+
+
+    /*$("#changeTime").click(function () {
+        layer.open({
+            title: '更改入住时间'
+            ,type: 1
+            ,area: ['400px', '320px']
+            ,anim: 1
+            ,content:$("#editDemo").html()
+        });
+    })*/
+
+</script>
+<script type="text/html" id="editDemo">
+    <!--时间弹出框-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">入住时间</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="inTime" name="inTime">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">离店时间</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="outTime" name="outTime">
+        </div>
+    </div>
+    <div align="center">
+        <input type="button" value="更改" id="change" class="layui-btn layui-btn-sm" />
+        <input type="button" value="取消" id="cancel" class="layui-btn layui-btn-sm layui-btn-normal" />
+    </div>
+</script>
+
+<script type="text/html" id="orderDemo">
+    <!--订单详情弹出框-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">房费(元/日)</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="daycost" name="daycost" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">房间数</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="alertroomnum" name="alertroomnum" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">天数</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="alertdays" name="alertdays" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">合计</label>
+        <div class="layui-input-inline">
+            <span style="color: red;font-size: large;font-family: 微软雅黑" id="heji"></span>
+        </div>
+    </div>
+    <div align="center">
+        <input type="button" value="好的" id="ordercancel" class="layui-btn layui-btn-sm layui-btn-normal" />
+    </div>
+</script>
+</html>

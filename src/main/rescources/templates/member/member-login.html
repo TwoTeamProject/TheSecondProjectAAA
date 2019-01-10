@@ -22,35 +22,43 @@
     <div class="message layui-bg-blue">会员登陆</div>
     <div id="darkbannerwrap"></div>
 
-    <form method="post" class="layui-form" action="/pro/login/inLogin">
-        <input name="MEM_TEL" placeholder="手机号码"  type="text" lay-verify="required" class="layui-input" >
+    <form method="post" class="layui-form" action="/pro/member/toChoose">
+        <input id="MEM_TEL" name="MEM_TEL" placeholder="手机号码"  type="text" lay-verify="required" class="layui-input" >
         <hr class="hr15">
-        <input name="MEM_PASSWORD" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
+        <input id="MEM_PASSWORD" name="MEM_PASSWORD" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
         <hr class="hr15">
-        <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit" class="layui-bg-blue">
+        <input value="登录"  id="login" style="width:100%;" type="button" class="layui-bg-blue">
         <hr class="hr15">
-        <input value="注册" lay-filter="register" id="register" style="width:100%;" type="button" class="layui-btn layui-bg-gray">
+        <input value="注册"  id="register" style="width:100%;" type="button" class="layui-btn layui-bg-gray">
         <hr class="hr20" >
     </form>
 </div>
 
 <script>
 
-    layui.use('form', function(){
-        var form = layui.form;
-        console.log(form);
-        form.on('submit(login)', function(data){
-            console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
-            console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
-            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
-            //return false; 阻止表单跳转。如果需要表单跳转，去掉这段即可。
-        });
-    });
-
     layui.use('layer', function(){
         var $ = layui.jquery, layer = layui.layer;
         $(document).on('click','#register',function(){
             location.href='/pro/member/toRegister';
+        });
+
+        $(document).on('click','#login',function(){
+            $.ajax({
+                url:"/pro/member/Login",
+                type:"POST",
+                data:{"MEM_TEL":$("#MEM_TEL").val(),"MEM_PASSWORD":$("#MEM_PASSWORD").val()},
+                dataType:"json",
+                success(data){
+                    console.log(data);
+                    console.log(data[0].RESULT);
+                    if(data[0].RESULT==1){
+                        layer.msg("登录成功!!")
+                        location.href='/pro/member/toChoose';
+                    }else{
+                        layer.msg("登录失败，账号或密码不正确!!")
+                    }
+                }
+            })
         });
     });
 
