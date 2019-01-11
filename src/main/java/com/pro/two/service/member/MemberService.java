@@ -18,9 +18,36 @@ public interface MemberService {
      */
     int memberRegister(Map map);
 
+
     /**
-     * 获取select信息
+     * 获取会员信息
      * @return
      */
-    List<Map> getSelect();
+    List<Map> getMemberMsg(Map map);
+
+    /**
+     * 获取会员信息
+     * @return
+     */
+    List<Map> getOrderMsg(Map map);
+
+    /**
+     * 获取房间类型信息
+     * @return
+     */
+    List<Map> getRoomType(Map map);
+
+    /**
+     * 提交订单
+     * @param map
+     * @return
+     */
+    int submitOrder(Map map);
+
+    /**
+     * 取消订单
+     * @param map
+     * @return
+     */
+    int deleteOrder(Map map);
 }

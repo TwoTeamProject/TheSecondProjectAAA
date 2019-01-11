@@ -30,7 +30,27 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Map> getSelect() {
-        return memberDao.getSelect();
+    public List<Map> getMemberMsg(Map map) {
+        return memberDao.getMemberMsg(map);
+    }
+
+    @Override
+    public List<Map> getOrderMsg(Map map) {
+        return memberDao.getOrderMsg(map);
+    }
+
+    @Override
+    public List<Map> getRoomType(Map map) {
+        return memberDao.getRoomType(map);
+    }
+
+    @Override
+    public int submitOrder(Map map) {
+        return memberDao.submitOrder(map);
+    }
+
+    @Override
+    public int deleteOrder(Map map) {
+        return memberDao.deleteOrder(map);
     }
 }
