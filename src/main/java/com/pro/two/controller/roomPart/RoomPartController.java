@@ -77,7 +77,7 @@ public class RoomPartController {
     }
 
     /**
-     * 续订
+     * 续订(修改 tb_room_part,往tb_room_parto 中添加记录)
      * @param map
      * @return
      */
@@ -116,6 +116,33 @@ public class RoomPartController {
         int updateARoom = roomPartService.update(map);
         //System.out.println(updateARoom);
         return updateARoom;
+    }
+
+
+    /**
+     * 客人入住房间信息
+     * @param map
+     * @return
+     */
+    @RequestMapping("/listB")
+    @ResponseBody
+    public Object getRoomPartListB(@RequestParam Map map){
+        Map tempMap = new HashMap();
+        tempMap.put("code",0);
+        tempMap.put("msg","");
+        tempMap.put("count",roomPartService.getRoomCountB(map));
+        tempMap.put("data",roomPartService.getRoomPartListB(map));
+        return tempMap;
+    }
+
+    /**
+     * 页面跳转方法
+     * @param map
+     * @return
+     */
+    @RequestMapping("/toRoomPartB")
+    public String toListB(Map map){
+        return "roomparto";
     }
 
 }

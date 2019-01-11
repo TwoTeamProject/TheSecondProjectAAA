@@ -55,6 +55,7 @@ public class RoomPartServiceImpl implements RoomPartService{
 
     @Override
     public int extendRoom(Map map) {
+        roomPartDao.insertA(map);
         return roomPartDao.extendRoom(map);
     }
 
@@ -80,6 +81,21 @@ public class RoomPartServiceImpl implements RoomPartService{
     public int update(Map map) {
         roomPartDao.update(map);
         roomPartDao.updateO(map);
+        roomPartDao.insertB(map);
         return roomPartDao.updateT(map);
+    }
+
+    @Override
+    public List<Map> getRoomPartListB(Map map) {
+        int pageNo = map.get("pageNo") == null ? 1 : Integer.valueOf(map.get("pageNo")+"");
+        int pageSize = map.get("pageSize") == null ? 10 : Integer.valueOf(map.get("pageSize")+"");
+        map.put("start",(pageNo-1)*pageSize);
+        map.put("end",pageNo*pageSize+1);
+        return roomPartDao.getRoomPartListB(map);
+    }
+
+    @Override
+    public int getRoomCountB(Map map) {
+        return roomPartDao.getRoomCountB(map);
     }
 }

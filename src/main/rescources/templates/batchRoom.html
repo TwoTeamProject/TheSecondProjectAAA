@@ -27,10 +27,9 @@
                 "card":$("#card").val(),"indate":$("#indate").val(),"outdate":$("#outdate").val(),"result":result},
             type:"post",
             success : function (data) {
-                var index = parent.layer.getFrameIndex(window.name);
-                alert(111)
+                //var index = parent.layer.getFrameIndex(window.name);
                 if(data.issuc==true){
-                    layer.close(index);
+                    layer.closeAll();
                     top.layer.msg("登记成功", {icon: 6});
                     window.parent.location.href=window.parent.location.href;
                 }else{
@@ -49,6 +48,26 @@
             elem: '#outdate' //指定元素
         });
     });
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#indate',//指定元素
+            min:minDate()
+        });
+        laydate.render({
+            elem: '#outdate', //指定元素
+            min:minDate2()
+        });
+    });
+    function minDate(){
+        var now = new Date();
+        return now.getFullYear()+"-" + (now.getMonth()+1) + "-" + now.getDate();
+    }
+    function minDate2(){
+        var now = new Date();
+        return now.getFullYear()+"-" + (now.getMonth()+1) + "-" + (now.getDate()+1);
+    }
 </script>
 <body>
 <div id="str">

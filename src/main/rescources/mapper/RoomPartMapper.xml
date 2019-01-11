@@ -55,12 +55,27 @@
     </update>
 
 
-    <!-- 续订 更改TB_ROOM_PART表中房间的到期时间，和天数
+    <!-- 续订1 更改TB_ROOM_PART表中房间的到期时间，和天数
        -->
     <update id="extendRoom">
         update tb_room_part set ROOM_TIME = to_date(#{ROOM_XU3},'yyyy-mm-dd '),
         ROOM_LIVETIME = #{ROOM_LIVETIME} where PART_ID = #{PART_ID}
     </update>
+    <!-- 续订2 tb_room_part0添加续订记录
+       -->
+    <insert id="insertA">
+        insert into TB_ROOM_PARTO(
+        room_codeo,room_part_nameo,room_part_phoneo,room_part_cardo,
+        room_typeido,room_dateo,room_datec,room_part_stateo,room_timeo,part_ido,ROOM_STATE)
+        values(#{room_code},#{name},#{phone},#{card},
+        (select room_typeid from tb_roomtype where room_typename=#{room_typename})
+        ,to_date(#{ruzhu},'yyyy-mm-dd '),
+        to_date(#{indate},'yyyy-mm-dd '),0,
+        to_date(#{outdate},'yyyy-mm-dd '),PART_IDO.nextval,1)
+    </insert>
+
+
+
 
     <!-- 换房管理：空房查询 -->
     <select id="emptyRoom" resultType="map">
@@ -92,4 +107,46 @@
     <update id="updateT">
         update TB_ROOM_PART set room_code=#{H_ROOM_CODE5} where part_id = #{Q_PART_ID5}
     </update>
+
+    <!-- 换房添加 TB_ROOM_PARTO-->
+    <insert id="insertB">
+        insert into TB_ROOM_PARTO(
+        room_codeo,room_codec,room_part_nameo,room_part_phoneo,room_part_cardo,
+        room_typeido,room_dateo,room_datec,room_part_stateo,room_timeo,part_ido,ROOM_STATE)
+        values(#{room_code},#{room_codec},#{name},#{phone},#{card},
+        (select room_typeid from tb_roomtype where room_typename=#{room_typename})
+        ,to_date(#{indate},'yyyy-mm-dd '),sysdate,0,to_date(#{room_timec},'yyyy-mm-dd '),PART_IDO.nextval,2)
+    </insert>
+
+
+    <!--  换房、续订记录 -->
+    <select id="getRoomPartListB" resultType="map">
+        select * from
+        (select rownum rn,a.PART_IDO,a.ROOM_CODEO,a.ROOM_CODEC,a.ROOM_TYPEIDO,b.ROOM_TYPENAME,a.ROOM_PART_NAMEO,
+        a.ROOM_PART_PHONEO,a.ROOM_PART_CARDO,to_char(ROOM_DATEO,'yyyy-mm-dd') as ROOM_DATEO,
+        to_char(ROOM_TIMEO,'yyyy-mm-dd') as ROOM_TIMEO,
+        to_char(ROOM_DATEC,'yyyy-mm-dd') as ROOM_DATEC,
+        ROOM_STATE
+        from tb_room_parto a
+        join tb_roomtype b on a.room_typeido=b.room_typeid
+        <where>
+            <if test="ROOM_PART_PHONEO!=null and ROOM_PART_PHONEO!= '' ">
+                and ROOM_PART_PHONEO like '%'||#{ROOM_PART_PHONEO}||'%'
+            </if>
+
+            <if test="ROOM_PART_NAMEO!=null and ROOM_PART_NAMEO!= '' ">
+                and ROOM_PART_NAMEO like '%'||#{ROOM_PART_NAMEO}||'%'
+            </if>
+            <if test="pageNo!=null and pageNo!= '' ">
+                and rownum &lt; #{end}) t where t.rn &gt; #{start}
+            </if>
+
+        </where>
+
+    </select>
+    <!--查询数量-->
+    <select id="getRoomCountB" resultType="int">
+        select count(*) from tb_room_parto
+    </select>
+
 </mapper>
