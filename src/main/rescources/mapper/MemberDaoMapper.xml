@@ -4,13 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pro.two.dao.member.MemberDao">
+
     <select id="memberLogin" resultType="map">
         select count(*) as result from TB_MEMBER  where MEM_TEL = #{MEM_TEL} and MEM_PASSWORD = #{MEM_PASSWORD}
     </select>
+
+    <select id="telRegisterVerify" resultType="map">
+        select count(*) as result from TB_MEMBER  where MEM_TEL = #{MEM_TEL}
+    </select>
+
     <insert id="memberRegister" >
         insert into TB_MEMBER(MEM_ID,MEM_NAME,MEM_TEL,MEM_PASSWORD,MEM_IDCORD)
         values (TB_MEMBER_ID.NEXTVAL,#{MEM_NAME},#{MEM_TEL},#{MEM_PASSWORD},#{MEM_IDCORD})
     </insert>
+
     <select id="getMemberMsg" resultType="map">
         select MEM_IDCORD,MEM_ID,MEM_NAME,MEM_TEL,MEM_PASSWORD from TB_MEMBER
         <where>
@@ -19,8 +26,9 @@
             </if>
         </where>
     </select>
+
     <select id="getOrderMsg" resultType="map">
-        select ORDER_ID,INPERSON,INTIME,OUTTIME,ROOM_TYPENAME,ROOMNUM,ORDERPRICE,LINKMAN,CONTACTNUM,INPERSONID,PAYTYPE,MESSAGE,STATE,ROOM_IMG
+        select ORDER_ID,INPERSON,to_char(INTIME,'yyyy-mm-dd') as INTIME,to_char(OUTTIME,'yyyy-mm-dd') as OUTTIME,ROOM_TYPENAME,ROOMNUM,ORDERPRICE,LINKMAN,CONTACTNUM,INPERSONID,MESSAGE,STATE,ROOM_IMG
         from TB_ORDER,TB_ROOMTYPE
         <where>
             TB_ORDER.ROOMTYPE = TB_ROOMTYPE.ROOM_TYPEID
@@ -32,6 +40,7 @@
             </if>
         </where>
     </select>
+
     <select id="getRoomType" resultType="map">
         select ROOM_TYPEID,ROOM_TYPENAME,ROOM_TYPEPRICE,ROOM_DEPOSIT,ROOM_INFO,ROOM_IMG from TB_ROOMTYPE
         <where>
@@ -41,18 +50,19 @@
         </where>
     </select>
     <insert id="submitOrder">
-        insert into TB_ORDER(ORDER_ID,INPERSON,INPERSONID,INTIME,OUTTIME,ROOMTYPE,ROOMNUM,ORDERPRICE,LINKMAN,CONTACTNUM,CONTACTEMAIL,PAYTYPE,MESSAGE,STATE)
-        values (TB_ORDER_ID.NEXTVAL,#{inperson},#{inpersonID},to_date(#{intime},'yyyy-mm-dd'),to_date(#{outtime},'yyyy-mm-dd'),#{roomtype},#{roomnum},#{orderprice},#{linkman},#{contactnum},#{contactemai},#{paytype},#{message},0)
+        insert into TB_ORDER(ORDER_ID,INPERSON,INPERSONID,INTIME,OUTTIME,ROOMTYPE,ROOMNUM,ORDERPRICE,LINKMAN,CONTACTNUM,MESSAGE,STATE)
+        values (TB_ORDER_ID.NEXTVAL,#{inperson},#{inpersonID},to_date(#{intime},'yyyy-mm-dd'),to_date(#{outtime},'yyyy-mm-dd'),#{roomtype},#{roomnum},#{orderprice},#{linkman},#{contactnum},#{message},0)
     </insert>
-    <select id="QueryVacancy" resultType="map">
+
+    <delete id="deleteOrder" >
+        delete from TB_ORDER where ORDER_ID=#{ORDER_ID}
+    </delete>
+
+    <!--<select id="QueryVacancy" resultType="map">
         select count(*) from(
         select distinct room_code from TB_ROOM_PART t
         where (room_typeid = #{ROOM_TYPEID} and t.room_date &lt; to_date(#{intime},'yyyy-mm-dd') and t.room_time &gt; to_date(#{outtime},'yyyy-mm-dd'))
         or (room_typeid = #{ROOM_TYPEID} and t.room_date &lt; to_date(#{intime},'yyyy-mm-dd') and t.room_time &gt; to_date(#{outtime},'yyyy-mm-dd'))
         )
-    </select>
-
-    <delete id="deleteOrder" >
-        delete from TB_ORDER where ORDER_ID=#{ORDER_ID}
-    </delete>
+    </select>-->
 </mapper>

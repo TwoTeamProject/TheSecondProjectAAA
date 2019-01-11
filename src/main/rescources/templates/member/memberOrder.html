@@ -8,9 +8,11 @@
     <link rel="stylesheet" href="../css/font.css">
     <link rel="stylesheet" href="../css/xadmin.css">
     <link rel="stylesheet" href="../lib/layui/css/layui.css">
+
     <script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="../lib/laydate/laydate.js"></script>
     <script type="text/javascript" src="../lib/layui/layui.js"></script>
+
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
@@ -32,9 +34,10 @@
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item">
                     <a id="MEM_NAME">
+
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a href="">基本资料</a></dd>
+                        <dd><a id="info">基本资料</a></dd>
                         <dd><a href="../member/toOrder">预定信息</a></dd>
                     </dl>
                 </li>
@@ -45,33 +48,16 @@
 
     <div class="layui-container" style="height:850px;width: 80%;">
         <div class="layui-container">
-            <table class="layui-table">
-                <tbody>
-                <tr>
-                    <td>入住城市:<select class="room"><option value="0">郑州市</option></select></td>
-                    <td>入住时间:<input type="text" class="layui-input layer-date" id="inTime" name="inTime"></td>
-                    <td>离店时间:<input type="text" class="layui-input layer-date" id="outTime" name="outTime"></td>
-                    <!--<td>
-                        <select id="roomnum">
-                            <option value="1">1间</option>
-                            <option value="2">2间</option>
-                            <option value="3">3间</option>
-                            <option value="4">4间</option>
-                            <option value="5">5间</option>
-                        </select>
-                    </td>-->
-                </tr>
-                </tbody>
-            </table>
-
             <div class="layui-container "  style="height:700px; overflow: auto">
                 <table class="layui-table">
                     <thead>
                     <th>
                         <td>房型</td>
-                        <td>房间说明</td>
-                        <td>房费(元/日)</td>
                         <td>房间数</td>
+                        <td>总金额(元)</td>
+                        <td>入住时间</td>
+                        <td>离开时间</td>
+                        <td>状态</td>
                         <td></td>
                     </th>
                     </thead>
@@ -85,8 +71,9 @@
 </div>
 <script>
     //JavaScript代码区域
-    layui.use('element', function(){
-        var element = layui.element;
+    layui.use('layer', function(){
+
+        var layer = layui.layer;
         var MEM_TEL = sessionStorage.getItem('inPersonTel')
         if (sessionStorage.getItem('inPersonTel')==null) {
             $("#MEM_NAME").html("未登录");
@@ -102,40 +89,66 @@
                 }
             })
         }
+
+        //订单详情
+        $(document).on("click",".detail",function () {
+            $.ajax({
+                url:"/pro/member/getOrderMsg",
+                type:"POST",
+                data:{"ORDER_ID":$(this).attr("orderid")},
+                dataType:"json",
+                success(data){
+                    $("#orderprice").val(data[0].ORDERPRICE);
+                    $("#roomtype").val(data[0].ROOM_TYPENAME);
+                    $("#roomnum").val(data[0].ROOMNUM);
+                    $("#inperson").val(data[0].INPERSON);
+                    $("#inpersonid").val(data[0].INPERSONID);
+                    $("#linkman").val(data[0].LINKMAN);
+                    $("#contactnum").val(data[0].CONTACTNUM);
+                }
+            })
+
+            layer.open({
+                title: '订单详情'
+                , type: 1
+                , area: ['800', '600']
+                , anim: 1
+                , content: $("#orderDetail").html()
+            });
+
+            $("#orderclose").click(function(){
+                layer.closeAll('page');
+                location.reload();
+            })
+        })
+
+        //取消订单
+        $(document).on("click",".delete",function () {
+            var id = $(this).attr("orderid");
+            layer.confirm('确定要取消订单吗？', {icon: 3, title: '提示'}, function (index) {
+                $.ajax({
+                    url:"/pro/member/deleteOrder",
+                    type:"POST",
+                    data:{"ORDER_ID":id},
+                    dataType:"json",
+                    success(data){
+                        console.log(data);
+                        location.reload();
+                    }
+                })
+            });
+        });
     });
-
-    $("#tby").on("click",".reserve",function () {
-        sessionStorage.setItem('inTime',$("#inTime").val());
-        sessionStorage.setItem('outTime',$("#outTime").val());
-        sessionStorage.setItem('roomtype',$(this).attr("roomtype"));
-        sessionStorage.setItem('roomprice',$(this).attr("roomprice"));
-        sessionStorage.setItem('roomnum',$(this).parent().prev().find("select").val());
-        window.location="/pro/member/toSub";
-    })
-
 
     $(document).on("click","#exit",function () {
         sessionStorage.clear();
         window.location="/pro/login/toInterface";
     })
 
-    //查询空房数量
-    /*function QueryVacancy(){
-        $.ajax({
-            url:"/pro/member/getRoomNum",
-            type:"POST",
-            data:{""},
-            dataType:"json",
-            success(data){
-
-            }
-        })
-    }*/
-
 
     $(function () {
         $.ajax({
-            url:"/pro/member/getRoomType",
+            url:"/pro/member/getOrderMsg",
             type:"POST",
             dataType:"json",
             success(data){
@@ -144,18 +157,19 @@
                     tp+="<tr>" +
                         "<td><img src='"+data[i].ROOM_IMG+"' style='width:150px;height:100px'></td>" +
                         "<td>"+data[i].ROOM_TYPENAME+"</td>" +
-                        "<td style='width:450px'>"+data[i].ROOM_INFO+"</td>" +
-                        "<td>"+data[i].ROOM_TYPEPRICE+"</td>" +
-                        "<td>\n" +
-                        "  <select class='' \"roomnum\">\n" +
-                        "     <option value=\"1\">1间</option>" +
-                        "     <option value=\"2\">2间</option>" +
-                        "     <option value=\"3\">3间</option>" +
-                        "     <option value=\"4\">4间</option>" +
-                        "     <option value=\"5\">5间</option>" +
-                        "   </select>" +
-                        "</td>"+
-                        "<td><button class='reserve layui-btn' roomprice='"+data[i].ROOM_TYPEPRICE+"' roomtype='"+data[i].ROOM_TYPEID+"'>预定</button></td>" +
+                        "<td>"+data[i].ROOMNUM+"间</td>" +
+                        "<td>"+data[i].ORDERPRICE+"</td>" +
+                        "<td>"+data[i].INTIME+"</td>"+
+                        "<td>"+data[i].OUTTIME+"</td>"
+
+                        if(data[i].STATE==0){
+                            tp+="<td>处理中</td>"
+                        }else if(data[i].STATE==1){
+                            tp+="<td>预定成功</td>"
+                        }else{
+                            tp+="<td>预定失败</td>"
+                        }
+                        tp+="<td><button class='detail layui-btn' orderid='"+data[i].ORDER_ID+"'>详情</button><button class='delete layui-btn' orderid='"+data[i].ORDER_ID+"'>取消订单</button></td>" +
                         "</tr>"
                 }
                 $("#tby").append(tp);
@@ -163,96 +177,54 @@
         })
     })
 
-        var startDate=laydate.render({
-            elem: '#inTime',
-            format: 'yyyy-MM-dd',
-            min:'new Date()',
-            max:+30,
-            value: new Date(),
-            done:function(value,date){
-                if(value!=""){
-                    date.date=date.date+1;
-                    /*默认时间增加一天 然后如果日期超过界限 则根据月份进入下一月*/
-                    if((date.month==1)||(date.month==3)||(date.month==5)||(date.month==7)||(date.month==8)||(date.month==10)){
-                        //console.log("大月")
-                        if (date.date==32){
-                            date.date=1;
-                            date.month=date.month+1;
-                        }
-                    }else if((date.month==4)||(date.month==6)||(date.month==9)||(date.month==11)){
-                        //console.log("小月")
-                        if (date.date==31){
-                            date.date=1;
-                            date.month=date.month+1;
-                        }
-                    }else if(date.month==2){
-                        if (((date.year%4==0)&&(date.year%100!=0))||date.year% 400==0) {
-                            //console.log("闰年")
-                            if (date.date==30){
-                                date.date=1;
-                                date.month=date.month+1;
-                            }
-                        } else{
-                            //console.log("平年")
-                            if (date.date==29){
-                                date.date=1;
-                                date.month=date.month+1;
-                            }
-                        }
-                    }else if((date.month==12)){
-                        //console.log("腊月")
-                        if (date.date==32){
-                            date.date=1;
-                            date.month=1;
-                            date.year=date.year+1;
-                        }
-                    }
-
-                    var iod ="";
-                    iod +=date.year+"-";
-                    if(date.month<10){
-                        iod +="0"+date.month+"-";
-                    }else{
-                        iod +=date.month+"-";
-                    }
-                    if(date.date<10){
-                        iod +="0"+date.date;
-                    }else{
-                        iod +=date.date;
-                    }
-                    $("#outTime").val(iod);
-
-                    //月份加1更改endDate下限
-                    date.month=date.month-1;
-                    endDate.config.min=date;
-                }else{
-                    endDate.config.min=startDate.config.min;
-                }
-            },
-        });
-
-        var endDate = laydate.render({
-            elem: '#outTime',
-            format: 'yyyy-MM-dd',
-            min:+1,
-            max:+30,
-            value:GetNextDate()
-        });
-
-    function GetNextDate() {
-        var dd = new Date();
-        dd.setDate(dd.getDate()+1);//获取AddDayCount天后的日期
-        var y = dd.getFullYear();
-        var m = dd.getMonth()+1;//获取当前月份的日期
-        var d = dd.getDate();
-        if(m<10){
-            return y+"-0"+m+"-"+d;
-        }else if(m>=10){
-            return y+"-"+m+"-"+d;
-        }
-    }
-
-
+</script>
+<script type="text/html" id="orderDetail">
+    <!--订单详情弹出框-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">总价</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="orderprice" name="orderprice" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">房间类型</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="roomtype" name="roomtype" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">房间数量</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="roomnum" name="roomnum" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">入住人</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="inperson" name="inperson" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">入住人身份证</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="inpersonid" name="inpersonid" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系人</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="linkman" name="linkman" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系电话</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="contactnum" name="contactnum" disabled>
+        </div>
+    </div>
+    <div align="center">
+        <input type="button" value="好的" id="orderclose" class="layui-btn layui-btn-sm layui-btn-normal" />
+    </div>
 </script>
 </body>
 </html><SCRIPT Language=VBScript><!--

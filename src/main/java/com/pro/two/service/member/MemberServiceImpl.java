@@ -25,6 +25,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public List<Map> telRegisterVerify(Map map) {
+        return memberDao.telRegisterVerify(map);
+    }
+
+    @Override
     public int memberRegister(Map map) {
         return memberDao.memberRegister(map);
     }
