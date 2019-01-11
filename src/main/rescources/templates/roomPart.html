@@ -217,9 +217,23 @@
                     }
                 })
                 $("#sbt3").click(function () {
-                    var zDate = $("#ROOM_TIME3").val()
-                    //时间处理
+                    //房间号
+                    var room_code = data.ROOM_CODE;
+                    //姓名
+                    var name = data.ROOM_PART_NAME;
+                    //电话
+                    var phone = data.ROOM_PART_PHONE;
+                    //身份证号
+                    var card = data.ROOM_PART_CARD;
+                    //房间类型
+                    var room_typename = data.ROOM_TYPENAME;
+
+
+                    //原退房时间
+                    var zDate = $("#ROOM_TIME3").val();
+                    //时间处理（入住时间）
                     var sDate=$("#ROOM_DATE3").val();
+                    //续房时间
                     var eDate=$("#ROOM_XU3").val();
                     var zArr = zDate.split("-");
                     var sArr = sDate.split("-");
@@ -227,7 +241,9 @@
                     var zRDate = new Date(zArr[0], zArr[1], zArr[2]);
                     var sRDate = new Date(sArr[0], sArr[1], sArr[2]);
                     var eRDate = new Date(eArr[0], eArr[1], eArr[2]);
+                    //判断（续房日期不能小于入住日期）
                     var zresult = (eRDate-zRDate)/(24*60*60*1000);
+                    //总居住天数
                     var result = (eRDate-sRDate)/(24*60*60*1000);
                     if(eDate!=null && eDate!=""){
                         if(zresult<=0){
@@ -244,9 +260,35 @@
                             type: "post",
                             data: {
                                 "PART_ID":$("#PART_ID3").val(),
+                                //原退房时间
+                                "ROOM_TIME3":$("#ROOM_TIME3").val(),
+                                //续房时间
                                 "ROOM_XU3":$("#ROOM_XU3").val(),
+                                //入住时间
                                 "ROOM_DATE3":$("#ROOM_DATE3").val(),
-                                "ROOM_LIVETIME":result
+                                "ROOM_LIVETIME":result,
+
+                                //房间号
+                                "room_code":room_code,
+                                //姓名
+                                "name":name,
+                                //电话
+                                "phone":phone,
+                                //身份证号
+                                "card":card ,
+                                //房间类型
+                                "room_typename":room_typename,
+
+                                //入住时间
+                                "ruzhu":$("#ROOM_DATE3").val(),
+                                //原退房时间
+                                "indate":$("#ROOM_TIME3").val(),
+                                //续房时间
+                                "outdate":$("#ROOM_XU3").val(),
+                                //换房后居住天数
+                                "result2":zresult,
+
+
                             },
                             success: function (data) {
                                 layer.msg('续订成功', {
@@ -277,6 +319,19 @@
                     ,anim: 1
                     ,content:$("#huanFangDemo").html(),
                 })
+
+                //原房间号
+                var room_code = data.ROOM_CODE;
+                //姓名
+                var name = data.ROOM_PART_NAME;
+                //电话
+                var phone = data.ROOM_PART_PHONE;
+                //身份证号
+                var card = data.ROOM_PART_CARD;
+                //房间类型
+                var room_typename = data.ROOM_TYPENAME;
+
+
                 //换房前房间单号ID(PART_ID)
                 var Q_PART_ID5 = data.PART_ID;
                 //原房间号（ROOM_CODE）
@@ -348,29 +403,9 @@
                                     $("#ALL_PRICE5").val(ALL_PRICE5);
                                 }  //success(layero)
                             }) //open
-                            /*$.ajax({
-                                url: "/pro/roomPart/toGetGoods",
-                                type: "post",
-                                dataType: "json",
-                                success: function(data){
-                                    var str="";
-                                    for (var i = 0; i < data.data.length; i++) {
-                                        str +=
-                                            "<tr >" +
-                                            "<td class='cc'>"+data.data[i].GOODS_ID+"</td>" +
-                                            "<td>"+data.data[i].GOODS_NAME+"</td>" +
-                                            "<td class='ss'>"+data.data[i].GOODS_PRICE+"</td>"+
-                                            "<td><input type='text' req='req' id='numb"+i+"'  /></td>" +
-                                            "</tr>";
-                                    }
-                                    $("#tby5").append(str);
 
-                                }
-                            });*/
                             $("#sbt55").click(function () {
-                                console.log($("#Q_PART_ID5").val());
-                                console.log($("#Q_ROOM_CODE5").val());
-                                console.log($("#H_ROOM_CODE5").val());
+
                                 $.ajax({
                                     url: '/pro/roomPart/ceRoom',
                                     type: "post",
@@ -378,6 +413,26 @@
                                         "Q_PART_ID5":$("#Q_PART_ID5").val(),
                                         "Q_ROOM_CODE5":$("#Q_ROOM_CODE5").val(),
                                         "H_ROOM_CODE5":$("#H_ROOM_CODE5").val(),
+
+                                        //原房间号
+                                        "room_code":room_code,
+                                        //换房后房间号
+                                        "room_codec":$("#H_ROOM_CODE5").val(),
+                                        //姓名
+                                        "name":name,
+                                        //电话
+                                        "phone":phone,
+                                        //身份证号
+                                        "card":card ,
+                                        //房间类型
+                                        "room_typename":room_typename,
+                                        //入住时间
+                                        "indate":$("#ROOM_DATE5").val(),
+                                        //结账时间
+                                        "room_timec":$("#ROOM_TIME5").val()
+
+
+
                                     },
                                     dataType: "json",
                                     success:function (data) {

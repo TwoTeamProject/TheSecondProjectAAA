@@ -55,4 +55,18 @@ public interface RoomPartService {
      * @return
      */
     int update(Map map);
+
+
+    /**
+     * 查询客人入住的房间
+     * @param map
+     * @return
+     */
+    List<Map> getRoomPartListB(Map map);
+
+    /**
+     * 获取分页总数量
+     * @return
+     */
+    int getRoomCountB(Map map);
 }

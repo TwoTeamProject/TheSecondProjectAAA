@@ -45,11 +45,18 @@ public interface RoomPartDao {
     int updateGoods(Map map);
 
     /**
-     * 续订房间
+     * 续订房间1
      * @param map
      * @return
      */
     int extendRoom(Map map);
+
+    /**
+     * 续订房间2
+     * @param map
+     * @return
+     */
+    int insertA(Map map);
 
 
     /**
@@ -58,6 +65,13 @@ public interface RoomPartDao {
      * @return
      */
     List<Map> emptyRoom(Map map);
+
+    /**
+     * 换房
+     * @param map
+     * @return
+     */
+    int insertB(Map map);
 
     /**
      * 空房分页数量
@@ -85,5 +99,19 @@ public interface RoomPartDao {
      * @return
      */
     int updateT(Map map);
+
+
+    /**
+     * 查询客人入住的房间
+     * @param map
+     * @return
+     */
+    List<Map> getRoomPartListB(Map map);
+
+    /**
+     * 获取分页总数量
+     * @return
+     */
+    int getRoomCountB(Map map);
 
 }
