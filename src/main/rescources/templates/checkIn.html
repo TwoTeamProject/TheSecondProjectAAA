@@ -66,10 +66,9 @@
                     "room_typename":$("#room_typename").val(),
                     "name":$("#name").val(),"phone":$("#phone").val(),
                     "card":$("#card").val(),"indate":$("#indate").val(),"outdate":$("#outdate").val(),"result":result},
-                dataType: "json",
                 success : function (data) {
                     if(data.issuc==true){
-                        layer.closeAll();
+                        layer.closeAl();
                         top.layer.msg("登记成功", {icon: 6});
                         window.parent.location.href=window.parent.location.href;
                     }else{

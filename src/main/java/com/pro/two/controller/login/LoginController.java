@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * className:LoginController
  * discription:
- * author:sjq
+ * author:gh
  * createTime:2018-11-22 09:48
  */
 @RequestMapping("login")
