@@ -14,6 +14,7 @@
     <script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
     <script src="../lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../js/xadmin.js"></script>
+    <script type="text/javascript" src="../js/gVerify.js"></script>
 
 </head>
 <body class="login-bg">
@@ -49,6 +50,13 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">验证码</label>
+            <div class="layui-input-block">
+                <input type="text" id="code_input" value="" lay-verify="required|res" placeholder="请输入验证码"/>
+                <div id="v_container" style="width: 200px;height: 50px;"></div>
+            </div>
+        </div>
+        <div class="layui-form-item">
             <div class="layui-input-block">
                 <button lay-submit lay-filter="register" id="register" class="layui-btn layui-btn-normal">注册</button>
                 <button lay-filter="cancel" id="cancel" class="layui-btn layui-btn-primary layui-bg-gray">取消</button>
@@ -58,6 +66,11 @@
 </div>
 
 <script>
+    var verifyCode = new GVerify("v_container");
+    document.getElementById("my_button").onclick = function(){
+        var res = verifyCode.validate(document.getElementById("code_input").value);
+
+    }
 
     $(function() {
             layui.use('form', function () {
@@ -71,11 +84,15 @@
                 , pass: [
                     /^[\S]{6,12}$/
                     , '密码必须6到12位，且不能出现空格'
-                ]
+                ],
+                res: function(){ //value：表单的值、item：表单的DOM对象
+                    if(!verifyCode.validate(document.getElementById("code_input").value)){
+                        return '验证码不正确';
+                    }
+                }
             });
 
             form.on('submit(register)', function (data) {
-
             });
         });
 

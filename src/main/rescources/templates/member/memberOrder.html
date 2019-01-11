@@ -151,6 +151,7 @@
             url:"/pro/member/getOrderMsg",
             type:"POST",
             dataType:"json",
+            data: {"MEM_TEL": sessionStorage.getItem('inPersonTel')},
             success(data){
                 var tp="";
                 for(i=0;i<data.length;i++){
@@ -163,7 +164,7 @@
                         "<td>"+data[i].OUTTIME+"</td>"
 
                         if(data[i].STATE==0){
-                            tp+="<td>处理中</td>"
+                            tp+="<td>预定中</td>"
                         }else if(data[i].STATE==1){
                             tp+="<td>预定成功</td>"
                         }else{
