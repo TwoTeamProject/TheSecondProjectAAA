@@ -16,6 +16,13 @@ public interface MemberDao {
     List<Map> memberLogin(Map map);
 
     /**
+     * 注册校验
+     * @param map
+     * @return
+     */
+    List<Map> telRegisterVerify(Map map);
+
+    /**
      * 会员注册
      * @param map
      * @return

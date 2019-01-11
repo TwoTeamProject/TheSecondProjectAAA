@@ -34,10 +34,11 @@
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item">
                     <a id="MEM_NAME">
+
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a href="">基本资料</a></dd>
-                        <dd><a href="">预定信息</a></dd>
+                        <dd><a id="info">基本资料</a></dd>
+                        <dd><a href="../member/toOrder">预定信息</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item"><a id="exit">退出登陆</a></li>
@@ -54,7 +55,8 @@
                         <td>房型</td>
                         <td>房间数</td>
                         <td>总金额(元)</td>
-                        <td>联系人</td>
+                        <td>入住时间</td>
+                        <td>离开时间</td>
                         <td>状态</td>
                         <td></td>
                     </th>
@@ -157,7 +159,9 @@
                         "<td>"+data[i].ROOM_TYPENAME+"</td>" +
                         "<td>"+data[i].ROOMNUM+"间</td>" +
                         "<td>"+data[i].ORDERPRICE+"</td>" +
-                        "<td>"+data[i].LINKMAN+"</td>"
+                        "<td>"+data[i].INTIME+"</td>"+
+                        "<td>"+data[i].OUTTIME+"</td>"
+
                         if(data[i].STATE==0){
                             tp+="<td>处理中</td>"
                         }else if(data[i].STATE==1){

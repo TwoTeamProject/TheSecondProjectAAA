@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.constraints.Size;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +32,7 @@ public class MemberController {
      */
     @RequestMapping("/toChoose")
     public String toTest(){
-        return "member/member-roomchoose";
+        return "member/memberRoomchoose";
     }
 
     /**
@@ -43,7 +41,7 @@ public class MemberController {
      */
     @RequestMapping("/toOrder")
     public String toOrder(){
-        return "member/member-Order";
+        return "member/memberOrder";
     }
 
     /**
@@ -52,7 +50,7 @@ public class MemberController {
      */
     @RequestMapping("/toLogin")
     public String toLogin(){
-        return "member/member-login";
+        return "member/memberLogin";
     }
 
     /**
@@ -61,7 +59,7 @@ public class MemberController {
      */
     @RequestMapping("/toRegister")
     public String toRegister(){
-        return "member/member-register";
+        return "member/memberRegister";
     }
 
     /**
@@ -70,7 +68,7 @@ public class MemberController {
      */
     @RequestMapping("/toSub")
     public String toMain(){
-        return "member/member-submission";
+        return "member/memberSubmission";
     }
 
     /**
@@ -86,6 +84,18 @@ public class MemberController {
     }
 
     /**
+     * 是否注册校验
+     * @param map
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/telRegisterVerify")
+    public Object telRegisterVerify(@RequestParam Map map ){
+        List<Map> result = memberService.telRegisterVerify(map);
+        return result;
+    }
+
+    /**
      * 会员注册
      * @param map
      * @return
@@ -95,10 +105,10 @@ public class MemberController {
         int result = memberService.memberRegister(map);
         if (result==-1){
             session.setAttribute("issuc",false);
-            return "member/member-register";
+            return "member/memberRegister";
         }else{
             session.setAttribute("issuc",true);
-            return "member/member-login";
+            return "member/memberLogin";
         }
     }
 
@@ -162,6 +172,6 @@ public class MemberController {
     @RequestMapping("/submitOrder")
     public String submitOrder(@RequestParam  Map map){
         memberService.submitOrder(map);
-        return "member/member-order";
+        return "member/memberOrder";
     }
 }
