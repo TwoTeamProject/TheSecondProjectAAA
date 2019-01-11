@@ -68,7 +68,6 @@
                     "card":$("#card").val(),"indate":$("#indate").val(),"outdate":$("#outdate").val(),"result":result},
                 dataType: "json",
                 success : function (data) {
-                    //var index = parent.layer.getFrameIndex(window.name);
                     if(data.issuc==true){
                         layer.closeAll();
                         top.layer.msg("登记成功", {icon: 6});
