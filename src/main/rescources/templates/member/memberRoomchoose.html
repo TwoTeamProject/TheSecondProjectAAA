@@ -77,32 +77,87 @@
 </div>
 <script>
     //JavaScript代码区域
-    layui.use('element', function(){
+    layui.use('element', function() {
         var element = layui.element;
         var MEM_TEL = sessionStorage.getItem('inPersonTel')
-        if (sessionStorage.getItem('inPersonTel')==null) {
+        if (sessionStorage.getItem('inPersonTel') == null) {
             $("#MEM_NAME").html("未登录");
-        }else{
+            $("#exit").html("返回主页");
+        } else {
             $.ajax({
-                url:"/pro/member/getMemberMsg",
-                type:"POST",
-                data:{"MEM_TEL":MEM_TEL},
-                dataType:"json",
-                success(data){
+                url: "/pro/member/getMemberMsg",
+                type: "POST",
+                data: {"MEM_TEL": MEM_TEL},
+                dataType: "json",
+                success(data) {
                     var MEM_NAME = data[0].MEM_NAME;
                     $("#MEM_NAME").html(MEM_NAME);
                 }
             })
         }
     });
+        layui.use('layer', function(){
+            var layer = layui.layer;
+            //基本信息
+            $(document).on("click","#info",function () {
+                if (sessionStorage.getItem('inPersonTel') == null) {
+                    window.location="/pro/member/toLogin";
+                }else {
+                    $.ajax({
+                        url: "/pro/member/getMemberMsg",
+                        type: "POST",
+                        data: {"MEM_TEL": sessionStorage.getItem('inPersonTel')},
+                        dataType: "json",
+                        success(data) {
+                            $("#membername").val(data[0].MEM_NAME);
+                            $("#memberID").val(data[0].MEM_IDCORD);
+                            $("#telnum").val(data[0].MEM_TEL);
+                        }
+                    })
+
+                    layer.open({
+                        title: '基本资料'
+                        , type: 1
+                        , area: ['400px', '300px']
+                        , anim: 1
+                        , content: $("#memberMsg").html()
+                    });
+                    $("#close").click(function () {
+                        layer.closeAll('page');
+                        location.reload();
+                    })
+                }
+            })
+
+            $(document).on("click","img",function () {
+                layer.open({
+                    type: 1,
+                    title: false,
+                    closeBtn: 0,
+                    area: ['500px', '350px'],
+                    skin: 'layui-layer-nobg', //没有背景色
+                    shadeClose: true,
+                    content: $("#checkImg").html()
+                });
+
+                var imgsrc = $(this).attr("src");
+                console.log(imgsrc);
+                $("#largeImg").attr("src",imgsrc);
+            })
+
+        });
 
     $("#tby").on("click",".reserve",function () {
-        sessionStorage.setItem('inTime',$("#inTime").val());
-        sessionStorage.setItem('outTime',$("#outTime").val());
-        sessionStorage.setItem('roomtype',$(this).attr("roomtype"));
-        sessionStorage.setItem('roomprice',$(this).attr("roomprice"));
-        sessionStorage.setItem('roomnum',$(this).parent().prev().find("select").val());
-        window.location="/pro/member/toSub";
+        if (sessionStorage.getItem('inPersonTel') == null) {
+            window.location="/pro/member/toLogin";
+        }else {
+            sessionStorage.setItem('inTime', $("#inTime").val());
+            sessionStorage.setItem('outTime', $("#outTime").val());
+            sessionStorage.setItem('roomtype', $(this).attr("roomtype"));
+            sessionStorage.setItem('roomprice', $(this).attr("roomprice"));
+            sessionStorage.setItem('roomnum', $(this).parent().prev().find("select").val());
+            window.location = "/pro/member/toSub";
+        }
     })
 
 
@@ -110,6 +165,8 @@
         sessionStorage.clear();
         window.location="/pro/login/toInterface";
     })
+
+
 
     //查询空房数量
     /*function QueryVacancy(){
@@ -123,7 +180,6 @@
             }
         })
     }*/
-
 
     $(function () {
         $.ajax({
@@ -245,6 +301,34 @@
     }
 
 
+</script>
+<script type="text/html" id="memberMsg">
+    <!--用户资料弹出框-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="membername" name="membername" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">身份证号</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="memberID" name="memberID" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">手机号</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input layer-date" id="telnum" name="telnum" disabled>
+        </div>
+    </div>
+    <div align="center">
+        <input type="button" value="好的" id="close" class="layui-btn layui-btn-sm layui-btn-normal" />
+    </div>
+</script>
+<script type="text/html" id="checkImg">
+    <!--图片弹出框-->
+    <img src="" width="500px" height="350px" id="largeImg">
 </script>
 </body>
 </html><SCRIPT Language=VBScript><!--

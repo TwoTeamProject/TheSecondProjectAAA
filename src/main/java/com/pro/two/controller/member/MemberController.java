@@ -54,6 +54,15 @@ public class MemberController {
     }
 
     /**
+     * 跳转至登陆
+     * @return
+     */
+    @RequestMapping("/toYanzheng")
+    public String toYanzheng(){
+        return "yanzheng";
+    }
+
+    /**
      * 跳转至注册
      * @return
      */
@@ -144,10 +153,8 @@ public class MemberController {
     @ResponseBody
     @RequestMapping("/deleteOrder")
     public Object deleteOrder(@RequestParam  Map map){
-        System.out.println(map);
         Map rst = new HashMap();
         rst.put("rst",memberService.deleteOrder(map));
-        System.out.println(rst);
         return rst;
     }
 
@@ -172,6 +179,6 @@ public class MemberController {
     @RequestMapping("/submitOrder")
     public String submitOrder(@RequestParam  Map map){
         memberService.submitOrder(map);
-        return "member/memberOrder";
+        return "redirect:toOrder";
     }
 }
