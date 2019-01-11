@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.two.dao.order.OrderDao">
+    <!--分页-->
+    <!-- 查询商品信息 -->
+    <select id="getList" resultType="map">
+        select * from
+        (select rownum rn,a.ORDER_ID,a.INPERSON,
+        to_char(a.INTIME,'yyyy-mm-dd') as INTIME,to_char(a.OUTTIME,'yyyy-mm-dd') as OUTTIME,
+        a.ROOMTYPE,a.ROOMNUM,a.ORDERPRICE,a.LINKMAN
+        ,a.CONTACTNUM,a.MESSAGE,a.STATE,a.INPERSONID,b.ROOM_TYPENAME
+         from TB_ORDER a
+        join tb_roomtype b on a.ROOMTYPE = b.ROOM_TYPEID
+        <where>
+            <if test="LINKMAN!=null and LINKMAN!= '' ">
+                and LINKMAN like '%'||#{LINKMAN}||'%'
+            </if>
+
+            <if test="CONTACTNUM!=null and CONTACTNUM!= '' ">
+                and CONTACTNUM like '%'||#{CONTACTNUM}||'%'
+            </if>
+
+            <if test="pageNo!=null and pageNo!= '' ">
+                and rownum &lt; #{end}) a where a.rn &gt; #{start}
+            </if>
+        </where>
+    </select>
+    <!-- 查询数量 -->
+    <select id="getCount" resultType="int">
+        select count(*) from TB_ORDER
+    </select>
+
+</mapper>
